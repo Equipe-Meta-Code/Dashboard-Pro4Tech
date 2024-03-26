@@ -1,7 +1,7 @@
 <h1 align="center"> Projeto API - 3º Semestre </h1>
 
 ## 🎯 Objetivo
- Desenvolver  uma solução dinâmica e eficiente para a análise de dados de vendas, utilizando planilhas do Excel como fonte de informação. Nosso objetivo é fornecer uma ferramenta acessível e intuitiva que permita às empresas entenderem melhor seu desempenho de vendas e tomarem decisões estratégicas fundamentadas.
+ Desenvolver  uma solução dinâmica e eficiente para a análise de dados de vendas, utilizando planilhas do Excel como fonte de informação. Nosso objetivo é fornecer uma ferramenta acessível e intuitiva que permita a empresa entender melhor seu desempenho de vendas e tomar decisões estratégicas fundamentadas.
 
 
  ## 📍 Requisitos funcionais

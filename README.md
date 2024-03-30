@@ -52,3 +52,50 @@
 - ![SLACK](https://img.shields.io/badge/Slack-0B1320?style=for-the-badge&logo=slack&logoColor=white)
 
 <span id="sprints">
+
+## 📊 Sprints e Backlog
+<img src="https://github.com/LuisaAndrade28/My-Library/assets/127700485/63ed8dda-87ba-4812-a758-649f2c33e3f2" width="638">
+
+<img src="https://github.com/LuisaAndrade28/My-Library/assets/127700485/d79b9b95-68a9-47a5-a6c3-6a5546b8a81c" width="638">
+
+
+
+
+
+<span id="user">
+
+## 📊 User Stories
+
+
+
+<span id="MVP">
+ 
+## 📋 MVP
+
+
+
+<span id="Diagrama de classes">
+ 
+## 📁 Diagrama de classes (UML)
+
+
+
+<span id="Vídeo">
+ 
+## 📽️ Vídeo final
+<details>
+   <summary>Vídeo</summary>
+    <div align="center">
+        
+
+    </div>
+</details>
+
+
+
+<p align="right">
+  <a href="#topo">
+    <img src="https://user-images.githubusercontent.com/123789443/270016279-157e5646-66d0-4178-9073-5faf685620ba.png" alt="Seta para cima" width="40">
+  </a>
+</p>
+

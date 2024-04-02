@@ -71,6 +71,7 @@
 <span id="MVP">
  
 ## 📋 MVP
+<img src="https://github.com/Equipe-Meta-Code/Dashboard-Code/assets/127700485/2a43fa6f-658e-44f6-9509-5f7ee33763ba" width="638">
 
 
 

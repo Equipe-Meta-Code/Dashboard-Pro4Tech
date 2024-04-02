@@ -35,7 +35,7 @@
 ## 🔧 Tecnologias utilizadas
 - ![TypeScript](https://img.shields.io/badge/TypeScript-0B1320?style=for-the-badge&logo=Typescript&logoColor=white)
 
-- ![MongoDB](https://img.shields.io/badge/MongoDB-0B1320?style=for-the-badge&logo=mongodb&logoColor=white)
+- ![MySQL](https://img.shields.io/badge/MySQL-0B1320?style=for-the-badge&logo=mysql&logoColor=white)
 
 - ![REACT](https://img.shields.io/badge/React-0B1320?style=for-the-badge&logo=react&logoColor=white)
 

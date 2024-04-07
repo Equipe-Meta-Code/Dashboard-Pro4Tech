@@ -1,8 +1,11 @@
+import { areaTop } from "../../components";
 
-const dashboardScreen = () => {
+const Dashboard = () => {
   return (
-    <div>dashboardScreen</div>
-  )
-}
+    <div className="content-area">
+      <areaTop />
+    </div>
+  );
+};
 
-export default dashboardScreen
+export default Dashboard;

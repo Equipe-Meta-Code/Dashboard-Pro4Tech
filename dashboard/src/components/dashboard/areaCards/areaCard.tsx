@@ -23,7 +23,7 @@ const AreaCard = ({ colors, percentFillValue }) => {
     <div className="area-card">
       <div className="area-card-info">
         <h5 className="info-title">Ganhos Mensais</h5>
-        <div className="info-value">R$6078.76</div>
+        <div className="info-value">R$6078.76</div> {/* //exemplo de dados */}
         <p className="info-text">Lucro 48% maior do que o mês passado </p>
       </div>
       <div className="area-card-chart">

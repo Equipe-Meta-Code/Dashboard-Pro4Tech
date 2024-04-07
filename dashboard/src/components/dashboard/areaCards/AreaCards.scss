@@ -26,14 +26,14 @@
       }
   
       .info-title {
-        color: var(--lg-text-color);
+        color: var(--light-color);
         font-size: 18px;
         margin-bottom: 8px;
         font-weight: bold;
       }
   
       .info-value {
-        color: var(--xl-text-color);
+        color: var(--side-text-color);
         font-weight: 700;
         font-size: 24px;
         margin-bottom: 8px;
@@ -46,7 +46,7 @@
     }
   }
   
-  // global recharts tooltip customization
+  // recharts customização
   .recharts-default-tooltip {
     padding: 4px 8px !important;
     box-shadow: rgba(0, 0, 0, 0.07) 0px 4px 12px;

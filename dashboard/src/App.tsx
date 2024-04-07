@@ -1,6 +1,6 @@
 import './App.scss'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import BaseLayout from './layout/BaseLayout';
+import BaseLayout from './layout/baseLayout';
 import Dashboard from './screens/dashboard/dashboardScreen';
 import PageNotFound from './screens/error/pageNotFound';
 

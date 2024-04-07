@@ -1,9 +1,9 @@
-import { areaTop } from "../../components";
+import { AreaTop } from "../../components";
 
 const Dashboard = () => {
   return (
     <div className="content-area">
-      <areaTop />
+      <AreaTop />
     </div>
   );
 };

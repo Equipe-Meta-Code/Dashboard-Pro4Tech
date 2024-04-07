@@ -3,12 +3,7 @@ import "./Sidebar.scss";
 //import { useContext, useRef, useEffect } from "react";
 import {
   MdOutlineAttachMoney,
-  MdOutlineBarChart,
-  MdOutlineClose,
-  MdOutlineCurrencyExchange,
   MdOutlineGridView,
-  MdOutlineLogout,
-  MdOutlineMessage,
   MdOutlinePeople,
   MdOutlineSettings,
   MdOutlineShoppingBag,

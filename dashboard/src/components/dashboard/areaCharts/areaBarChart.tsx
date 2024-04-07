@@ -1,5 +1,4 @@
-import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { FaArrowUpLong } from "react-icons/fa6";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import "./AreaCharts.scss";
 
 const data = [ //exemplo de dados

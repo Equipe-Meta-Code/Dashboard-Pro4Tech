@@ -1,6 +1,6 @@
 import { AreaCards, AreaLineChart, AreaTop } from "../../components";
-import AreaBarChart from "../../components/dashboard/areaCharts/AreaBarChart";
-import AreaProgressChart from "../../components/dashboard/areaCharts/AreaProgressChart";
+import AreaBarChart from "../../components/dashboard/areaCharts/areaBarChart";
+import AreaProgressChart from "../../components/dashboard/areaCharts/areaProgressChart";
 
 const Dashboard = () => {
   return (

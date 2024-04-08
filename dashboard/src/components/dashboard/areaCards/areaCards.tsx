@@ -1,4 +1,4 @@
-import AreaCard from "./AreaCard";
+import AreaCard from "./areaCard";
 import "./AreaCards.scss";
 
 const AreaCards = () => {

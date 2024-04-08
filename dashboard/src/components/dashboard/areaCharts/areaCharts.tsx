@@ -1,5 +1,5 @@
-import AreaBarChart from "./AreaBarChart"
-import AreaProgressChart from "./AreaProgressChart"
+import AreaBarChart from "./areaBarChart"
+import AreaProgressChart from "./areaProgressChart"
 
 const AreaCharts = () => {
   return (

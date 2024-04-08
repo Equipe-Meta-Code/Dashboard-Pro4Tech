@@ -1,8 +1,17 @@
+import { AreaCards, AreaLineChart, AreaTop } from "../../components";
+import AreaBarChart from "../../components/dashboard/areaCharts/areaBarChart";
+import AreaProgressChart from "../../components/dashboard/areaCharts/areaProgressChart";
 
-const dashboardScreen = () => {
+const Dashboard = () => {
   return (
-    <div>dashboardScreen</div>
-  )
-}
+    <div className="content-area">
+      <AreaTop />
+      <AreaProgressChart />
+      <AreaLineChart />
+      <AreaBarChart />
+      <AreaCards />
+    </div>
+  );
+};
 
-export default dashboardScreen
+export default Dashboard;

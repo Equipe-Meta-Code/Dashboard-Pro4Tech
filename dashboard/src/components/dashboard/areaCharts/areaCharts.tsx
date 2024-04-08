@@ -1,9 +1,15 @@
+import AreaBarChart from "./areaBarChart";
+import AreaProgressChart from "./areaProgressChart";
 
-
-const areaCharts = () => {
+const AreaCharts = () => {
   return (
-    <div>areaCharts</div>
-  )
-}
+    <section className="content-area-charts">
+      <div className="chart-container">
+        <AreaBarChart />
+        <AreaProgressChart />
+      </div>
+    </section>
+  );
+};
 
-export default areaCharts
+export default AreaCharts;

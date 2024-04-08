@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "date-fns": "^3.6.0",
     "react": "^18.2.0",
+    "react-date-range": "^2.0.0-alpha.4",
     "react-dom": "^18.2.0",
+    "react-icons": "^5.0.1",
     "react-router-dom": "^6.22.3",
     "recharts": "^2.12.3"
   },
@@ -24,6 +27,8 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "sass": "^1.74.1",
+    "scss": "^0.2.4",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   }

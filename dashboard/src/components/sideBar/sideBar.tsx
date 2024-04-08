@@ -43,7 +43,7 @@ const Sidebar = () => {
         {/*<button className="sidebar-close-btn">
           <MdOutlineClose size={24} />
         </button>*/}
-        </div>
+      </div>
       <div className="sidebar-body">
         <div className="sidebar-menu">
           <ul className="menu-list">

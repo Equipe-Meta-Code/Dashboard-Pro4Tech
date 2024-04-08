@@ -1,6 +1,7 @@
 import "./AreaCharts.scss";
 
-const data = [ //exemplo de dados
+const data = [
+  //exemplo de dados
   {
     id: 1,
     name: "Produto 1",

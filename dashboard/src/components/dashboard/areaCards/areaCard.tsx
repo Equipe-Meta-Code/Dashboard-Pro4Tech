@@ -1,10 +1,5 @@
 import PropTypes from "prop-types";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
 const AreaCard = ({ colors, percentFillValue }) => {
   const filledValue = (percentFillValue / 100) * 360;

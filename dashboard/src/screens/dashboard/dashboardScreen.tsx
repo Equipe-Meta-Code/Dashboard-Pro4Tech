@@ -6,10 +6,10 @@ const Dashboard = () => {
   return (
     <div className="content-area">
       <AreaTop />
-      <AreaProgressChart/>
-      <AreaLineChart/>
+      <AreaProgressChart />
+      <AreaLineChart />
       <AreaBarChart />
-      <AreaCards/>
+      <AreaCards />
     </div>
   );
 };

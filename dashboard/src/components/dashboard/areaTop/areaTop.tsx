@@ -6,8 +6,6 @@ import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 
 const AreaTop = () => {
-
-
   const [state, setState] = useState([
     {
       startDate: new Date(),
@@ -36,22 +34,26 @@ const AreaTop = () => {
     };
   }, []); */
 
+  // Função para personalizar o conteúdo dos dias
+  const renderDayContent = (day) => {
+    const date = day.getDate();
+    return <div style={{ color: "#F3F5F7" }}>{date}</div>;
+  };
+
   return (
     <section className="content-area-top">
-      <div className="area-top-l">
-      </div>
+      <div className="area-top-l"></div>
       <div className="area-top-r">
-      <h2 className="area-top-title">Calendário</h2>
-        <div className="date-range"
-           ref={dateRangeRef}> 
+        <h2 className="area-top-title">Calendário</h2>
+        <div className="custom-date-range" ref={dateRangeRef}>
           <DateRange
             editableDateInputs={true}
             onChange={(item) => setState([item.selection])}
             moveRangeOnFirstSelection={false}
             ranges={state}
             showMonthAndYearPickers={false}
-            rangeColors="red"
-           
+            dayContentRenderer={renderDayContent}
+            className="custom-date-range"
           />
         </div>
       </div>

@@ -1,7 +1,16 @@
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import "./AreaCharts.scss";
 
-const data = [ //exemplo de dados
+const data = [
+  //exemplo de dados
   {
     mes: "Jan",
     sales: 70,
@@ -53,7 +62,6 @@ const data = [ //exemplo de dados
 ];
 
 const AreaBarChart = () => {
-
   return (
     <div className="bar-chart">
       <div className="bar-chart-info">
@@ -63,25 +71,30 @@ const AreaBarChart = () => {
         </div>
       </div>
       <div className="bar-chart-wrapper">
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart
-          width={500}
-          height={400}
-          data={data}
-          margin={{
-            top: 10,
-            right: 30,
-            left: 0,
-            bottom: 0,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="mes" />
-          <YAxis />
-          <Tooltip />
-          <Area type="monotone" dataKey="sales" stroke="#a9dfd8" fill="#a9dfd8" />
-        </AreaChart>
-      </ResponsiveContainer>
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            width={500}
+            height={400}
+            data={data}
+            margin={{
+              top: 10,
+              right: 30,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="mes" />
+            <YAxis />
+            <Tooltip />
+            <Area
+              type="monotone"
+              dataKey="sales"
+              stroke="#a9dfd8"
+              fill="#a9dfd8"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );

@@ -89,6 +89,32 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
     }
 });
 
+// Exportar dados para rota em JSON
+async function exportar() {
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASS,
+            database: process.env.DB_BASE
+        });
+
+        app.get('/dados_vendas', async (req, res) => {
+            try {
+                const [rows, fields] = await connection.query('SELECT Vendedor, SUM(Valor_de_Venda) AS total_vendas FROM informacoes GROUP BY Vendedor');
+                res.json(rows);
+            } catch (error) {
+                console.error('Erro ao buscar dados de vendas:', error);
+                res.status(500).send('Erro ao buscar dados de vendas');
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao conectar ao banco de dados:', error);
+    }
+}
+
+exportar();
+
 // Iniciar o servidor na porta 8080
 app.listen(8080, () => {
     console.log("Servidor iniciado na porta 8080: http://localhost:8080");

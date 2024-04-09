@@ -1,55 +1,31 @@
-import {
-  Line,
-  LineChart,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import { useEffect, useState } from 'react';
+import { Line, LineChart, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { FaArrowUpLong } from "react-icons/fa6";
 import "./AreaCharts.scss";
 
-const data = [
-  //exemplo de dados
-  {
-    name: "1",
-    thisWeekSales: 4000,
-    lastWeekSales: 2400,
-  },
-  {
-    name: "2",
-    thisWeekSales: 3000,
-    lastWeekSales: 1398,
-  },
-  {
-    name: "3",
-    thisWeekSales: 2000,
-    lastWeekSales: 9800,
-  },
-  {
-    name: "4",
-    thisWeekSales: 2780,
-    lastWeekSales: 3908,
-  },
-  {
-    name: "5",
-    thisWeekSales: 1890,
-    lastWeekSales: 4800,
-  },
-  {
-    name: "6",
-    thisWeekSales: 3800,
-    lastWeekSales: 2500,
-  },
-  {
-    date: "7",
-    thisWeekSales: 3490,
-    lastWeekSales: 3490,
-  },
-];
-
 const AreaLineChart = () => {
+  const [chartData, setChartData] = useState([]);
+ 
+  useEffect(() => {
+    fetchData();
+  }, []);
+ 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/dados_vendas');
+      const data = response.data;
+      const labels = data.map(item => item.Vendedor);
+      const valores = data.map(item => item.total_vendas);
+      const chartData = labels.map((label, index) => ({
+        name: label,
+        sales: valores[index]
+      }));
+      setChartData(chartData);
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  };
+ 
   return (
     <div className="line-chart">
       <div className="line-chart-info">
@@ -65,7 +41,7 @@ const AreaLineChart = () => {
           <LineChart
             width={500}
             height={300}
-            data={data}
+            data={chartData}
             margin={{
               top: 5,
               right: 30,
@@ -79,16 +55,10 @@ const AreaLineChart = () => {
             <Legend />
             <Line
               type="monotone"
-              dataKey="lastWeekSales"
-              name="Semana Passada"
-              stroke="#a9dfd8"
-              activeDot={{ r: 8 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="thisWeekSales"
-              name="Essa Semana"
+              dataKey="sales"
+              name="Vendas"
               stroke="#fcb859"
+              activeDot={{ r: 8 }}
             />
           </LineChart>
         </ResponsiveContainer>

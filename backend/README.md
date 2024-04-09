@@ -5,6 +5,9 @@ Instalar todas as dependencias indicada pelo package.json
 Criar a base de dados "upload" no MySQL
 Alterar as credencias do banco de dados no arquivo ".env"
 
+Criar a Models Informacoes
+### npx sequelize-cli model:generate --name Informacoes --attributes Data_da_venda:string,Vendedor:string,CPF_Vendedor:string,Produto:string,ID_Produto:string,Cliente:string,CNPJ_CPF_Cliente:string,Segmento_do_Cliente:string,Valor_de_Venda:string,Forma_de_Pagamento:string
+
 Executar as migrations
 ### npx sequelize-cli db:migrate
 
@@ -16,6 +19,7 @@ Rodar o projeto usando o nodemon
 
 Abrir o endereço no navegador para acessar a página inicial
 ### http://localhost:8080
+
 
 
 SEQUENCIA PARA CRIAR O PROJETO

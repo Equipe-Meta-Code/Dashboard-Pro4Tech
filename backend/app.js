@@ -16,6 +16,8 @@ const db = require('./db/models');
 //Chamar a função express
 const app = express();
 
+const mysql = require('mysql2/promise');
+
 // Criar o middleware para receber os dados no corpo da requisição
 app.use(express.json());
 

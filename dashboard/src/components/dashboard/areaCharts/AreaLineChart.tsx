@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Line, LineChart, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { FaArrowUpLong } from "react-icons/fa6";
 import "./AreaCharts.scss";
+import axios from "axios";
 
 const AreaLineChart = () => {
   const [chartData, setChartData] = useState([]);

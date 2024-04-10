@@ -15,12 +15,14 @@ const AreaLineChart = () => {
     try {
       const response = await axios.get('http://localhost:8080/dados_vendas');
       const data = response.data;
-      const labels = data.map(item => item.Vendedor);
-      const valores = data.map(item => item.total_vendas);
-      const chartData = labels.map((label, index) => ({
-        name: label,
-        sales: valores[index]
-      }));
+      // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
+      const chartData = data.map(item => {
+        const name = item.Vendedor.split(' ').slice(0, 2).join(' ');
+        return {
+          name: name,
+          sales: item.total_vendas
+        };
+      });
       setChartData(chartData);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);

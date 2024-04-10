@@ -50,7 +50,7 @@ const AreaLineChart = () => {
               bottom: 20,
             }}
           >
-            <XAxis dataKey="date" />
+            <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
             <Legend />

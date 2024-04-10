@@ -17,12 +17,15 @@
 
   .custom-date-range .rdrDateRangeWrapper {
     background-color: var(--chart-secondary-color);
+    color: #ffffff; //cor do texto do mês
+    border-radius: 5px;
   }
 
   .rdrDateDisplayWrapper {
     background-color: var(--chart-secondary-color);
     border-color: var(--chart-secondary-color);
     outline: var(--chart-secondary-color);
+    border-radius: 20px;
 
     * {
       background-color: var(--chart-secondary-color);

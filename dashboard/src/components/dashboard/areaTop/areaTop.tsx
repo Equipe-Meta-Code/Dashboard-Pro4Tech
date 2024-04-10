@@ -1,3 +1,4 @@
+//calendário
 import "./AreaTop.scss";
 import { useRef, useState } from "react";
 import "react-date-range/dist/styles.css"; // main style file
@@ -34,7 +35,7 @@ const AreaTop = () => {
     };
   }, []); */
 
-  // Função para personalizar o conteúdo dos dias
+  // personalizar o conteúdo dos dias
   const renderDayContent = (day) => {
     const date = day.getDate();
     return <div style={{ color: "#F3F5F7" }}>{date}</div>;

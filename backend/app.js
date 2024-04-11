@@ -110,6 +110,17 @@ async function exportar() {
                 res.status(500).send('Erro ao buscar dados de vendas');
             }
         });
+
+        app.get('/dados_itens', async (req, res) => {
+            try {
+                const [rows, fields] = await connection.query('SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes GROUP BY Produto ORDER BY quantidade_vendida DESC');
+                res.json(rows);
+            } catch (error) {
+                console.error('Erro ao buscar dados de itens mais vendidos:', error);
+                res.status(500).send('Erro ao buscar dados de itens mais vendidos');
+            }
+        });  
+        
     } catch (error) {
         console.error('Erro ao conectar ao banco de dados:', error);
     }

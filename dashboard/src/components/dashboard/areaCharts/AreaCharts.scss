@@ -12,7 +12,9 @@
   display: flex;
   justify-content: space-between;
 }
-
+.line-chart{
+  height: 337px;
+}
 .chart-container {
   display: flex;
   gap: 16px;
@@ -20,8 +22,9 @@
 
 // bar chart
 .bar-chart {
+  height: 314px;
   background-color: var(--secondary-color);
-  padding: 16px 16px 6px 16px;
+  padding: 16px 16px 16px 16px;
   border-radius: 5px;
   box-shadow: var(--light-shadow1);
   position: relative;
@@ -32,7 +35,7 @@
 
   .bar-chart-wrapper {
     width: 100%;
-    height: 240px;
+    height: 210px;
 
     // recharts customização
     .recharts-wrapper {
@@ -44,6 +47,7 @@
 
   .bar-chart-info {
     margin-bottom: 32px;
+
   }
 
   .bar-chart-title {
@@ -124,7 +128,7 @@
     width: 100%;
     height: 10px;
     border-radius: 100vh;
-    background-color: var(--chart-secondary-color);
+    background-color: var(--secondary-color);
     position: relative;
   }
 

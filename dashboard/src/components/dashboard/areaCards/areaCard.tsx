@@ -22,12 +22,12 @@ const AreaCard = ({ colors, percentFillValue }) => {
         <p className="info-text">Lucro 48% maior do que o mês passado </p>
       </div>
       <div className="area-card-chart">
-        <PieChart width={100} height={100}>
+        <PieChart width={200} height={200}>
           <Pie
             data={data}
-            cx={50}
-            cy={45}
-            innerRadius={20}
+            cx={100}
+            cy={130}
+            innerRadius={50}
             fill="#e4e8ef"
             paddingAngle={0}
             dataKey="value"

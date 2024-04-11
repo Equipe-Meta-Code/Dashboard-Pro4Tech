@@ -109,10 +109,34 @@ ul {
     padding: 16px;
   }
 }
+.linhaQuebrada{
+  width:100vw ;
+}
+.content-area{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+}
+.ul{
+  display: flex;
+  flex-wrap: wrap;
+}
+.content-area li{
+  margin-bottom: 16px;
+  margin-right: 16px;
+  
+}
+.content-area-li-esquerda{
+    width: 55%;
+}
+.content-area-li-direita{
+  width: 40%;
 
+}
 .content-area {
   & > section {
-    margin-bottom: 16px;
+    margin-bottom: 32px;
     &:last-child {
       margin-bottom: 0;
     }

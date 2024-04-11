@@ -1,8 +1,8 @@
 .content-area-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
   gap: 16px;
+  height: 346px;
 
   @media (max-width: 992px) {
     grid-template-columns: repeat(2, 1fr);
@@ -13,11 +13,13 @@
   }
 
   .area-card {
+    height: 314px;
     background-color: var(--secondary-color);
     display: flex;
+    flex-direction: column;
     align-items: center;
     border-radius: 5px;
-    padding: 20px 16px;
+    padding: 16px 16px 16px 16px;
     justify-content: space-between;
     box-shadow: var(--light-shadow1);
 

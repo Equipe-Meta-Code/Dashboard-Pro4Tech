@@ -120,6 +120,16 @@ async function exportar() {
                 res.status(500).send('Erro ao buscar dados de itens mais vendidos');
             }
         });  
+
+        app.get('/dados_vendas_mes', async (req, res) => {
+            try {
+                const [rows, fields] = await connection.query('SELECT MONTH(STR_TO_DATE(Data_da_Venda, "%d/%m/%Y")) AS mes, SUM(Valor_de_Venda) AS total_vendas FROM informacoes GROUP BY mes');
+                res.json(rows);
+            } catch (error) {
+                console.error('Erro ao buscar dados de vendas:', error);
+                res.status(500).send('Erro ao buscar dados de vendas');
+            }
+        });
         
     } catch (error) {
         console.error('Erro ao conectar ao banco de dados:', error);

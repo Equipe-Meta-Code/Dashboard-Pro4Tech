@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Line, LineChart, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { FaArrowUpLong } from "react-icons/fa6";
 import "./AreaCharts.scss";
 import axios from "axios";
 
 const AreaLineChart = () => {
   const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
  
   useEffect(() => {
     fetchData();
@@ -16,16 +17,16 @@ const AreaLineChart = () => {
       const response = await axios.get('http://localhost:8080/dados_vendas');
       const data = response.data;
       // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
-      const chartData = data.map(item => {
-        const name = item.Vendedor.split(' ').slice(0, 2).join(' ');
-        return {
-          name: name,
-          sales: item.total_vendas
-        };
-      });
-      setChartData(chartData);
+      const processedData = data.map(item => ({
+        name: item.Vendedor.split(' ').slice(0, 2).join(' '),
+        sales: item.total_vendas
+      }));
+      setChartData(processedData);
+      setLoading(false);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
+      setError(true);
+      setLoading(false);
     }
   };
  
@@ -35,7 +36,6 @@ const AreaLineChart = () => {
         <h5 className="line-chart-title">Vendas</h5>
         <div className="info-data-text">
           <FaArrowUpLong />
-          <p>5% a mais que semana passada.</p>
         </div>
         <div className="chart-info-data"></div>
       </div>
@@ -56,6 +56,9 @@ const AreaLineChart = () => {
             <YAxis />
             <Tooltip />
             <Legend />
+            {chartData.length === 0 && (
+              <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="white">Não há dados para exibir no gráfico.</text>
+            )}
             <Line
               type="monotone"
               dataKey="sales"

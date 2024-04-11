@@ -35,7 +35,6 @@ const AreaLineChart = () => {
       <div className="line-chart-info">
         <h5 className="line-chart-title">Vendas</h5>
         <div className="info-data-text">
-          <FaArrowUpLong />
         </div>
         <div className="chart-info-data"></div>
       </div>

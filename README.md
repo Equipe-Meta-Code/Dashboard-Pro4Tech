@@ -56,9 +56,9 @@
 <span id="sprints">
 
 ## 📊 Sprints e Backlog
-<img src="https://github.com/Equipe-Meta-Code/Dashbord-Code/assets/127700485/63ed8dda-87ba-4812-a758-649f2c33e3f2" width="638">
+<img src="https://github.com/Equipe-Meta-Code/Dashboard-Pro4Tech/assets/127700485/3028884e-35e3-4e14-aef8-9309786f82ae" width="638">
 
-<img src="https://github.com/Equipe-Meta-Code/Dashboard-Code/assets/127700485/d79b9b95-68a9-47a5-a6c3-6a5546b8a81c" width="638">
+<img src="https://github.com/Equipe-Meta-Code/Dashboard-Pro4Tech/assets/127700485/1b43bab9-17c5-4add-85db-d45a53825247" width="638">
 
 
 

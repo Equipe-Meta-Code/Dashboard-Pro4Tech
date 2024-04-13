@@ -22,3 +22,25 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Arquivos de compilação
+/build
+/dist
+
+# Dependências
+/node_modules
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Arquivos temporários
+*.log
+*.tmp
+
+# Outros arquivos e pastas que não são necessários no controle de versão
+.DS_Store
+Thumbs.db

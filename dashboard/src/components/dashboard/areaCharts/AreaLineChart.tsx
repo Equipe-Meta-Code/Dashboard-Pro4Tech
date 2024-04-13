@@ -33,7 +33,7 @@ const AreaLineChart = () => {
   return (
     <div className="line-chart">
       <div className="line-chart-info">
-        <h5 className="line-chart-title">Vendas</h5>
+        <h5 className="line-chart-title">Vendas por vendedor</h5>
         <div className="info-data-text">
         </div>
         <div className="chart-info-data"></div>

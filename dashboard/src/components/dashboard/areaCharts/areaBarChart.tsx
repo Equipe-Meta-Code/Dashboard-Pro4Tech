@@ -38,7 +38,7 @@ const AreaBarChart = () => {
       <div className="bar-chart-info">
         <h5 className="bar-chart-title">Vendas Gerais</h5>
         <div className="chart-info-data">
-          <div className="info-data-value">$50.4M</div>
+          <div className="info-data-value"></div>
         </div>
       </div>
       <div className="bar-chart-wrapper">

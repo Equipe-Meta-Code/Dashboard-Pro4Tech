@@ -56,7 +56,7 @@ const AreaProgressChart = () => {
               </div>
             ))
           ) : (
-            <p>Não há dados disponíveis.</p>
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="white">Não há dados para exibir no gráfico.</text>
           )
         )}
       </div>

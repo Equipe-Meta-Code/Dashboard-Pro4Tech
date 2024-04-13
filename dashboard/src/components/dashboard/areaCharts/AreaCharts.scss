@@ -78,12 +78,13 @@
 
   // cutomização of recharts - bar chart
   .recharts-default-legend {
+    color: white !important;
     position: absolute;
     top: -90px;
     right: 0;
   }
   .recharts-tooltip-label {
-    color: var(--text-color-inverted);
+    color: white !important;
     font-size: 14px;
     font-weight: 600;
   }
@@ -203,7 +204,7 @@
     right: 0;
   }
   .recharts-tooltip-label {
-    color: var(--text-color-inverted);
+    color: white !important;
     font-size: 14px;
     font-weight: 600;
   }

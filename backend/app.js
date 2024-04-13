@@ -131,6 +131,17 @@ async function exportar() {
             }
         });
         
+        app.get('/dados_vendas_total', async (req, res) => {
+            try {
+                const [rows, fields] = await connection.query('SELECT SUM(Valor_de_Venda) AS total_vendas FROM informacoes');
+                res.json(rows[0]); // Retorna apenas a primeira linha do resultado
+            } catch (error) {
+                console.error('Erro ao buscar dados de vendas:', error);
+                res.status(500).send('Erro ao buscar dados de vendas');
+            }
+        });
+        
+        
     } catch (error) {
         console.error('Erro ao conectar ao banco de dados:', error);
     }

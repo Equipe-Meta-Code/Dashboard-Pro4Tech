@@ -6,14 +6,13 @@
   height: 100%;
   background-color: var(--secondary-color);
   padding: 20px 14px;
-  box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
   display: flex;
   flex-direction: column;
   z-index: 999;
   transition: var(--default-transition);
-  overflow-y: scroll;
+  //overflow-y: scroll; //barra de rolagem
 
-  //barra de rolagem
+  /*//barra de rolagem
   &::-webkit-scrollbar {
     width: 9px;
   }
@@ -27,7 +26,7 @@
     background-color: var(--scroll-thumb-bg-color);
     outline: 1px solid rgba(0, 0, 0, 0.05);
     outline-offset: -1px;
-  }
+  }*/
 
   //responsividade
   &.sidebar-show {

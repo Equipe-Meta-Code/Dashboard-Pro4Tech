@@ -1,11 +1,10 @@
 .content-area-top {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: right;
+  justify-content: flex-end;
   flex-wrap: wrap;
-  width: 300px;
+  width: 10px;
   height: 337px;
-
 
   .area-top-title {
     color: var(--light-color);
@@ -13,20 +12,25 @@
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
   }
- .rdrDateRangeWrapper{
-   height: 313px;
- }
+
+  .rdrDateRangeWrapper{
+    height: 313px;
+  }
+
   .area-top-l {
     display: flex;
     align-items: center;
   }
+
   .content-area-top,.area-top-r,.area-top-l,.custom-date-range,.rdrDateDisplayWrapper,.rdrDateRangeWrapper,.rdrMonth{
     width: 300px;
   }
+
   .custom-date-range .rdrDateRangeWrapper {
     background-color: var(--secondary-color);
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
+    color: #ffffff; //cor do texto do mês
   }
 
   .rdrDateDisplayWrapper {

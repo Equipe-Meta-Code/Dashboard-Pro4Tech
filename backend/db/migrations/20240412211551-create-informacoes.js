@@ -9,8 +9,8 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Data_da_venda: {
-        type: Sequelize.STRING
+      Data_da_Venda: {
+        type: Sequelize.DATE
       },
       Vendedor: {
         type: Sequelize.STRING

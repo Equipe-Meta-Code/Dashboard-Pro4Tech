@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Informacoes.init({
-    Data_da_venda: DataTypes.STRING,
+    Data_da_venda: DataTypes.DATE,
     Vendedor: DataTypes.STRING,
     CPF_Vendedor: DataTypes.STRING,
     Produto: DataTypes.STRING,

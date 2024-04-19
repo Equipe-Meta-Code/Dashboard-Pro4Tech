@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .env
+public/upload/xlsx
 
 # Editor directories and files
 .vscode/*

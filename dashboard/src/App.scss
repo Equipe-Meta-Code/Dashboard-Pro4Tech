@@ -129,19 +129,19 @@ ul li{
   max-height: 337px;
 }
 .top-produtos{
-  width: 53%;
+  width: 53.8%;
 }
 .calendario, .ganhos-mensais{
-  @media (max-width: 1858px) {
+  @media (max-width: 1917px) {
     order: -1;
   }
-  @media (max-width: 757px) {
+  @media (max-width: 845px) {
    width: 100%;
   }
 }
 
 .top-produtos {
-  @media (max-width: 1858px) {
+  @media (max-width: 1917px) {
     width: 100%;
   }
 }
@@ -158,7 +158,7 @@ ul li{
   margin-bottom: 16px;
   margin-right: 16px;
 
-  @media (max-width: 831px) {
+  @media (max-width: 845px) {
     width: 100%;
     margin-right: 0%;
     margin-left: 0px;

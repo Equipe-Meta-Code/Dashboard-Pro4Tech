@@ -14,23 +14,25 @@
   }
 
   .rdrDateRangeWrapper{
-    height: 313px;
+    height: 308px;
   }
 
   .area-top-l {
     display: flex;
     align-items: center;
   }
-
+ 
   .content-area-top,.area-top-r,.area-top-l,.custom-date-range,.rdrDateDisplayWrapper,.rdrDateRangeWrapper,.rdrMonth{
     width: 100%;
   }
+  
   /*
   @media (max-width: 576px) {
     width: 100%;
   }
   */
-  @media (max-width: 831px) {
+
+  @media (max-width: 845px) {
     width: 100%;
   }
   .custom-date-range .rdrDateRangeWrapper {

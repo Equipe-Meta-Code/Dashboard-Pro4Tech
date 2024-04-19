@@ -109,31 +109,58 @@ ul {
     padding: 16px;
   }
 }
+
 .linhaQuebrada{
   width:100vw ;
 }
+
 .content-area{
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
 }
+
 .ul{
   display: flex;
   flex-wrap: wrap;
 }
+
 .content-area li{
   margin-bottom: 16px;
   margin-right: 16px;
-  
-}
-.content-area-li-esquerda{
-    width: 55%;
-}
-.content-area-li-direita{
-  width: 40%;
+  width: 48%;
 
+  @media (max-width: 1400px) {
+    width: 48%;
+  }
+
+  @media (max-width: 1200px) {
+    width: 45%;
+  }
+
+  @media (max-width: 768px) {
+    width: 45%;
+  }
+
+  @media (max-width: 576px) {
+    width: 100%;
+    margin-right: 0%;
+    margin-left: 0px;
+    
+  }
 }
+
+.calendario {
+  @media (max-width: 576px) {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    
+  }
+}
+
 .content-area {
   & > section {
     margin-bottom: 32px;

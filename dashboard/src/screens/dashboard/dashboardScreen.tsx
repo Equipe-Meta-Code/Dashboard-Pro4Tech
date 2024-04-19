@@ -5,13 +5,14 @@ import AreaProgressChart from "../../components/dashboard/areaCharts/areaProgres
 const Dashboard = () => {
   return (
     <ul className="content-area">
-      <li className="content-area-li-direita"><AreaTop /></li>
+      
+      <li className="top-produtos"><AreaProgressChart /></li>
+      <li className="calendario"><AreaTop /></li>
       <div className="linhaQuebrada"></div>
-      <li className="content-area-li-esquerda"><AreaProgressChart /></li>
-      <li className="content-area-li-direita"><AreaLineChart /></li>
+      <li className="ganhos-mensais"><AreaCards /></li>
+      <li className="vendas-gerais"><AreaBarChart /></li>
       <div className="linhaQuebrada"></div>
-      <li className="content-area-li-"><AreaCards /></li>
-      <li className="content-area-li-direita"><AreaBarChart /></li>
+      <li className="vendas-por-vendedor"><AreaLineChart /></li>
       
     </ul>
   );

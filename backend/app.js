@@ -59,14 +59,19 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
         const arquivoXLSX = './public/upload/xlsx/' + req.file.filename;
 
         // Ler o arquivo XLSX
-        const workbook = xlsx.readFile(arquivoXLSX);
+        const workbook = xlsx.readFile(arquivoXLSX, {
+            type: 'array',
+            cellDates: true,
+            cellNF: false,
+            cellText: false
+        });
 
         // Obter a primeira planilha
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
 
         // Converter a planilha em um array de objetos JavaScript
-        const data = xlsx.utils.sheet_to_json(worksheet);
+        const data = xlsx.utils.sheet_to_json(worksheet,{dateNF:"MM/DD/YYYY"});
 
         // Salvar os dados no banco de dados
         for (const row of data) {
@@ -123,7 +128,7 @@ async function exportar() {
 
         app.get('/dados_vendas_mes', async (req, res) => {
             try {
-                const [rows, fields] = await connection.query('SELECT MONTH(STR_TO_DATE(Data_da_Venda, "%d/%m/%Y")) AS mes, SUM(Valor_de_Venda) AS total_vendas FROM informacoes GROUP BY mes');
+                const [rows, fields] = await connection.query('SELECT MONTH(STR_TO_DATE(Data_da_Venda, "%Y-%m-%d")) AS mes, SUM(Valor_de_Venda) AS total_vendas FROM informacoes GROUP BY mes');
                 res.json(rows);
             } catch (error) {
                 console.error('Erro ao buscar dados de vendas:', error);

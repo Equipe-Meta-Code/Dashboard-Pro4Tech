@@ -6,10 +6,10 @@ const Dashboard = () => {
   return (
     <ul className="content-area">
       
-      <li className="top-produtos"><AreaProgressChart /></li>
       <li className="calendario"><AreaTop /></li>
-      <div className="linhaQuebrada"></div>
+      <li className="top-produtos"><AreaProgressChart /></li>
       <li className="ganhos-mensais"><AreaCards /></li>
+      <div className="linhaQuebrada"></div>
       <li className="vendas-gerais"><AreaBarChart /></li>
       <div className="linhaQuebrada"></div>
       <li className="vendas-por-vendedor"><AreaLineChart /></li>

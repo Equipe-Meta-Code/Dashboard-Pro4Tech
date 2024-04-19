@@ -88,11 +88,11 @@ ul {
 .content-wrapper {
   background-color: var(--background-color);
   min-height: 100vh;
-  padding: 50px 58px;
+  padding: 25px 29px;
   margin-left: 260px;
 
   @media (max-width: 1400px) {
-    padding: 32px;
+    padding: 16p;
   }
 
   @media (max-width: 1200px) {
@@ -128,25 +128,37 @@ ul {
 ul li{
   max-height: 337px;
 }
+.top-produtos{
+  width: 53%;
+}
+.calendario, .ganhos-mensais{
+  @media (max-width: 1858px) {
+    order: -1;
+  }
+  @media (max-width: 757px) {
+   width: 100%;
+  }
+}
 
-.content-area li{
+.top-produtos {
+  @media (max-width: 1858px) {
+    width: 100%;
+  }
+}
+.vendas-gerais,.vendas-por-vendedor{
+  width: 100%;
+
+}
+.vendas-gerais,.vendas-por-vendedor, .top-produtos{
+  @media (max-width: 1440px) {
+    width: 100%;
+  }
+}
+.content-area li  {
   margin-bottom: 16px;
   margin-right: 16px;
-  width: 48%;
 
-  @media (max-width: 1400px) {
-    width: 48%;
-  }
-
-  @media (max-width: 1200px) {
-    width: 45%;
-  }
-
-  @media (max-width: 768px) {
-    width: 45%;
-  }
-
-  @media (max-width: 576px) {
+  @media (max-width: 831px) {
     width: 100%;
     margin-right: 0%;
     margin-left: 0px;

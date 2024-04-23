@@ -19,6 +19,7 @@ const config = require(__dirname + '/../config/config.js')[env];
 // Criar a constate com objeto vazio
 const db = {};
 
+
 // Criar a variável que recebe a conexão com banco de dados
 let sequelize;
 // Verificar qual configuração de banco de dados você deseja usar

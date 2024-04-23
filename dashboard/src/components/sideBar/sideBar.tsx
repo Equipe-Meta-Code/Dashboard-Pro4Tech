@@ -3,11 +3,11 @@ import "./Sidebar.scss";
 //import { SidebarContext } from "../../context/SidebarContext";
 //import { useContext, useRef, useEffect } from "react";
 import { FaHome, FaEnvelope, FaUsers, FaDollarSign } from "react-icons/fa";
-import { MdOutlineSettings } from "react-icons/md";
 import { MdCloudUpload } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
+
   /*const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
   const navbarRef = useRef<HTMLDivElement>(null);
 
@@ -95,15 +95,15 @@ const Sidebar = () => {
         <div className="sidebar-menu">
           <ul className="menu-list">
             <li className="menu-item">
-              <Link to="/" className="menu-link active">
+              <Link to="/" className="menu-link">
                 <span className="menu-link-icon">
                   <FaHome size={18} />
                 </span>
                 <span className="menu-link-text">Visão Geral</span>
               </Link>
             </li>
-            {/*<li className="menu-item">
-              <Link to="/" className="menu-link">
+            <li className="menu-item">
+              <Link to="/vendedores" className="menu-link">
                 <span className="menu-link-icon">
                   <FaUsers size={18} />
                 </span>
@@ -121,11 +121,11 @@ const Sidebar = () => {
             <li className="menu-item">
               <Link to="/" className="menu-link">
                 <span className="menu-link-icon">
-                  <FaEnvelope size={18} />
+                  <FaEnvelope size={16} />
                 </span>
                 <span className="menu-link-text">Comissões</span>
               </Link>
-            </li>*/}
+            </li>
           </ul>
         </div>
 
@@ -135,9 +135,9 @@ const Sidebar = () => {
               <form onSubmit={handleSubmit}>
                 <label htmlFor="fileInput" className="menu-link">
                   <span className="menu-link-icon">
-                    <MdCloudUpload size={20} />
+                    <MdCloudUpload size={18} />
                   </span>
-                  <span className="menu-link-text">Upload Arquivo Excel</span>
+                  <span className="menu-link-text">Upload</span>
                 </label>
                 <input
                   type="file"
@@ -161,14 +161,14 @@ const Sidebar = () => {
                 </div>
               )}
             </li>
-            <li className="menu-item">
+            {/*<li className="menu-item">
                 <Link to="/" className="menu-link">
                   <span className="menu-link-icon">
                     <MdOutlineSettings size={20} />
                   </span>
                   <span className="menu-link-text">Settings</span>
                 </Link>
-            </li>
+            </li>*/}
           </ul>
         </div>
 

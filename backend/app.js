@@ -81,14 +81,17 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
 
             if (!user) {
                 await db.Informacoes.create(row);
-                // Insere os dados na tabela CadastroVendedor
+                // Insere os dados na tabela Vendedor
                 await db.Vendedor.create({
                     Vendedor: row.Vendedor,
                     CPF_Vendedor: row.CPF_Vendedor
                 });
+                await db.Cliente.create({
+                    Cliente: row.Cliente,
+                    CNPJ_CPF_Cliente: row.CNPJ_CPF_Cliente
+                });
             }
         }
-
 
         return res.status(200).json({
             error: false,

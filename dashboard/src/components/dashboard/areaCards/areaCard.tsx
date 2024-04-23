@@ -9,11 +9,9 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get('http://localhost:8080/dados_vendas_total');
-      console.log('Resposta da API:', response.data); 
       const data = response.data;
       const totalVendasDoJson = data.total_vendas;
       setTotalVendas(totalVendasDoJson);
-      console.log(totalVendasDoJson)
     } catch (error) {
       console.error('Erro ao buscar dados de vendas:', error);
     }
@@ -45,7 +43,11 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
         <div className="info-value">
           {totalVendas !== null ? `R$${totalVendas.toFixed(2)}` : "Carregando..."}
         </div>
-        <p className="info-text">Faltam R${valorRestante.toFixed(2)} para atingir a meta de vendas</p>
+        {valorRestante >= 0 ? (
+          <p className="info-text">Faltam R${valorRestante.toFixed(2)} para atingir a meta de vendas</p>
+        ) : (
+          <p className="info-text">A meta de vendas foi ultrapassada em R${Math.abs(valorRestante).toFixed(2)}</p>
+        )}
       </div>
       <div className="area-card-chart">
         <PieChart width={200} height={200}>

@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Informacoes.init({
+    id: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
     Data_da_venda: DataTypes.DATE,
     Vendedor: DataTypes.STRING,
     CPF_Vendedor: DataTypes.STRING,

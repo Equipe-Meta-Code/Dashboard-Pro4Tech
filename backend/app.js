@@ -76,7 +76,7 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
         // Salvar os dados no banco de dados
         for (const row of data) {
             const user = await db.Informacoes.findOne({
-                where: { CPF_Vendedor: row.CPF_Vendedor }
+               where: { id: row.id}
             });
 
             if (!user) {

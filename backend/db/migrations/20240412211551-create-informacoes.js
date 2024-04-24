@@ -34,7 +34,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       Valor_de_Venda: {
-        type: Sequelize.STRING
+        type: Sequelize.DECIMAL(10, 2)
       },
       Forma_de_Pagamento: {
         type: Sequelize.STRING

@@ -15,6 +15,15 @@ module.exports = {
       CPF_Vendedor: {
         type: Sequelize.STRING
       },
+      Ultima_Venda: {
+        type: Sequelize.DATE
+      },
+      Valor_da_Venda: {
+        type: Sequelize.DECIMAL(10, 2)
+      },
+      Tipo_de_Venda: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

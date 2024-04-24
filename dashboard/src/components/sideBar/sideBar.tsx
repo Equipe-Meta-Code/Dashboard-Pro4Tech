@@ -7,7 +7,6 @@ import { MdCloudUpload } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
-
   /*const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
   const navbarRef = useRef<HTMLDivElement>(null);
 
@@ -77,7 +76,6 @@ const Sidebar = () => {
     window.location.reload();
   };
 
-
   return (
     <nav
       className="sidebar" /*{`sidebar ${isSidebarOpen ? "sidebar-show" : ""}`}
@@ -110,16 +108,16 @@ const Sidebar = () => {
                 <span className="menu-link-text">Vendedores</span>
               </Link>
             </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link">
+            {/*<li className="menu-item">
+              <Link to="/vendas" className="menu-link">
                 <span className="menu-link-icon">
                   <FaDollarSign size={18} />
                 </span>
                 <span className="menu-link-text">Vendas</span>
               </Link>
-            </li>
+      </li>*/}
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/comissões" className="menu-link">
                 <span className="menu-link-icon">
                   <FaEnvelope size={16} />
                 </span>
@@ -151,18 +149,20 @@ const Sidebar = () => {
                   </button>
                 )}
               </form>
-            
+
               {showModal && (
                 <div className="modal">
-                  <div className="modal-content" style={{ color: 'white' }}>
+                  <div className="modal-content" style={{ color: "white" }}>
                     <p>{modalMessage}</p>
-                    <button className="close-button" onClick={handleCloseModal}>Fechar</button>
+                    <button className="close-button" onClick={handleCloseModal}>
+                      Fechar
+                    </button>
                   </div>
                 </div>
               )}
             </li>
             {/*<li className="menu-item">
-                <Link to="/" className="menu-link">
+                <Link to="/settings" className="menu-link">
                   <span className="menu-link-icon">
                     <MdOutlineSettings size={20} />
                   </span>
@@ -171,7 +171,6 @@ const Sidebar = () => {
             </li>*/}
           </ul>
         </div>
-
       </div>
     </nav>
   );

@@ -1,0 +1,31 @@
+.add-vendedor{
+    color: var(--background-color);
+};
+
+.custom-header{
+    background-color: var(--background-color);
+};
+
+.edit-button{
+    color: var(--logo-color);
+};
+
+.sx-box{
+    height: 600;
+    width: 100%;
+
+    /*&.actions {
+        color: #ffff;
+      };
+    
+    &.textPrimary {
+    color: #ffff;
+    };*/
+
+    .sx-data-grid{
+        background-color: var(--background-color);
+        border-radius: 1%;
+        border-color: var(--background-color);
+        color: var(--side-text-color2);
+    };
+};

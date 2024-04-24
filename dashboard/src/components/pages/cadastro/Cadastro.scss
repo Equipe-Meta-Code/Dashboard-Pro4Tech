@@ -1,6 +1,7 @@
 body{
     background: #171821;
 }
+
 .container {
     display: flex;
     flex-direction: column;
@@ -13,15 +14,15 @@ body{
     color: #eaeaea;
     font-size: 32px;
     font-weight: 700;
-
+    font-family: var(--font-family-manrope);
 }
+
 
 .inputs{
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-top: 50px; 
-
 }
 
 .input{
@@ -32,7 +33,6 @@ body{
     height: 60px;
     background: #eaeaea;
     border-radius: 10px;
-
 }
 
 .input img{
@@ -40,22 +40,21 @@ body{
 }
 
 .input input{
-    height: 20px;
+    height: 30px;
     width: 400px;
     background: transparent;
     outline: none;
     border: none;
     font-size: 20px;
 }
+
 .submit-container{
     display: flex;
-    gap: 30px ;
+    justify-content: center;
     margin: 60px auto;
 }
 
 .submit{
-    display: flex;
-    justify-content: center;
     align-items: center;
     border-radius: 50px;
     width: 200px;

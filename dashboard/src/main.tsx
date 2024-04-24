@@ -2,9 +2,9 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import React from "react";
-import Login from "./pages/login/Login.tsx";
+import Login from "./components/pages/login/Login.tsx";
 import PageNotFound from "./screens/error/pageNotFound.tsx";
-import Cadastro from "./pages/cadastro/Cadastro.tsx";
+import Cadastro from "./components/pages/cadastro/Cadastro.tsx";
 
 const router = createBrowserRouter ([
   {

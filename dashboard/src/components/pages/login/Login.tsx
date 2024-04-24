@@ -1,15 +1,13 @@
-import "./Cadastro.scss"
-import password_icon from '../../assets/password.png'
-import user_icon from '../../assets/person.png'
+import "./Login.scss"
+import password_icon from '../../../assets/password.png'
+import user_icon from '../../../assets/person.png'
 import { Link } from "react-router-dom";
-
-
-const Cadastro = () => {
+const Login = () => {
 
 
   return (
     <div className="container">
-      <div className="title-label">Cadastro</div>
+      <div className="title-label">Login</div>
       <div className="content"> 
       <div className="inputs">
             <div className="input">
@@ -22,13 +20,18 @@ const Cadastro = () => {
             </div>
             </div>
             <div className="submit-container">
-              <Link to={"dashboard"}>
+                <Link to={"dashboard"}>
                 <div className="submit">Entrar</div>
-              </Link>
+                </Link>
+                <Link to={"cadastro"}>
+                <div className="submit">
+                    Cadastrar
+                </div> 
+                </Link>
             </div>
         </div>                 
     </div>
   );
 };
 
-export default Cadastro;
+export default Login;

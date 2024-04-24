@@ -4,9 +4,15 @@ import BaseLayout from "./layout/baseLayout";
 import Dashboard from "./screens/dashboard/dashboardScreen";
 import PageNotFound from "./screens/error/pageNotFound";
 import Vendedores from "./components/pages/vendedores/vendedoresScreen";
+import { useEffect } from "react";
 //import Vendas from "./components/pages/vendas/vendasScreen";
 
 function App() {
+
+  useEffect(() => {
+    document.title = "Dashboard";
+  }, []);
+
   return (
     <>
       <Router>

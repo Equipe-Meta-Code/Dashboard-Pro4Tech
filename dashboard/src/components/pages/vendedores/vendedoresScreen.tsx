@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState } from 'react';
 import "./Vendedores.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -23,98 +24,45 @@ import {
   GridRowEditStopReasons,
   GridSlots,
 } from "@mui/x-data-grid";
+import App from "../../../App";
+import axios from "axios";
 
 const Vendedores = () => {
-  const initialRows: GridRowsProp = [
-    {
-      id: 1,
-      vendedor: "Matheus Teixeira",
-      cpf: "12312312312",
-      valor: 140,
-      tipoVenda: "Produto Novo",
-      ultimaVenda: "01/02/2024",
-    },
-    {
-      id: 2,
-      vendedor: "Roberto Nunes",
-      cpf: "11112312312",
-      valor: 310,
-      tipoVenda: "Cliente Novo",
-      ultimaVenda: "10/04/2024",
-    },
-    {
-      id: 3,
-      vendedor: "Carlos Eduardo",
-      cpf: "22212312312",
-      valor: 310,
-      tipoVenda: "Produto Antigo",
-      ultimaVenda: "10/13/2024",
-    },
-    {
-      id: 4,
-      vendedor: "Fernanda Souza",
-      cpf: "33312312312",
-      valor: 110,
-      tipoVenda: "Produto Novo",
-      ultimaVenda: "10/01/2024",
-    },
-    {
-      id: 5,
-      vendedor: "Thiago Abreu",
-      cpf: "44412312312",
-      valor: 1000,
-      tipoVenda: "Produto Novo",
-      ultimaVenda: "10/02/2024",
-    },
-    {
-      id: 6,
-      vendedor: "Patrícia Soares",
-      cpf: "55512312312",
-      valor: 150,
-      tipoVenda: "Produto Antigo",
-      ultimaVenda: "10/04/2024",
-    },
-    {
-      id: 7,
-      vendedor: "Lucas Gonçalves",
-      cpf: "66612312312",
-      valor: 440,
-      tipoVenda: "Cliente Novo",
-      ultimaVenda: "14/02/2024",
-    },
-    {
-      id: 8,
-      vendedor: "Rosana Tadeu",
-      cpf: "77712312312",
-      valor: 360,
-      tipoVenda: "Cliente Novo",
-      ultimaVenda: "11/01/2024",
-    },
-    {
-      id: 9,
-      vendedor: "Laís Santos",
-      cpf: "88812312312",
-      valor: 650,
-      tipoVenda: "Produto Antigo",
-      ultimaVenda: "15/04/2024",
-    },
-    {
-      id: 10,
-      vendedor: "Roberto Carlos",
-      cpf: "99912312312",
-      valor: 880,
-      tipoVenda: "Produto Novo",
-      ultimaVenda: "15/04/2024",
-    },
-    {
-      id: 11,
-      vendedor: "Thaís Araujo",
-      cpf: "00012312322",
-      valor: 600,
-      tipoVenda: "Produto Antigo",
-      ultimaVenda: "15/04/2024",
-    },
-  ];
+  const [chartData, setChartData] = useState([]);
+  const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  
+  useEffect(() => {
+    setInitialRows(chartData);
+  }, [chartData]);
+  
+  useEffect(() => {
+    setRows(chartData);
+  }, [chartData]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/vendedores');
+      const data = response.data;
+      // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
+      
+      const processedData = data.map(item => ({
+        id: item.id,
+        vendedor: item.Vendedor.split(' ').slice(0, 2).join(' '),
+        cpf: item.CPF_Vendedor,
+        valor: item.Valor_da_Venda,
+        ultimaVenda: item.Ultima_Venda,
+        tipoVenda: item.Tipo_de_Venda
+      }));
+      setChartData(processedData)
+      console.log(processedData);
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  };
 
   //adicionar na tabela
   interface EditToolbarProps {
@@ -152,7 +100,8 @@ const Vendedores = () => {
       </GridToolbarContainer>
     );
   }
-  const [rows, setRows] = React.useState(initialRows);
+
+  const [rows, setRows] = React.useState(chartData);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );

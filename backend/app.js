@@ -114,7 +114,7 @@ async function exportar() {
             password: process.env.DB_PASS,
             database: process.env.DB_BASE
         });
-
+        
         app.get('/dados_vendas', async (req, res) => {
             try {
                 const [rows, fields] = await connection.query('SELECT Vendedor, SUM(Valor_de_Venda) AS total_vendas FROM informacoes GROUP BY Vendedor');
@@ -149,6 +149,16 @@ async function exportar() {
             try {
                 const [rows, fields] = await connection.query('SELECT SUM(Valor_de_Venda) AS total_vendas FROM informacoes');
                 res.json(rows[0]); // Retorna apenas a primeira linha do resultado
+            } catch (error) {
+                console.error('Erro ao buscar dados de vendas:', error);
+                res.status(500).send('Erro ao buscar dados de vendas');
+            }
+        });
+
+        app.get('/vendedores', async (req, res) => {
+            try {
+                const [rows, fields] = await connection.query('SELECT id,Vendedor, CPF_Vendedor, Ultima_Venda, Valor_da_Venda, Tipo_de_Venda FROM vendedor');
+                res.json(rows);
             } catch (error) {
                 console.error('Erro ao buscar dados de vendas:', error);
                 res.status(500).send('Erro ao buscar dados de vendas');

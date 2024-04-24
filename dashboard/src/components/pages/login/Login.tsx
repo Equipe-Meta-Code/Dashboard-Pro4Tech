@@ -20,7 +20,7 @@ const Login = () => {
             </div>
             </div>
             <div className="submit-container">
-                <Link to={"dashboard"}>
+                <Link to={""}>
                 <div className="submit">Entrar</div>
                 </Link>
                 <Link to={"cadastro"}>

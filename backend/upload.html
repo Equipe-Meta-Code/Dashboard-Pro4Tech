@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Upload de Arquivo XLSX</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Cor de fundo */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* Centralizar conteúdo horizontalmente */
+    align-items: center; /* Centralizar conteúdo verticalmente */
+    height: 100vh; /* Tamanho total da tela */
+  }
+
+  .container {
+    background-color: #fff; /* Cor de fundo do container */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+    text-align: center;
+  }
+
+  .container h1 {
+    margin-bottom: 20px;
+  }
+
+  form {
+    margin-bottom: 20px;
+  }
+
+  input[type="file"] {
+    display: none; /* Esconder o input do arquivo */
+  }
+
+  .custom-file-upload {
+    border: 1px solid #ccc; /* Borda do botão */
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #000; /* Cor de fundo do botão */
+    color: #fff; /* Cor do texto do botão */
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .custom-file-upload:hover {
+    background-color: #333; /* Alterar cor de fundo ao passar o mouse */
+  }
+
+  .message {
+    color: green; /* Cor do texto da mensagem de sucesso */
+    display: none; /* Inicialmente oculta */
+  }
+
+  .error-message {
+    color: red; /* Cor do texto da mensagem de erro */
+    display: none; /* Inicialmente oculta */
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload de Arquivo XLSX</h1>
+    <form id="uploadForm" action="http://localhost:8080" method="POST" enctype="multipart/form-data">
+      <label class="custom-file-upload">
+        Selecionar Arquivo
+        <input type="file" name="arquivo" id="fileInput">
+      </label>
+      <br>
+      <button type="submit" class="custom-file-upload">Enviar</button>
+    </form>
+    <div class="message" id="successMessage">Arquivo enviado com sucesso!</div>
+    <div class="error-message" id="errorMessage">Erro ao enviar arquivo. Por favor, tente novamente.</div>
+  </div>
+
+  <script>
+    const uploadForm = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
+
+    uploadForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // Impedir envio padrão do formulário
+
+      const formData = new FormData(uploadForm); // Criar objeto FormData com os dados do formulário
+      const response = await fetch(uploadForm.action, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        successMessage.style.display = 'block'; // Exibir mensagem de sucesso
+        errorMessage.style.display = 'none'; // Ocultar mensagem de erro
+        fileInput.value = ''; // Limpar campo de seleção de arquivo
+      } else {
+        errorMessage.style.display = 'block'; // Exibir mensagem de erro
+        successMessage.style.display = 'none'; // Ocultar mensagem de sucesso
+      }
+    });
+  </script>
+</body>
+</html>

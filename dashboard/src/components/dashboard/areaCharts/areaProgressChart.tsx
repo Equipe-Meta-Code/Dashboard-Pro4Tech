@@ -42,7 +42,7 @@ const AreaProgressChart = () => {
                 <div className="bar-item-info">
                   <p className="bar-item-info-name">{item.Produto}</p>
                   <p className="bar-item-info-value">
-                    {item.quantidade_vendida} ({((item.quantidade_vendida / total) * 100)}% do total)
+                    {item.quantidade_vendida} ({((item.quantidade_vendida / total) * 100).toFixed(2)}% do total)
                   </p>
                 </div>
                 <div className="bar-item-full">

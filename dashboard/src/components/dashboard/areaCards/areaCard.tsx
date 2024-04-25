@@ -41,12 +41,12 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
       <div className="area-card-info">
         <h5 className="info-title">Ganhos Mensais</h5>
         <div className="info-value">
-          {totalVendas !== null ? `R$${totalVendas.toFixed(2)}` : "Carregando..."}
+          {totalVendas !== null ? `R$${totalVendas}` : "Carregando..."}
         </div>
         {valorRestante >= 0 ? (
           <p className="info-text">Faltam R${valorRestante.toFixed(2)} para atingir a meta de vendas</p>
         ) : (
-          <p className="info-text">A meta de vendas foi ultrapassada em R${Math.abs(valorRestante).toFixed(2)}</p>
+          <p className="info-text">A meta de vendas foi ultrapassada em R${Math.abs(valorRestante)}</p>
         )}
       </div>
       <div className="area-card-chart">

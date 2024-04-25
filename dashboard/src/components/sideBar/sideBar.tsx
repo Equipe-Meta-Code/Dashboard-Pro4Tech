@@ -108,14 +108,14 @@ const Sidebar = () => {
                 <span className="menu-link-text">Vendedores</span>
               </Link>
             </li>
-            {/*<li className="menu-item">
+            <li className="menu-item">
               <Link to="/vendas" className="menu-link">
                 <span className="menu-link-icon">
                   <FaDollarSign size={18} />
                 </span>
                 <span className="menu-link-text">Vendas</span>
               </Link>
-      </li>*/}
+            </li>
             <li className="menu-item">
               <Link to="/comissões" className="menu-link">
                 <span className="menu-link-icon">

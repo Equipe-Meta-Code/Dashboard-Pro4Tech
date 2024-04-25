@@ -1,5 +1,5 @@
 .add-vendedor{
-    color: var(--background-color);
+    
 };
 
 .custom-header{
@@ -14,18 +14,15 @@
     height: 600;
     width: 100%;
 
-    /*&.actions {
-        color: #ffff;
-      };
-    
-    &.textPrimary {
-    color: #ffff;
-    };*/
-
     .sx-data-grid{
-        background-color: var(--background-color);
+        background-color: var(--chart-secondary-color);
         border-radius: 1%;
         border-color: var(--background-color);
-        color: var(--side-text-color2);
+        color: var(--side-text-color3);
     };
+};
+
+.area-top-title{
+    color: var(--side-text-color);
+    margin-bottom: 20px;
 };

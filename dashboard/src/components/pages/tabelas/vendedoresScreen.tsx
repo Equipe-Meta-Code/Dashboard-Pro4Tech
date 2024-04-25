@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from 'react';
-import "./Vendedores.scss";
+import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {
@@ -92,7 +92,7 @@ const Vendedores = () => {
     return (
       <GridToolbarContainer>
         <Button className="add-vendedor"
-          startIcon={<MdAdd size={20} />}
+          startIcon={<MdAdd size={20} className="edit-button"/>}
           onClick={handleClick}
         >
           Adicionar
@@ -158,7 +158,7 @@ const Vendedores = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 50, editable: true },
+    { field: "id", headerName: "", width: 70, type: "number", editable: true },
     {
       field: "vendedor",
       headerName: "Vendedor",
@@ -220,16 +220,12 @@ const Vendedores = () => {
             <GridActionsCellItem
               icon={<MdSave size={20} className="edit-button" />}
               label="Save"
-              /*sx={{
-                color: "primary.main",
-              }}*/
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
               icon={<MdOutlineCancel size={20} className="edit-button" />}
               label="Cancel"
               onClick={handleCancelClick(id)}
-              //color="inherit"
             />,
           ];
         }
@@ -257,6 +253,7 @@ const Vendedores = () => {
   return (
     //tabela
     <Box className="sx-box">
+      <h2 className="area-top-title">Vendedores</h2>
       <DataGrid
         className="sx-data-grid"
         rows={rows}
@@ -276,13 +273,11 @@ const Vendedores = () => {
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 10,
+              pageSize: 20,
             },
           },
         }}
-        pageSizeOptions={[10]}
-        checkboxSelection
-        disableRowSelectionOnClick
+        pageSizeOptions={[20]}
       />
     </Box>
   );

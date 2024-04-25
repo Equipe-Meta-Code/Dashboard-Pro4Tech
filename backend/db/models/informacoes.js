@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     Cliente: DataTypes.STRING,
     CNPJ_CPF_Cliente: DataTypes.STRING,
     Segmento_do_Cliente: DataTypes.STRING,
-    Valor_de_Venda: DataTypes.DECIMAL(10, 2),
+    Valor_de_Venda: DataTypes.STRING,
     Forma_de_Pagamento: DataTypes.STRING
   }, {
     sequelize,

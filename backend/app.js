@@ -164,6 +164,18 @@ async function exportar() {
                 res.status(500).send('Erro ao buscar dados de vendas');
             }
         });
+
+        app.get('/minhas_vendas', async (req, res) => {
+            try {
+                const vendedor = "111.111.111-11"; // Supondo que o CPF do vendedor esteja disponível após o login
+         
+                const [rows, fields] = await connection.query('SELECT * FROM informacoes WHERE CPF_Vendedor = ? ORDER BY Data_da_Venda DESC', [vendedor]);
+                res.json(rows);
+            } catch (error) {
+                console.error('Erro ao buscar as vendas do vendedor:', error);
+                res.status(500).send('Erro ao buscar as vendas do vendedor');
+            }
+        });
         
         
     } catch (error) {

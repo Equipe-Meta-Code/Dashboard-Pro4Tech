@@ -38,7 +38,7 @@ const AreaProgressChart = () => {
         ) : (
           chartData.length > 0 ? (
             chartData.map((item) => (
-              <div className="progress-bar-item" key={item.id}>
+              <div className="progress-bar-item">
                 <div className="bar-item-info">
                   <p className="bar-item-info-name">{item.Produto}</p>
                   <p className="bar-item-info-value">

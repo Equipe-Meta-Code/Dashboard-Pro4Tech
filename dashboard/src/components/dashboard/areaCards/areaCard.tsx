@@ -33,7 +33,7 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
   ];
 
   const renderTooltipContent = (value) => {
-    return `${(value / 360) * 100} %`;
+    return `${((value / 360) * 100).toFixed(2)} %`;
   };
 
   return (

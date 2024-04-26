@@ -66,32 +66,35 @@ const Vendedores = () => {
 
   //adicionar na tabela
   interface EditToolbarProps {
-    setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-    setRowModesModel: (
-      newModel: (oldModel: GridRowModesModel) => GridRowModesModel
-    ) => void;
+    setRows: (newRows: GridRowModel[]) => void;
+    setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+    rows: GridRowsProp;
   }
 
   function EditToolbar(props: EditToolbarProps) {
-    const { setRows, setRowModesModel } = props;
+    const { setRows, setRowModesModel, rows } = props;
 
     const handleClick = () => {
-      //quando o botão é acionado
-      const id = "id";
-      setRows((oldRows) => [
-        ...oldRows,
-        { id, vendedores: "", cpf: "", isNew: true },
-      ]);
+      //calcula o próximo ID baseado no maior ID existente na tabela
+      const nextId = Math.max(...rows.map((row) => row.id), 0) + 1;
+
+      const newRows = [
+        { id: nextId, venda: "", vendedor: "", isNew: true },
+        ...rows, //adiciona a nova linha no início do array
+      ];
+
+      setRows(newRows);
       setRowModesModel((oldModel) => ({
         ...oldModel,
-        [id]: { mode: GridRowModes.Edit, fieldToFocus: "vendedores" },
+        [nextId]: { mode: GridRowModes.Edit, fieldToFocus: "venda" },
       }));
     };
 
     //botão de adicionar vendedor
     return (
       <GridToolbarContainer>
-        <Button className="add-vendedor"
+        <Button 
+          className="text-button"
           startIcon={<MdAdd size={20} className="edit-button"/>}
           onClick={handleClick}
         >
@@ -158,11 +161,11 @@ const Vendedores = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "", width: 70, type: "number", editable: true },
     {
       field: "vendedor",
       headerName: "Vendedor",
-      width: 170,
+      headerClassName: 'super-app-theme--header',
+      width: 230,
       align: "left",
       headerAlign: "left",
       editable: true,
@@ -170,7 +173,8 @@ const Vendedores = () => {
     {
       field: "cpf",
       headerName: "CPF",
-      width: 130,
+      headerClassName: 'super-app-theme--header',
+      width: 190,
       align: "left",
       headerAlign: "left",
       editable: true,
@@ -178,7 +182,8 @@ const Vendedores = () => {
     {
       field: "ultimaVenda",
       headerName: "Última Venda",
-      width: 140,
+      headerClassName: 'super-app-theme--header',
+      width: 170,
       align: "left",
       headerAlign: "left",
       type: "date",
@@ -188,8 +193,9 @@ const Vendedores = () => {
     {
       field: "valor",
       headerName: "Valor da Venda",
+      headerClassName: 'super-app-theme--header',
       type: "number",
-      width: 130,
+      width: 190,
       align: "left",
       headerAlign: "left",
       editable: true,
@@ -198,7 +204,8 @@ const Vendedores = () => {
     {
       field: "tipoVenda",
       headerName: "Tipo de Venda",
-      width: 150,
+      headerClassName: 'super-app-theme--header',
+      width: 350,
       align: "left",
       headerAlign: "left",
       editable: true,
@@ -208,7 +215,8 @@ const Vendedores = () => {
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: "",
+      headerClassName: 'super-app-theme--header',
       width: 100,
       cellClassName: "actions",
       getActions: ({ id }) => {
@@ -237,13 +245,11 @@ const Vendedores = () => {
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
-            //color="inherit"
           />,
           <GridActionsCellItem
             icon={<MdDeleteOutline size={20} className="edit-button" />}
             label="Delete"
             onClick={handleDeleteClick(id)}
-            //color="inherit"
           />,
         ];
       },
@@ -258,18 +264,26 @@ const Vendedores = () => {
         className="sx-data-grid"
         rows={rows}
         columns={columns}
+        //botões de ação
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         slots={{
-          toolbar: EditToolbar as GridSlots["toolbar"],
+          toolbar: (props) => (
+            <EditToolbar
+            setRowModesModel={function (newModel: (oldModel: GridRowModesModel) => GridRowModesModel): void {
+              throw new Error("Function not implemented.");
+            } } {...props}
+            setRows={setRows}
+            rows={rows}            />
+          ),
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRowModesModel },
         }}
-        //a tabela divide - mostra 10 vendedores por página
+        //a tabela divide - mostra 20 vendedores por página
         initialState={{
           pagination: {
             paginationModel: {

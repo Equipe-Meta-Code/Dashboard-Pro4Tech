@@ -15,7 +15,7 @@ module.exports = {
       CPF_Vendedor: {
         type: Sequelize.STRING
       },
-      Ultima_Venda: {
+      Data_da_Venda: {
         type: Sequelize.DATE
       },
       Valor_da_Venda: {

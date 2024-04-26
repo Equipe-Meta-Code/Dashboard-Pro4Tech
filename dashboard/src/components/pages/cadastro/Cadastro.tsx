@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 
 const Cadastro = () => {
 
-
   return (
     <div className="container">
       <div className="title-label">Cadastro</div>
@@ -22,8 +21,8 @@ const Cadastro = () => {
             </div>
             </div>
             <div className="submit-container">
-              <Link to={"dashboard"}>
-                <div className="submit">Entrar</div>
+              <Link to={"/"}>
+                <div className="submit">Cadastrar</div>
               </Link>
             </div>
         </div>                 

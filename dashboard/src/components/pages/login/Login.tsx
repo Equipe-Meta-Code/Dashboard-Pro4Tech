@@ -2,8 +2,8 @@ import "./Login.scss"
 import password_icon from '../../../assets/password.png'
 import user_icon from '../../../assets/person.png'
 import { Link } from "react-router-dom";
-const Login = () => {
 
+const Login = () => {
 
   return (
     <div className="container">
@@ -20,10 +20,10 @@ const Login = () => {
             </div>
             </div>
             <div className="submit-container">
-                <Link to={""}>
+                <Link to={"/dashboard"}>
                 <div className="submit">Entrar</div>
                 </Link>
-                <Link to={"cadastro"}>
+                <Link to={"/cadastro"}>
                 <div className="submit">
                     Cadastrar
                 </div> 

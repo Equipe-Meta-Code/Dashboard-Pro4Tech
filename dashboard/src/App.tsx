@@ -7,6 +7,7 @@ import Vendedores from "./components/pages/tabelas/vendedoresScreen";
 import { useEffect } from "react";
 import Vendas from "./components/pages/tabelas/vendasScreen";
 import { Login, Cadastro } from "./components";
+import Comissao from "./components/pages/tabelas/comissaoScreen";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/cadastro" element={<Cadastro />} />
           <Route element={<BaseLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/comissões" element={<Comissao />} />
             <Route path="*" element={<PageNotFound />} />
             <Route path="vendedores" element={<Vendedores />} />
             <Route path="vendas" element={<Vendas />} />

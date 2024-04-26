@@ -89,6 +89,13 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
                 await db.Cliente.create({
                     Cliente: row.Cliente,
                     CNPJ_CPF_Cliente: row.CNPJ_CPF_Cliente
+                });   
+                await db.Comissao.create({
+                    Vendedor: row.Vendedor,
+                    CPF_Vendedor: row.CPF_Vendedor,
+                    Produto: row.Produto,
+                    ID_Produto: row.ID_Produto,
+                    Valor_da_Venda: row.Valor_de_Venda
                 });
             }
         }
@@ -170,6 +177,16 @@ async function exportar() {
                 const vendedor = "111.111.111-11"; // Supondo que o CPF do vendedor esteja disponível após o login
          
                 const [rows, fields] = await connection.query('SELECT * FROM informacoes WHERE CPF_Vendedor = ? ORDER BY Data_da_Venda DESC', [vendedor]);
+                res.json(rows);
+            } catch (error) {
+                console.error('Erro ao buscar as vendas do vendedor:', error);
+                res.status(500).send('Erro ao buscar as vendas do vendedor');
+            }
+        });
+
+        app.get('/Comissao', async (req, res) => {
+            try {
+                const [rows, fields] = await connection.query('SELECT id, Vendedor, CPF_Vendedor, Produto, ID_Produto, Valor_da_Venda , Tipo_de_Venda, Porcentagem FROM comissao');
                 res.json(rows);
             } catch (error) {
                 console.error('Erro ao buscar as vendas do vendedor:', error);

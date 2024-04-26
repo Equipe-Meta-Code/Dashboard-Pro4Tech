@@ -218,8 +218,6 @@ const Comissao = () => {
         align: "left",
         headerAlign: "left",
         editable: true,
-        type: "singleSelect",
-        valueOptions: ["5%", "10%", "15%"],
       },
     {
       field: "actions",

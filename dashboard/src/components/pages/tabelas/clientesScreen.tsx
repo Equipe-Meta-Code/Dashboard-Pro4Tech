@@ -23,73 +23,27 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 
-const Vendas = () => {
+const Clientes = () => {
   const initialRows: GridRowsProp = [
     {
       id: 1,
-      venda: "Produto Novo para Cliente Novo",
-      vendedor: "Carlos Eduardo",
-      data: "18/04/2024",
-      valor: "320",
-      pagamento: "À vista",
+      cadastro: "", //cpf ou cnpj
+      nome: "Maria Ferreira",
+      ultimaCompra: "Produto Antigo",
     },
     {
       id: 2,
-      venda: "Produto Novo para Cliente Novo",
-      vendedor: "Matheus Teixeira",
-      data: "11/04/2024",
-      valor: "550",
-      pagamento: "À vista",
+      cadastro: "11111111111", //cpf ou cnpj
+      nome: "Carlos Eduardo",
+      ultimaCompra: "Produto Novo",
     },
     {
       id: 3,
-      venda: "Produto Novo para Cliente Novo",
-      vendedor: "Roberto Nunes",
-      data: "02/04/2024",
-      valor: "220",
-      pagamento: "Parcelado",
+      cadastro: "22222222222", //cpf ou cnpj
+      nome: "Jéssica Medeiros",
+      ultimaCompra: "Produto Novo",
     },
   ];
-
-  //adicionar na tabela
-  interface EditToolbarProps {
-    setRows: (newRows: GridRowModel[]) => void;
-    setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
-    rows: GridRowsProp;
-  }
-
-  function EditToolbar(props: EditToolbarProps) {
-    const { setRows, setRowModesModel, rows } = props;
-
-    const handleClick = () => {
-      //calcula o próximo ID baseado no maior ID existente na tabela
-      const nextId = Math.max(...rows.map((row) => row.id), 0) + 1;
-
-      const newRows = [
-        { id: nextId, venda: "", vendedor: "", isNew: true },
-        ...rows, //adiciona a nova linha no início do array
-      ];
-
-      setRows(newRows);
-      setRowModesModel((oldModel) => ({
-        ...oldModel,
-        [nextId]: { mode: GridRowModes.Edit, fieldToFocus: "venda" },
-      }));
-    };
-
-    //botão para adicionar nova venda
-    return (
-      <GridToolbarContainer>
-        <Button
-          className="text-button"
-          startIcon={<MdAdd size={20} className="edit-button" />}
-          onClick={handleClick}
-        >
-          Adicionar
-        </Button>
-      </GridToolbarContainer>
-    );
-  }
 
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
@@ -143,55 +97,28 @@ const Vendas = () => {
   };
 
   const columns: GridColDef<(typeof rows)[number]>[] = [
-    { field: "id",
-      headerName: "ID_Venda",
+    {
+      field: "cadastro",
+      headerName: "CPF/CNPJ",
       headerClassName: "super-app-theme--header",
-      width: 120,
+      width: 300,
+      editable: true,
     },
     {
-      field: "venda",
-      headerName: "Venda",
+      field: "nome",
+      headerName: "Nome",
       headerClassName: "super-app-theme--header",
       width: 350,
       editable: true,
     },
     {
-      field: "vendedor",
-      headerName: "Vendedor",
-      headerClassName: "super-app-theme--header",
-      width: 230,
-      editable: true,
-    },
-    {
-      field: "data",
-      headerName: "Data",
+      field: "ultimaCompra",
+      headerName: "Última Compra",
       headerClassName: "super-app-theme--header",
       width: 170,
       align: "left",
       headerAlign: "left",
-      type: "date",
       editable: true,
-      valueGetter: (value) => value && new Date(value),
-    },
-    {
-      field: "valor",
-      headerName: "Valor da Venda",
-      headerClassName: "super-app-theme--header",
-      type: "number",
-      width: 190,
-      align: "left",
-      headerAlign: "left",
-      editable: true,
-      valueGetter: (value) => `R$${value}`,
-    },
-    {
-      field: "pagamento",
-      headerName: "Forma de pagamento",
-      headerClassName: "super-app-theme--header",
-      width: 190,
-      editable: true,
-      type: "singleSelect",
-      valueOptions: ["À vista", "Parcelado"],
     },
     {
       field: "actions",
@@ -235,7 +162,7 @@ const Vendas = () => {
   return (
     //tabela
     <Box className="sx-box">
-      <h2 className="area-top-title">Vendas Recentes</h2>
+      <h2 className="area-top-title">Clientes</h2>
       <DataGrid
         className="sx-data-grid"
         rows={rows}
@@ -246,16 +173,7 @@ const Vendas = () => {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: (props) => (
-            <EditToolbar
-            setRowModesModel={function (_newModel: (oldModel: GridRowModesModel) => GridRowModesModel): void {
-              throw new Error("Function not implemented.");
-            } } {...props}
-            setRows={setRows}
-            rows={rows}            />
-          ),
-        }}
+
         slotProps={{
           toolbar: { setRowModesModel },
         }}
@@ -273,4 +191,4 @@ const Vendas = () => {
   );
 };
 
-export default Vendas;
+export default Clientes;

@@ -162,10 +162,10 @@ const Comissao = () => {
 
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "", width: 70, type: "number", editable: true },
     {
       field: "vendedor",
       headerName: "Vendedor",
+      headerClassName: "super-app-theme--header",
       width: 170,
       align: "left",
       headerAlign: "left",
@@ -174,6 +174,7 @@ const Comissao = () => {
     {
       field: "cpf",
       headerName: "CPF",
+      headerClassName: "super-app-theme--header",
       width: 130,
       align: "left",
       headerAlign: "left",
@@ -182,6 +183,7 @@ const Comissao = () => {
     {
         field: "produto",
         headerName: "Produto",
+        headerClassName: "super-app-theme--header",
         width: 170,
         align: "left",
         headerAlign: "left",
@@ -190,6 +192,7 @@ const Comissao = () => {
       {
         field: "id_produto",
         headerName: "ID_Produto",
+        headerClassName: "super-app-theme--header",
         width: 170,
         align: "left",
         headerAlign: "left",
@@ -198,6 +201,7 @@ const Comissao = () => {
       {
         field: "valor_da_venda",
         headerName: "Valor da Venda",
+        headerClassName: "super-app-theme--header",
         width: 190,
         align: "left",
         headerAlign: "left",
@@ -206,6 +210,7 @@ const Comissao = () => {
     {
       field: "tipoVenda",
       headerName: "Tipo de Venda",
+      headerClassName: "super-app-theme--header",
       width: 150,
       align: "left",
       headerAlign: "left",
@@ -214,6 +219,7 @@ const Comissao = () => {
     {
         field: "porcentagem",
         headerName: "Porcentagem",
+        headerClassName: "super-app-theme--header",
         width: 150,
         align: "left",
         headerAlign: "left",
@@ -222,7 +228,8 @@ const Comissao = () => {
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: "",
+      headerClassName: "super-app-theme--header",
       width: 100,
       cellClassName: "actions",
       getActions: ({ id }) => {

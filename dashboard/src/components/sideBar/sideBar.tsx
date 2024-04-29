@@ -93,7 +93,7 @@ const Sidebar = () => {
         <div className="sidebar-menu">
           <ul className="menu-list">
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/dashboard" className="menu-link">
                 <span className="menu-link-icon">
                   <FaHome size={18} />
                 </span>
@@ -114,6 +114,14 @@ const Sidebar = () => {
                   <FaDollarSign size={18} />
                 </span>
                 <span className="menu-link-text">Vendas</span>
+              </Link>
+            </li>
+            <li className="menu-item">
+              <Link to="/clientes" className="menu-link">
+                <span className="menu-link-icon">
+                  <FaDollarSign size={18} />
+                </span>
+                <span className="menu-link-text">Clientes</span>
               </Link>
             </li>
             <li className="menu-item">

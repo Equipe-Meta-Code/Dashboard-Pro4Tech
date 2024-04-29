@@ -130,8 +130,16 @@ const Vendedores = () => {
   };
 
   //remover linha quando o botão deletar for clicado
-  const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+  const handleDeleteClick = (id: GridRowId) => async () => {
+    try {
+      // Faz uma requisição DELETE para o backend para deletar o vendedor com o ID especificado
+      await axios.delete(`http://localhost:8080/vendedores/${id}`);
+      
+      // Atualiza o estado das linhas, removendo a linha deletada
+      setRows(rows.filter((row) => row.id !== id));
+    } catch (error) {
+      console.error('Erro ao deletar vendedor:', error);
+    }
   };
 
   //ignorar modificações feitas na linha e voltar para modo visualização quando botão cancelar for clicado

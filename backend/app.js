@@ -172,6 +172,20 @@ async function exportar() {
             }
         });
 
+        app.delete('/vendedores/:id', async (req, res) => {
+            const vendedorId = req.params.id;
+            try {
+              // Aqui você executa a query SQL para deletar o vendedor do banco de dados
+              await connection.query('DELETE FROM vendedor WHERE id = ?', [vendedorId]);
+              
+              // Se o vendedor foi deletado com sucesso, você pode enviar uma resposta de sucesso
+              res.status(200).send('Vendedor deletado com sucesso');
+            } catch (error) {
+              console.error('Erro ao deletar vendedor:', error);
+              res.status(500).send('Erro ao deletar vendedor');
+            }
+          });
+
         app.get('/minhas_vendas', async (req, res) => {
             try {
                 const vendedor = "111.111.111-11"; // Supondo que o CPF do vendedor esteja disponível após o login

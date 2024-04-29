@@ -134,7 +134,40 @@ async function exportar() {
             password: process.env.DB_PASS,
             database: process.env.DB_BASE
         });
+
+        app.get('/geral', async (req, res) => {
+            try {
+                const [rows, fields] = await connection.query('SELECT * FROM informacoes');
+                // Objeto para armazenar contagem de cada produto
+                const produtoCount = {};
+                
+                // Contagem de cada produto
+                rows.forEach(row => {
+                    const produto = row.Produto;
+                    if (produtoCount[produto]) {
+                        produtoCount[produto]++;
+                    } else {
+                        produtoCount[produto] = 1;
+                    }
+                });
+                
+                // Adicionar o tipo de venda a cada linha
+                rows.forEach(row => {
+                    const produto = row.Produto;
+                    if (produtoCount[produto] === 1) {
+                        row.tipoVenda = 'Produto Novo';
+                    } else {
+                        row.tipoVenda = 'Produto Velho';
+                    }
+                });
         
+                res.json(rows);
+            } catch (error) {
+                console.error('Erro ao buscar dados de itens mais vendidos:', error);
+                res.status(500).send('Erro ao buscar dados de itens mais vendidos');
+            }
+        });
+
         app.get('/dados_vendas', async (req, res) => {
             try {
                 const [rows, fields] = await connection.query('SELECT Vendedor, SUM(Valor_de_Venda) AS total_vendas FROM informacoes GROUP BY Vendedor');

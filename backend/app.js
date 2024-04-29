@@ -80,12 +80,25 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
             });
 
             if (!user) {
+                const existingVendedor = await db.Vendedor.findOne({
+                    where: { Vendedor: row.Vendedor }
+                });
+                const existingProduto = await db.Informacoes.findOne({
+                    where: { Produto: row.Produto }
+                });
+
                 await db.Informacoes.create(row);
                 // Insere os dados na tabela Vendedor
-                await db.Vendedor.create({
-                    Vendedor: row.Vendedor,
-                    CPF_Vendedor: row.CPF_Vendedor
-                });
+                if (!existingVendedor) {
+                    console.log("Data de venda da linha:", row.Data_da_Venda);
+                    // Se o vendedor não existir, cria um novo registro na tabela Vendedor
+                    await db.Vendedor.create({
+                        Vendedor: row.Vendedor,
+                        CPF_Vendedor: row.CPF_Vendedor,
+                        Data_da_Venda: row.Data_da_Venda, // Certifique-se de que a propriedade correta está sendo acessada aqui
+                        Valor_de_Venda: row.Valor_de_Venda
+                    });
+                }
                 await db.Cliente.create({
                     Cliente: row.Cliente,
                     CNPJ_CPF_Cliente: row.CNPJ_CPF_Cliente

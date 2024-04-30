@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 
 const Cadastro = () => {
+  
 
   return (
     <div className="container">

@@ -34,8 +34,11 @@
   --background-color: #171821;
   --side-link-hover-color: #4c6786;
   --side-text-color: #f3f5f7;
+  --side-text-color2: #c3ccd4;
+  --side-text-color3: #8ea6c2;
+  --side-text-color4: #808087;
   --bar-fill-color: #dd6cd0;
-  --logo-color: var(--primary-color);
+  --logo-color: #4c6786;
   --xl-text-color: #292929;
   --lg-text-color: #525252;
   --base-text-color: #525252;
@@ -88,11 +91,11 @@ ul {
 .content-wrapper {
   background-color: var(--background-color);
   min-height: 100vh;
-  padding: 50px 58px;
+  padding: 25px 29px;
   margin-left: 260px;
 
   @media (max-width: 1400px) {
-    padding: 32px;
+    padding: 16p;
   }
 
   @media (max-width: 1200px) {
@@ -109,31 +112,73 @@ ul {
     padding: 16px;
   }
 }
+
 .linhaQuebrada{
   width:100vw ;
 }
+
 .content-area{
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
 }
+
 .ul{
   display: flex;
   flex-wrap: wrap;
 }
-.content-area li{
-  margin-bottom: 16px;
-  margin-right: 16px;
-  
+ul li{
+  max-height: 337px;
 }
-.content-area-li-esquerda{
-    width: 55%;
+.top-produtos{
+  width: 53.8%;
 }
-.content-area-li-direita{
-  width: 40%;
+.calendario, .ganhos-mensais{
+  @media (max-width: 1917px) {
+    order: -1;
+  }
+  @media (max-width: 845px) {
+   width: 100%;
+  }
+}
+
+.top-produtos {
+  @media (max-width: 1917px) {
+    width: 100%;
+  }
+}
+.vendas-gerais,.vendas-por-vendedor{
+  width: 100%;
 
 }
+.vendas-gerais,.vendas-por-vendedor, .top-produtos{
+  @media (max-width: 1440px) {
+    width: 100%;
+  }
+}
+.content-area li  {
+  margin-bottom: 16px;
+  margin-right: 16px;
+
+  @media (max-width: 845px) {
+    width: 100%;
+    margin-right: 0%;
+    margin-left: 0px;
+    
+  }
+}
+
+.calendario {
+  @media (max-width: 576px) {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    
+  }
+}
+
 .content-area {
   & > section {
     margin-bottom: 32px;

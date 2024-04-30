@@ -8,6 +8,8 @@ Alterar as credencias do banco de dados no arquivo ".env"
 Criar a Models Informacoes
 ### npx sequelize-cli model:generate --name Informacoes --attributes Data_da_venda:string,Vendedor:string,CPF_Vendedor:string,Produto:string,ID_Produto:string,Cliente:string,CNPJ_CPF_Cliente:string,Segmento_do_Cliente:string,Valor_de_Venda:string,Forma_de_Pagamento:string
 
+### npx sequelize-cli model:generate --name comissao --attributes Vendedor:string,CPF_Vendedor:string,Produto:string,ID_Produto:string,Valor_da_Venda:string,Tipo_de_Venda:string,Porcentagem:string
+
 Executar as migrations
 ### npx sequelize-cli db:migrate
 

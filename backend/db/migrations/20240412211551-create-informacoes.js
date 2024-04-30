@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       Data_da_Venda: {
-        type: Sequelize.DATE
+        type: Sequelize.DATEONLY
       },
       Vendedor: {
         type: Sequelize.STRING

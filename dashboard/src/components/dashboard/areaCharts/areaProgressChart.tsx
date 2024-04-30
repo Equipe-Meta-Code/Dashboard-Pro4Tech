@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "./AreaCharts.scss";
+import { v4 as uuidv4 } from 'uuid';
 
 const AreaProgressChart = () => {
   const [chartData, setChartData] = useState([]);
@@ -38,7 +39,7 @@ const AreaProgressChart = () => {
         ) : (
           chartData.length > 0 ? (
             chartData.map((item) => (
-              <div className="progress-bar-item" key={item.id}>
+              <div className="progress-bar-item" key={uuidv4()}>
                 <div className="bar-item-info">
                   <p className="bar-item-info-name">{item.Produto}</p>
                   <p className="bar-item-info-value">

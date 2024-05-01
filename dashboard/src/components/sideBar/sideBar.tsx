@@ -5,6 +5,7 @@ import "./Sidebar.scss";
 import { FaHome, FaEnvelope, FaUsers, FaDollarSign } from "react-icons/fa";
 import { MdCloudUpload } from "react-icons/md";
 import { Link } from "react-router-dom";
+import PermissionComponent from "../PermissionComponent";
 
 const Sidebar = () => {
   /*const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
@@ -100,38 +101,46 @@ const Sidebar = () => {
                 <span className="menu-link-text">Visão Geral</span>
               </Link>
             </li>
-            <li className="menu-item">
-              <Link to="/vendedores" className="menu-link">
-                <span className="menu-link-icon">
-                  <FaUsers size={18} />
-                </span>
-                <span className="menu-link-text">Vendedores</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/vendas" className="menu-link">
-                <span className="menu-link-icon">
-                  <FaDollarSign size={18} />
-                </span>
-                <span className="menu-link-text">Vendas</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/clientes" className="menu-link">
-                <span className="menu-link-icon">
-                  <FaDollarSign size={18} />
-                </span>
-                <span className="menu-link-text">Clientes</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/comissões" className="menu-link">
-                <span className="menu-link-icon">
-                  <FaEnvelope size={16} />
-                </span>
-                <span className="menu-link-text">Comissões</span>
-              </Link>
-            </li>
+            <PermissionComponent role="Admin_Role">
+                <li className="menu-item">
+                  <Link to="/vendedores" className="menu-link">
+                    <span className="menu-link-icon">
+                      <FaUsers size={18} />
+                    </span>
+                    <span className="menu-link-text">Vendedores</span>
+                  </Link>
+                </li>
+            </PermissionComponent>
+            <PermissionComponent role="Admin_Role">
+                <li className="menu-item">
+                  <Link to="/vendas" className="menu-link">
+                    <span className="menu-link-icon">
+                      <FaDollarSign size={18} />
+                    </span>
+                    <span className="menu-link-text">Vendas</span>
+                  </Link>
+                </li>
+            </PermissionComponent>
+            <PermissionComponent role="Admin_Role">
+                <li className="menu-item">
+                  <Link to="/clientes" className="menu-link">
+                    <span className="menu-link-icon">
+                      <FaDollarSign size={18} />
+                    </span>
+                    <span className="menu-link-text">Clientes</span>
+                  </Link>
+                </li>
+            </PermissionComponent>
+            <PermissionComponent role="Admin_Role">
+                <li className="menu-item">
+                  <Link to="/comissões" className="menu-link">
+                    <span className="menu-link-icon">
+                      <FaEnvelope size={16} />
+                    </span>
+                    <span className="menu-link-text">Comissões</span>
+                  </Link>
+                </li>
+            </PermissionComponent>
           </ul>
         </div>
 

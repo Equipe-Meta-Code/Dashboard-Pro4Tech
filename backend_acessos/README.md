@@ -2,8 +2,12 @@ SEQUÊNCIA PARA RODAR O PROJETO
 
 ### cd backend_acessos
 
+### npm install
+
 Rodar migrations (Se a migration estiver registrada no banco ela não irá ler um novo envio da mesma)
 ### npm run typeorm -- -d ./src/database/data-source.ts migration:run
+
+Vá no arquivo banco em backend_acessos e execute aqueles inserts no banco de dados
 
 ### npm run dev:server
 

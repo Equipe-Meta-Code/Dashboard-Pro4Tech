@@ -60,8 +60,9 @@ const AreaBarChart = () => {
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="mes" />
-                <YAxis />
-                <Tooltip />
+                <YAxis tickFormatter={(value) => `R$` +` ` + `${value.toLocaleString('pt-BR')}`}/>
+                {/* Usando o formatter personalizado para incluir "R$" no tooltip */}
+                <Tooltip formatter={(value, name) => [`R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, name]}/>
                 <Area
                   type="monotone"
                   dataKey="total_vendas"

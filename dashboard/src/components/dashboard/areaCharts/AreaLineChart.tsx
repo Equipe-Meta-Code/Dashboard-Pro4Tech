@@ -52,7 +52,7 @@ const AreaLineChart = () => {
             }}
           >
             <XAxis dataKey="name" />
-            <YAxis tickFormatter={(value) => `R$` +` ` + `${value.toLocaleString('pt-BR')}`}/>
+            <YAxis tickFormatter={(value) => `R$` + `${value.toLocaleString('pt-BR')}`}/>
             {/* Usando o formatter personalizado para incluir "R$" no tooltip */}
             <Tooltip formatter={(value, name) => [`R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, name]}/>
             <Legend />

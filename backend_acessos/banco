@@ -1,0 +1,34 @@
+Inserts para fazer no banco de dados na tabela upload
+
+Esses inserts precisam ser feitos para que você consiga cadastrar um administrador 
+ou um administrador/vendedor no frontend, no cadastro escolha a role de acordo com o id
+da tabela roles
+
+//INSIRA NA TABELA PERMISSIONS
+INSERT INTO permissions (nome_permission, descricao)
+VALUES
+  ('create_product', 'Create product'),
+  ('delete_product', 'Delete product'),
+  ('view_product', 'View product'),
+  ('edit_product', 'Edit product');
+
+//INSIRA NA TABELA ROLES 
+INSERT INTO roles (nome_role, descricao)
+VALUES
+  ('User_Role', 'User'),
+  ('Admin_Role', 'Administrator'),
+  ('Admin/Vendedor_Role', 'Administrador e vendedor');
+
+//INSIRA NA TABELA PERMISSIONS_ROLES
+INSERT INTO permissions_roles (role_id, permission_id)
+VALUES
+  ('1', '3'),
+  ('2', '1'),
+  ('2', '2'),
+  ('2', '3'),
+  ('2', '4'),
+  ('3', '1'),
+  ('3', '2'),
+  ('3', '3'),
+  ('3', '4');
+  

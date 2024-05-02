@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     CPF_Vendedor: DataTypes.STRING,
     Produto: DataTypes.STRING,
     ID_Produto: DataTypes.STRING,
-    Valor_da_Venda: DataTypes.STRING,
+    Valor_da_Venda: DataTypes.DECIMAL(10,2),
     Tipo_de_Venda: DataTypes.STRING,
     Porcentagem: DataTypes.STRING
   }, {

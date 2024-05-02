@@ -40,8 +40,8 @@ const Login = () => {
             </div>
             </div>
             <div className="submit-container">
-                <div className="submit" onClick={handleSubmit}>Entrar</div>
                 <div className="submit" onClick={cadastroSubmit}>Cadastrar</div>
+                <div className="submit" onClick={handleSubmit}>Entrar</div>
             </div>
             </div>
         </div>                

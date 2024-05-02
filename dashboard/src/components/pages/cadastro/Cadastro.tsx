@@ -13,7 +13,19 @@ const Cadastro = () => {
       <div className="inputs">
             <div className="input">
                 <img src={user_icon} alt="" />
-                <input type="text" placeholder="Código"/>
+                <input type="text" placeholder="Nome"/>
+            </div>
+            <div className="input">
+                <img src={user_icon} alt="" />
+                <input type="text" placeholder="CPF"/>
+            </div>
+            <div className="input">
+                <img src={user_icon} alt="" />
+                <input type="text" placeholder="Login"/>
+            </div>
+            <div className="input">
+                <img src={user_icon} alt="" />
+                <input type="text" placeholder="Roles"/>
             </div>
             <div className="input"> 
                 <img src={password_icon} alt="" />

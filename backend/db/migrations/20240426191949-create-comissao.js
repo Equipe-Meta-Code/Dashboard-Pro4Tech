@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       Valor_da_Venda: {
-        type: Sequelize.STRING
+        type: Sequelize.DECIMAL(10,2)
       },
       Tipo_de_Venda: {
         type: Sequelize.STRING

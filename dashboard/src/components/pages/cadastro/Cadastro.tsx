@@ -12,7 +12,8 @@ const Cadastro = () => {
   const [senha, setSenha] = useState("");
   const [roles, setRoles] = useState("");
   const [error, setError] = useState("");
-
+  const [successMessage, setSuccessMessage] = useState("");
+  
   const navigate = useNavigate();
 
   const handleSubmit = useCallback(async () => {
@@ -30,10 +31,16 @@ const Cadastro = () => {
         roles,
       });
       console.log(response.data);
+      setSuccessMessage("Usuário cadastrado com sucesso!");
+      setTimeout(() => {
+        setSuccessMessage("");
+        navigate("/login");
+      }, 1000); // Redirecionar para a página de login após 1 segundos
     } catch (error) {
       console.error("Erro ao cadastrar usuário:", error);
+      setError("Erro ao cadastrar usuário. Por favor, tente novamente.");
     }
-  }, [nome, cpf, login, senha, roles]);
+  }, [nome, cpf, login, senha, roles, navigate]);
 
   const voltarSubmit = () => {
     navigate("/");
@@ -61,7 +68,9 @@ const Cadastro = () => {
             <input type="password" placeholder="Senha" onChange={(event) => setSenha(event.target.value)} />
           </div>
         </div>
-        <div className="error-message">{error}</div>
+        
+        {error && <div className="error-message">{error}</div>}
+        {successMessage && <div className="success-message">{successMessage}</div>}
         <div className="submit-container">
           <div className="submit" onClick={voltarSubmit}>Voltar</div>
           <div className="submit" onClick={handleSubmit}>Cadastrar</div>

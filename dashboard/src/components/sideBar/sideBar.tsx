@@ -133,7 +133,7 @@ const Sidebar = () => {
             </PermissionComponent>
             <PermissionComponent role="Admin_Role">
                 <li className="menu-item">
-                  <Link to="/comissões" className="menu-link">
+                  <Link to="/comissoes" className="menu-link">
                     <span className="menu-link-icon">
                       <FaEnvelope size={16} />
                     </span>

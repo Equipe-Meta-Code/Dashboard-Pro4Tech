@@ -22,7 +22,7 @@ const Login = () => {
     }, [login, senha]);
 
     const cadastroSubmit = () => {
-        navigate('cadastro');
+        navigate('/cadastro');
     };
 
   return (

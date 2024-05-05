@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useEffect, useState } from 'react';
+
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -18,27 +20,56 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 
+import axios from "axios";
+
 const Clientes = () => {
-  const initialRows: GridRowsProp = [
-    {
-      id: 1,
-      cadastro: "", //cpf ou cnpj
-      nome: "Maria Ferreira",
-      ultimaCompra: "Produto Antigo",
-    },
-    {
-      id: 2,
-      cadastro: "11111111111", //cpf ou cnpj
-      nome: "Carlos Eduardo",
-      ultimaCompra: "Produto Novo",
-    },
-    {
-      id: 3,
-      cadastro: "22222222222", //cpf ou cnpj
-      nome: "Jéssica Medeiros",
-      ultimaCompra: "Produto Novo",
-    },
-  ];
+  const [chartData, setChartData] = useState([]);
+  const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+  
+  useEffect(() => {
+    setInitialRows(chartData);
+  }, [chartData]);
+  
+  useEffect(() => {
+    setRows(chartData);
+  }, [chartData]);
+
+  const fetchData = async () => {
+    try {
+
+      const response = await axios.get('http://localhost:8080/geral');
+      const data = response.data;
+      
+      const processedClients = {};// Objeto para rastrear clientes já processados
+      const processedData = data.reduce((acc, item) => {// Filtrar apenas os dois primeiros nomes de cada cliente
+        const cpf = item.CNPJ_CPF_Cliente;
+        
+        if (!processedClients[cpf]) {// Verificar se o CPF já foi processado
+          
+          processedClients[cpf] = true;// Adicionar o CPF ao objeto de clientes processados
+
+          acc.push({// Adicionar os dados do cliente ao conjunto de dados processado
+            id: item.id,
+            cadastro: cpf,
+            nome: item.Cliente.split(' ').slice(0, 2).join(' '),
+            ultimaCompra: item.Data_da_Venda
+          });
+        }
+  
+        return acc;
+      }, []);
+  
+      setChartData(processedData);
+      console.log(processedData);
+
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  };
 
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
@@ -113,7 +144,9 @@ const Clientes = () => {
       width: 170,
       align: "left",
       headerAlign: "left",
+      type: "date",
       editable: true,
+      valueGetter: (value) => value && new Date(value),
     },
     {
       field: "actions",

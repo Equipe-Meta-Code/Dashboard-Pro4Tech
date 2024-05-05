@@ -125,6 +125,28 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
     }
 });
 
+// Função para adicionar o tipo de venda a cada linha
+const adicionarTipoVenda = (rows) => {
+    // Agrupar as vendas por produto
+    const vendasPorProduto = {};
+    rows.forEach(row => {
+        if (!vendasPorProduto[row.Produto]) {
+            vendasPorProduto[row.Produto] = [];
+        }
+        vendasPorProduto[row.Produto].push(row);
+    });
+
+    // Iterar sobre as vendas de cada produto e adicionar o tipo de venda
+    Object.values(vendasPorProduto).forEach(vendas => {
+        const ultimaVenda = vendas[vendas.length - 1]; // Pegar a última venda
+        vendas.forEach(venda => {
+            venda.tipoVenda = venda === ultimaVenda ? 'Produto Novo' : 'Produto Velho';
+        });
+    });
+
+    return rows;
+};
+
 // Exportar dados para rota em JSON
 async function exportar() {
     try {
@@ -138,30 +160,8 @@ async function exportar() {
         app.get('/geral', async (req, res) => {
             try {
                 const [rows, fields] = await connection.query('SELECT * FROM informacoes');
-                // Objeto para armazenar contagem de cada produto
-                const produtoCount = {};
-                
-                // Contagem de cada produto
-                rows.forEach(row => {
-                    const produto = row.Produto;
-                    if (produtoCount[produto]) {
-                        produtoCount[produto]++;
-                    } else {
-                        produtoCount[produto] = 1;
-                    }
-                });
-                
-                // Adicionar o tipo de venda a cada linha
-                rows.forEach(row => {
-                    const produto = row.Produto;
-                    if (produtoCount[produto] === 1) {
-                        row.tipoVenda = 'Produto Novo';
-                    } else {
-                        row.tipoVenda = 'Produto Velho';
-                    }
-                });
-        
-                res.json(rows);
+                const rowsWithTipoVenda = adicionarTipoVenda(rows);
+                res.json(rowsWithTipoVenda);
             } catch (error) {
                 console.error('Erro ao buscar dados de itens mais vendidos:', error);
                 res.status(500).send('Erro ao buscar dados de itens mais vendidos');

@@ -210,7 +210,43 @@ const Vendas = () => {
       headerName: "Vendedor",
       headerClassName: "super-app-theme--header",
       width: 230,
-      editable: true,
+      renderCell: (params) => {
+        const isInEditMode = rowModesModel[params.row.id]?.mode === GridRowModes.Edit;
+   
+        if (isInEditMode) {
+          return (
+            <select
+              style={{
+                width: "100%",
+                padding: "8px",
+                borderRadius: "5px",
+                backgroundColor: "#21222d",
+                color: "#fff",
+              }}
+              value={params.value}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                const id = params.row.id;
+                const updatedRows = rows.map((row) => {
+                  if (row.id === id) {
+                    return { ...row, vendedor: newValue };
+                  }
+                  return row;
+                });
+                setRows(updatedRows);
+              }}
+            >
+              {chartVendedores.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else {
+          return <div>{params.value}</div>;
+        }
+      },
     },
     {
       field: "data",

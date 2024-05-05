@@ -2,8 +2,9 @@ import { useState } from "react";
 import "./Sidebar.scss";
 //import { SidebarContext } from "../../context/SidebarContext";
 //import { useContext, useRef, useEffect } from "react";
-import { FaHome, FaEnvelope, FaUsers, FaDollarSign } from "react-icons/fa";
-import { MdCloudUpload } from "react-icons/md";
+import { FaEnvelope, FaUsers } from "react-icons/fa";
+import { MdCloudUpload, MdWork, MdSell } from "react-icons/md";
+import { RiDashboardFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import PermissionComponent from "../PermissionComponent";
 
@@ -96,7 +97,7 @@ const Sidebar = () => {
             <li className="menu-item">
               <Link to="/dashboard" className="menu-link">
                 <span className="menu-link-icon">
-                  <FaHome size={18} />
+                  <RiDashboardFill size={18} />
                 </span>
                 <span className="menu-link-text">Visão Geral</span>
               </Link>
@@ -105,7 +106,7 @@ const Sidebar = () => {
                 <li className="menu-item">
                   <Link to="/vendedores" className="menu-link">
                     <span className="menu-link-icon">
-                      <FaUsers size={18} />
+                      <MdWork size={18} />
                     </span>
                     <span className="menu-link-text">Vendedores</span>
                   </Link>
@@ -115,7 +116,7 @@ const Sidebar = () => {
                 <li className="menu-item">
                   <Link to="/vendas" className="menu-link">
                     <span className="menu-link-icon">
-                      <FaDollarSign size={18} />
+                      <MdSell size={18} />
                     </span>
                     <span className="menu-link-text">Vendas</span>
                   </Link>
@@ -125,7 +126,7 @@ const Sidebar = () => {
                 <li className="menu-item">
                   <Link to="/clientes" className="menu-link">
                     <span className="menu-link-icon">
-                      <FaDollarSign size={18} />
+                      <FaUsers size={18} />
                     </span>
                     <span className="menu-link-text">Clientes</span>
                   </Link>

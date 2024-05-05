@@ -2,13 +2,9 @@ import * as React from "react";
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import {
-  MdDeleteOutline,
-  MdEdit,
-  MdSave,
-  MdAdd,
-  MdOutlineCancel,
-} from "react-icons/md";
+import { FaRegEdit } from "react-icons/fa";
+import { RxCheck, RxCross2 } from "react-icons/rx";
+import { MdAdd } from "react-icons/md";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -207,12 +203,12 @@ const Vendas = () => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<MdSave size={20} className="edit-button" />}
+              icon={<RxCheck size={32} className="edit-button" />}
               label="Save"
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<MdOutlineCancel size={20} className="edit-button" />}
+              icon={<RxCross2 size={27} className="edit-button" />}
               label="Cancel"
               onClick={handleCancelClick(id)}
             />,
@@ -222,7 +218,7 @@ const Vendas = () => {
         //botões de editar e deletar
         return [
           <GridActionsCellItem
-            icon={<MdEdit size={20} className="edit-button" />}
+            icon={<FaRegEdit size={22} className="edit-button" />}
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}

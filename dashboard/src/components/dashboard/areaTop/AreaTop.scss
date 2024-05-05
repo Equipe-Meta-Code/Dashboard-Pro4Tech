@@ -4,18 +4,22 @@
   justify-content: center;
   flex-wrap: wrap;
   width: 300px;
-  height: 337px;
+  height: 300px;
 
-  .area-top-title {
+  /*.area-top-title {
     color: var(--light-color);
-    background-color: var(--secondary-color);
+    background-color: var(--chart-secondary-color);
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     margin: 0px;
-  }
+    color: var(--light-color);
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }*/
 
   .rdrDateRangeWrapper{
-    height: 308px;
+    height: 337px;
   }
 
   .area-top-l {
@@ -37,22 +41,22 @@
     width: 100%;
   }
   .custom-date-range .rdrDateRangeWrapper {
-    background-color: var(--secondary-color);
+    background-color: var(--chart-secondary-color);
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
     color: #ffffff; //cor do texto do mês
   }
 
   .rdrDateDisplayWrapper {
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-color);
-    outline: var(--secondary-color);
+    background-color: var(--chart-secondary-color);
+    border-color: var(--chart-secondary-color);
+    outline: var(--chart-secondary-color);
     border-radius: 6px;
 
     * {
-      background-color: var(--secondary-color);
-      border-color: var(--secondary-color);
-      outline: var(--secondary-color);
+      background-color: var(--chart-secondary-color);
+      border-color: var(--chart-secondary-color);
+      outline: var(--chart-secondary-color);
       box-shadow: none;
       color: #ffffff;
     }

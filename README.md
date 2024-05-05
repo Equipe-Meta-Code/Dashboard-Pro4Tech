@@ -91,7 +91,11 @@
     <div align="center">
         
 
-https://github.com/Equipe-Meta-Code/Dashboard-Pro4Tech/assets/126246097/357c0e63-e834-4900-a025-a6f46be42afb
+
+
+https://github.com/Equipe-Meta-Code/Dashboard-Pro4Tech/assets/126246097/4082a3d5-4939-4cda-bbcf-4005c68800e8
+
+
 
 
 

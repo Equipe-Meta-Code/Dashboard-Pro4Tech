@@ -26,6 +26,7 @@ import axios from "axios";
 const Vendas = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
+  const [chartVendedores, setChartVendedores] = useState([]);
   
   useEffect(() => {
     fetchData();
@@ -54,6 +55,23 @@ const Vendas = () => {
       setChartData(processedData)
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
+    }
+  };
+
+  // Função para buscar os vendedores disponíveis
+  const fetchVendedores = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/vendedores');
+      const vendedores = response.data;
+
+      const processedVendedores = vendedores.map(item => ({
+        value: item.Vendedor.split(' ').slice(0, 2).join(' '),
+        label: item.Vendedor.split(' ').slice(0, 2).join(' '), // Você pode ajustar o label conforme necessário
+      }));
+      // Atualizando o state com os vendedores disponíveis
+      setChartVendedores(processedVendedores);
+    } catch (error) {
+      console.error('Erro ao buscar vendedores:', error);
     }
   };
 

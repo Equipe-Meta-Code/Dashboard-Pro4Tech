@@ -167,6 +167,24 @@ async function exportar() {
                 res.status(500).send('Erro ao buscar dados de itens mais vendidos');
             }
         });
+        
+        app.put('/vendas_update', async (req, res) => {
+            const updatedData = req.body; // Os dados atualizados são enviados no corpo da requisição
+          
+            try {
+              // Aqui você executa a lógica para atualizar os dados no banco de dados
+              // Por exemplo, você pode iterar sobre os dados atualizados e executar uma query SQL de UPDATE para cada registro
+              for (const data of updatedData) {
+                await connection.query('UPDATE informacoes SET Vendedor = ?, Valor_da_Venda = ?, Forma_de_Pagamento = ? WHERE id = ?', [data.Vendedor, data.Valor_de_Venda, data.Forma_de_Pagamento, data.id]);
+              }
+          
+              // Se os dados foram atualizados com sucesso, você pode enviar uma resposta de sucesso
+              res.status(200).send('Dados atualizados com sucesso');
+            } catch (error) {
+              console.error('Erro ao atualizar os dados:', error);
+              res.status(500).send('Erro ao atualizar os dados');
+            }
+          });
 
         app.get('/dados_vendas', async (req, res) => {
             try {

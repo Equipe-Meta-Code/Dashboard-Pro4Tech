@@ -42,8 +42,9 @@ const Vendedores = () => {
   const fetchData = async () => {
     try {
       const responseVendedores = await axios.get('http://localhost:8080/vendedores');
-      const responseGeral = await axios.get('http://localhost:8080/geral');
       const dataVendedores = responseVendedores.data;
+      
+      const responseGeral = await axios.get('http://localhost:8080/geral');
       const dataGeral = responseGeral.data;
    
       // Mapear os dados de /vendedores

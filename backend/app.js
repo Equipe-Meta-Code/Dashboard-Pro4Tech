@@ -140,7 +140,7 @@ const adicionarTipoVenda = (rows) => {
     Object.values(vendasPorProduto).forEach(vendas => {
         const ultimaVenda = vendas[vendas.length - 1]; // Pegar a última venda
         vendas.forEach(venda => {
-            venda.tipoVenda = venda === ultimaVenda ? 'Produto Novo' : 'Produto Velho';
+            venda.tipoVenda = venda === ultimaVenda ? 'Produto Novo' : 'Produto Antigo';
         });
     });
 

@@ -211,7 +211,8 @@ async function exportar() {
         app.get('/vendedores', async (req, res) => {
             try {
                 const [rows, fields] = await connection.query('SELECT id,Vendedor, CPF_Vendedor, Data_da_Venda, Valor_da_Venda, Tipo_de_Venda FROM vendedor');
-                res.json(rows);
+                const rowsWithTipoVenda = adicionarTipoVenda(rows);
+                res.json(rowsWithTipoVenda);
             } catch (error) {
                 console.error('Erro ao buscar dados de vendas:', error);
                 res.status(500).send('Erro ao buscar dados de vendas');

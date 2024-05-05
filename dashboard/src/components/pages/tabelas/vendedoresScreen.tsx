@@ -41,19 +41,47 @@ const Vendedores = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/vendedores');
-      const data = response.data;
-      // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
-      
-      const processedData = data.map(item => ({
-        id: item.id,
-        vendedor: item.Vendedor.split(' ').slice(0, 2).join(' '),
-        cpf: item.CPF_Vendedor,
-        valor: item.Valor_da_Venda,
-        ultimaVenda: item.Ultima_Venda,
-        tipoVenda: item.Tipo_de_Venda
-      }));
-      setChartData(processedData)
+      const responseVendedores = await axios.get('http://localhost:8080/vendedores');
+      const responseGeral = await axios.get('http://localhost:8080/geral');
+      const dataVendedores = responseVendedores.data;
+      const dataGeral = responseGeral.data;
+   
+      // Mapear os dados de /vendedores
+      const processedData = dataVendedores.map(itemVendedor => {
+        // Filtrar as vendas em /geral para o vendedor atual
+        const vendasVendedor = dataGeral.filter(itemGeral => itemGeral.CPF_Vendedor === itemVendedor.CPF_Vendedor);
+   
+        // Se houver vendas para o vendedor atual
+        if (vendasVendedor.length > 0) {
+          // Encontrar a última venda
+          const ultimaVenda = vendasVendedor.reduce((prev, current) => (prev.Data_da_Venda > current.Data_da_Venda) ? prev : current);
+   
+          // Construir o objeto combinando as propriedades de /vendedores e a última venda de /geral
+          return {
+            id: itemVendedor.id,
+            vendedor: itemVendedor.Vendedor.split(' ').slice(0, 2).join(' '),
+            cpf: itemVendedor.CPF_Vendedor,
+            // Valor_de_Venda da última venda de /geral
+            valor: ultimaVenda.Valor_de_Venda,
+            ultimaVenda: ultimaVenda.Data_da_Venda,
+            tipoVenda: ultimaVenda.tipoVenda
+            // Adicione outras propriedades de /vendedores, se necessário
+          };
+        } else {
+          // Se não houver vendas para o vendedor atual, defina o Valor_de_Venda como vazio
+          return {
+            id: itemVendedor.id,
+            vendedor: itemVendedor.Vendedor.split(' ').slice(0, 2).join(' '),
+            cpf: itemVendedor.CPF_Vendedor,
+            valor: '', // Valor_de_Venda vazio
+            ultimaVenda: '',
+            tipoVenda: ''
+            // Adicione outras propriedades de /vendedores, se necessário
+          };
+        }
+      });
+   
+      setChartData(processedData);
       console.log(processedData);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);

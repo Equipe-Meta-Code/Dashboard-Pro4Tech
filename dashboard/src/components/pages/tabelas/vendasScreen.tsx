@@ -75,6 +75,27 @@ const Vendas = () => {
     }
   };
 
+  const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
+    try {
+      console.log('Chamando função saveChangesToDatabase');
+      // Mapeia os dados atualizados para o formato esperado pelo backend
+      const updatedData = updatedRows.map(row => ({
+        id: row.id,
+        Vendedor: row.vendedor,
+        Valor_de_Venda: row.valor,
+        Forma_de_Pagamento: row.pagamento
+      }));
+      // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
+      console.log("Updated Data OBJ: ")
+      console.log(updatedData)
+      console.log("Vendedores: ", chartVendedores)
+      await axios.put('http://localhost:8080/vendas_update', updatedData);
+      console.log("Dados atualizados com sucesso!");
+    } catch (error) {
+      console.error('Erro ao salvar os dados:', error);
+    }
+  };
+
   //adicionar na tabela
   interface EditToolbarProps {
     setRows: (newRows: GridRowModel[]) => void;
@@ -133,6 +154,7 @@ const Vendas = () => {
   //alterar para modo edição da linha quando o botão for clicado
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    fetchVendedores();
   };
 
   //alterar para modo visualização da linha quando o botão de salvar for clicado
@@ -155,9 +177,13 @@ const Vendas = () => {
   };
 
   //atualizar quando a linha nova for salva
-  const processRowUpdate = (newRow: GridRowModel) => {
+  const processRowUpdate = async (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  
+    // Chama a função para salvar as mudanças no banco de dados
+    await saveChangesToDatabase([updatedRow]);
+    
     return updatedRow;
   };
 

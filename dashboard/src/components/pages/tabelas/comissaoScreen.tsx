@@ -41,8 +41,9 @@ const Comissao = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/comissao');
+      const response = await axios.get('http://localhost:8080/geral');
       const data = response.data;
+
       // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
       
       const processedData = data.map(item => ({
@@ -51,8 +52,8 @@ const Comissao = () => {
         cpf: item.CPF_Vendedor,
         produto: item.Produto,
         id_produto: item.ID_Produto,
-        valor_da_venda: item.Valor_da_Venda,
-        tipoVenda: item.Tipo_de_Venda,
+        valor_da_venda: item.Valor_de_Venda,
+        tipoVenda: item.tipoVenda,
         porcentagem: item.Porcentagem
       }));
       setChartData(processedData)
@@ -202,6 +203,7 @@ const Comissao = () => {
         align: "left",
         headerAlign: "left",
         editable: true,
+        valueGetter: (value) => `R$${value}`,
       },
     {
       field: "tipoVenda",
@@ -220,6 +222,7 @@ const Comissao = () => {
         align: "left",
         headerAlign: "left",
         editable: true,
+        valueGetter: (value) => `%${value}`
       },
     {
       field: "actions",

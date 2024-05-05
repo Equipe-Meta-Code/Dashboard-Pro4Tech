@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useEffect, useState } from 'react';
+
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -19,33 +21,41 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 
+import axios from "axios";
+
 const Vendas = () => {
-  const initialRows: GridRowsProp = [
-    {
-      id: 1,
-      venda: "Produto Novo para Cliente Novo",
-      vendedor: "Carlos Eduardo",
-      data: "18/04/2024",
-      valor: "320",
-      pagamento: "À vista",
-    },
-    {
-      id: 2,
-      venda: "Produto Novo para Cliente Novo",
-      vendedor: "Matheus Teixeira",
-      data: "11/04/2024",
-      valor: "550",
-      pagamento: "À vista",
-    },
-    {
-      id: 3,
-      venda: "Produto Novo para Cliente Novo",
-      vendedor: "Roberto Nunes",
-      data: "02/04/2024",
-      valor: "220",
-      pagamento: "Parcelado",
-    },
-  ];
+  const [chartData, setChartData] = useState([]);
+  const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setRows(chartData);
+    setInitialRows(chartData);
+  }, [chartData]);
+ 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/geral');
+      const data = response.data;
+      // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
+      
+      const processedData = data.map(item => ({
+        id: item.id,
+        venda: item.tipoVenda,
+        vendedor: item.Vendedor.split(' ').slice(0, 2).join(' '),
+        data: item.Data_da_Venda,
+        valor: item.Valor_de_Venda,
+        pagamento: item.Forma_de_Pagamento
+        
+      }));
+      setChartData(processedData)
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  };
 
   //adicionar na tabela
   interface EditToolbarProps {

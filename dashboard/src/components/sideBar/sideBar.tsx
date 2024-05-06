@@ -173,7 +173,7 @@ const Sidebar = () => {
                   <div className="modal-content" style={{ color: "white" }}>
                     <p>{modalMessage}</p>
                     <button className="close-button" onClick={handleCloseModal}>
-                      Fechar
+                      Atualizar
                     </button>
                   </div>
                 </div>

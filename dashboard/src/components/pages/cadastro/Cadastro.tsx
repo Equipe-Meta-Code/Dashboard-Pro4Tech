@@ -2,10 +2,16 @@ import "../styles.scss";
 import password_icon from "../../../assets/password.png";
 import user_icon from "../../../assets/person.png";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../../../services/api";
 
 const Cadastro = () => {
+
+  const [pageTitle, setPageTitle] = useState('Cadastro');
+  useEffect(() => {
+    document.title = pageTitle;
+  }, [pageTitle]);
+
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
   const [login, setLogin] = useState("");

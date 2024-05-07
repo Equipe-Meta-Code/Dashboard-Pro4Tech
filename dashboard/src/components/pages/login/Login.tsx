@@ -1,11 +1,16 @@
 import "../styles.scss";
 import password_icon from '../../../assets/password.png'
 import user_icon from '../../../assets/person.png'
-import React, { useCallback, useState } from  'react';
+import React, { useCallback, useEffect, useState } from  'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate  } from 'react-router-dom';
 
 const Login = () => {
+
+    const [pageTitle, setPageTitle] = useState('Login');
+    useEffect(() => {
+      document.title = pageTitle;
+    }, [pageTitle]);
 
     const [login, setLogin] = useState('');
     const [senha, setSenha] = useState('');

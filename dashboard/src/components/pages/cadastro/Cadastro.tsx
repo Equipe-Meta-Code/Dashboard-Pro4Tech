@@ -1,4 +1,4 @@
-import "./Cadastro.scss";
+import "../styles.scss";
 import password_icon from "../../../assets/password.png";
 import user_icon from "../../../assets/person.png";
 import { useNavigate } from "react-router-dom";

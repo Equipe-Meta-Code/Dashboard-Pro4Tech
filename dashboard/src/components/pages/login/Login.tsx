@@ -1,4 +1,4 @@
-import "./Login.scss"
+import "../styles.scss";
 import password_icon from '../../../assets/password.png'
 import user_icon from '../../../assets/person.png'
 import React, { useCallback, useState } from  'react';
@@ -40,8 +40,8 @@ const Login = () => {
             </div>
             </div>
             <div className="submit-container">
-                <div className="submit" onClick={cadastroSubmit}>Cadastrar</div>
                 <div className="submit" onClick={handleSubmit}>Entrar</div>
+                <div className="submit" onClick={cadastroSubmit}>Cadastrar</div>
             </div>
             </div>
         </div>                

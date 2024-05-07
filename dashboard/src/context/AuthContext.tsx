@@ -1,5 +1,10 @@
-import { createContext, useCallback, useContext, useState} from "react";
+import { createContext, useCallback, useContext, useEffect, useState} from "react";
 import api from "../services/api";
+import { ThemeContext } from "./ThemeContext";
+import { DARK_THEME, LIGHT_THEME } from "../constants/themeConstants";
+import MoonIcon from "../assets/icons/moon.svg";
+import SunIcon from "../assets/icons/sun.svg";
+
 
 interface AuthContextState {
     token: TokenState;
@@ -30,6 +35,16 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         return { } as TokenState;
     });
 
+    const { theme, toggleTheme } = useContext(ThemeContext); 
+    // adding dark-mode class if the dark mode is set on to the body tag
+    useEffect(() => {
+        if (theme === DARK_THEME) {
+        document.body.classList.add("dark-mode");
+        } else {
+        document.body.classList.remove("dark-mode");
+        }
+    }, [theme]);
+
     const signIn = useCallback(async ({login, senha}: UserData) => {
         const response = await api.post('/sessions', {
             login,
@@ -54,9 +69,15 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     return (
         <AuthContext.Provider value={{ token, signIn, userLogged }}>
+            {/* Renderize o conteúdo dos filhos */}
             {children}
+            
+            {/* Adicione o botão de alternância de tema dentro do Provider */}
+            <button type='button' className='theme-toggle-btn' onClick={toggleTheme}>
+                <img className='theme-icon' src={theme === LIGHT_THEME ? SunIcon : MoonIcon} alt="Theme Icon"/>
+            </button>
         </AuthContext.Provider>
-    );
+    );    
 };
 
 function useAuth(): AuthContextState {

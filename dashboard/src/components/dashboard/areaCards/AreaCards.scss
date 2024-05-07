@@ -51,9 +51,9 @@
 
 // recharts customização
 .recharts-default-tooltip {
-  color: white !important;
+  color: var(--fourth-color) !important;
   padding: 4px 8px !important;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 4px 12px;
+  box-shadow: rgba(143, 44, 44, 0.07) 0px 4px 12px;
   border-radius: 4px;
   background-color: var(--secondary-color) !important;
   border: 1px solid var(--border-color-inverted) !important;
@@ -61,7 +61,7 @@
 
 .recharts-tooltip-item-list {
   * {
-    color: white !important;
+    color: var(--fourth-color) !important;
     font-size: 14px;
     font-family: inherit !important;
     opacity: 0.9;

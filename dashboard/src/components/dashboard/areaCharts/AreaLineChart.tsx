@@ -29,7 +29,7 @@ const AreaLineChart = () => {
       setLoading(false);
     }
   };
- 
+
   return (
     <div className="line-chart">
       <div className="line-chart-info">
@@ -55,7 +55,6 @@ const AreaLineChart = () => {
             <YAxis tickFormatter={(value) => `R$` + `${value.toLocaleString('pt-BR')}`}/>
             {/* Usando o formatter personalizado para incluir "R$" no tooltip */}
             <Tooltip formatter={(value, name) => [`R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, name]}/>
-            <Legend />
             {chartData.length === 0 && (
               <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="white">Não há dados para exibir no gráfico.</text>
             )}

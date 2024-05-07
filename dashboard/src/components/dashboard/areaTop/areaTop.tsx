@@ -38,7 +38,9 @@ const AreaTop = () => {
   // personalizar o conteúdo dos dias
   const renderDayContent = (day) => {
     const date = day.getDate();
-    return <div style={{ color: "#F3F5F7" }}>{date}</div>;
+    return (
+      <div style={{ color: `var(--calendar-day-color)` }}>{date}</div> 
+    );
   };
 
   return (

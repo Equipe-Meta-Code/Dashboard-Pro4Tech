@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import axios from 'axios';
@@ -66,6 +65,7 @@ const AreaBarChart = () => {
                 <Area
                   type="monotone"
                   dataKey="total_vendas"
+                  name="Total das vendas"
                   stroke="#a9dfd8"
                   fill="#a9dfd8"
                 />

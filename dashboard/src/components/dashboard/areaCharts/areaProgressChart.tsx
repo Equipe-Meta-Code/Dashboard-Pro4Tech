@@ -57,7 +57,7 @@ const AreaProgressChart = () => {
               </div>
             ))
           ) : (
-            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="white">Não há dados para exibir no gráfico.</text>
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill={getComputedStyle(document.documentElement).getPropertyValue('--fourth-color') || '#000000'}>Não há dados para exibir no gráfico.</text>
           )
         )}
       </div>

@@ -44,7 +44,7 @@
     background-color: var(--chart-secondary-color);
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
-    color: #ffffff; //cor do texto do mês
+    color: var(--fourth-color); //cor do texto do mês
   }
 
   .rdrDateDisplayWrapper {
@@ -58,7 +58,7 @@
       border-color: var(--chart-secondary-color);
       outline: var(--chart-secondary-color);
       box-shadow: none;
-      color: #ffffff;
+      color: var(--fourth-color);
     }
   }
 }

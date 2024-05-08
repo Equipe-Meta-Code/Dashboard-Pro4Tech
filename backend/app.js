@@ -186,6 +186,25 @@ async function exportar() {
             }
           });
 
+          app.put('/vendas_clientes_update', async (req, res) => {
+            const updatedData = req.body; // Os dados atualizados são enviados no corpo da requisição
+
+            try {
+
+              for (const data of updatedData) {
+                await connection.query('UPDATE informacoes SET Cliente = ? WHERE CNPJ_CPF_Cliente = ?', [data.Cliente, data.CNPJ_CPF_Cliente]);
+              }
+              res.status(200).send('Dados atualizados com sucesso');
+            }
+            
+            catch (error) {
+
+              console.error('Erro ao atualizar os dados:', error);
+              res.status(500).send('Erro ao atualizar os dados');
+            }
+
+          });
+
         app.get('/dados_vendas', async (req, res) => {
             try {
                 const [rows, fields] = await connection.query('SELECT Vendedor, SUM(Valor_de_Venda) AS total_vendas FROM informacoes GROUP BY Vendedor');

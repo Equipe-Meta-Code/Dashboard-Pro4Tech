@@ -55,7 +55,7 @@ const Clientes = () => {
           acc.push({// Adicionar os dados do cliente ao conjunto de dados processado
             id: item.id,
             cadastro: cpf,
-            nome: item.Cliente.split(' ').slice(0, 2).join(' '),
+            nome: item.Cliente,
             ultimaCompra: item.Data_da_Venda
           });
         }
@@ -68,6 +68,25 @@ const Clientes = () => {
 
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
+    }
+  };
+  
+  const savarEdicaoNoBanco = async (updatedRows: GridRowModel[]) => {
+    try {
+      console.log('Chamando função saveChangesToDatabase');
+      // Mapeia os dados atualizados para o formato esperado pelo backend
+      const updatedData = updatedRows.map(row => ({
+        Cliente: row.nome,
+        CNPJ_CPF_Cliente: row.cadastro,
+      }));
+      // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
+      console.log("Updated Data OBJ: ")
+      console.log(updatedData)
+  
+      await axios.put('http://localhost:8080/vendas_clientes_update', updatedData);
+      console.log("Dados atualizados com sucesso!");
+    } catch (error) {
+      console.error('Erro ao salvar os dados:', error);
     }
   };
 
@@ -111,9 +130,13 @@ const Clientes = () => {
   };
 
   //atualizar quando a linha nova for salva
-  const processRowUpdate = (newRow: GridRowModel) => {
+  const processRowUpdate = async (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  
+    // Chama a função para salvar as mudanças no banco de dados
+    await savarEdicaoNoBanco([updatedRow]);
+    
     return updatedRow;
   };
 
@@ -128,7 +151,7 @@ const Clientes = () => {
       headerName: "CPF/CNPJ",
       headerClassName: "super-app-theme--header",
       width: 300,
-      editable: true,
+      editable: false,
     },
     {
       field: "nome",
@@ -145,7 +168,7 @@ const Clientes = () => {
       align: "left",
       headerAlign: "left",
       type: "date",
-      editable: true,
+      editable: false,
       valueGetter: (value) => value && new Date(value),
     },
     {

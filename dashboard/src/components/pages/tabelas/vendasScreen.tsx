@@ -47,6 +47,7 @@ const Vendas = () => {
         id: item.id,
         venda: item.tipoVendaGeral,
         vendedor: item.Vendedor.split(' ').slice(0, 2).join(' '),
+        cpf: item.CPF_Vendedor,
         data: item.Data_da_Venda,
         valor: item.Valor_de_Venda,
         pagamento: item.Forma_de_Pagamento
@@ -64,10 +65,13 @@ const Vendas = () => {
       const response = await axios.get('http://localhost:8080/vendedores');
       const vendedores = response.data;
 
-      const processedVendedores = vendedores.map(item => ({
-        value: item.Vendedor.split(' ').slice(0, 2).join(' '),
-        label: item.Vendedor.split(' ').slice(0, 2).join(' '), // Você pode ajustar o label conforme necessário
-      }));
+    const processedVendedores = vendedores.map(item => ({
+      value: item.Vendedor.split(' ').slice(0, 2).join(' '),
+      cpf: item.CPF_Vendedor,
+      label: `${item.Vendedor.split(' ').slice(0, 2).join(' ')}`,
+    }));
+
+      
       // Atualizando o state com os vendedores disponíveis
       setChartVendedores(processedVendedores);
     } catch (error) {
@@ -82,6 +86,7 @@ const Vendas = () => {
       const updatedData = updatedRows.map(row => ({
         id: row.id,
         Vendedor: row.vendedor,
+        CPF_Vendedor: row.cpf,
         Valor_de_Venda: row.valor,
         Forma_de_Pagamento: row.pagamento
       }));
@@ -178,12 +183,12 @@ const Vendas = () => {
 
   //atualizar quando a linha nova for salva
   const processRowUpdate = async (newRow: GridRowModel) => {
+
+    const { id, vendedor, cpf, valor, pagamento, data } = newRow; // Extrair os dados da linha
     const updatedRow = { ...newRow, isNew: false };
+    // Chama a função para salvar as mudanças no banco de dados, passando o CPF selecionado
+    await saveChangesToDatabase([{ id, vendedor, cpf, valor, pagamento, data }]);
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-  
-    // Chama a função para salvar as mudanças no banco de dados
-    await saveChangesToDatabase([updatedRow]);
-    
     return updatedRow;
   };
 
@@ -196,23 +201,23 @@ const Vendas = () => {
     { field: "id",
       headerName: "ID_Venda",
       headerClassName: "super-app-theme--header",
-      width: 120,
+      width: 100,
     },
     {
       field: "venda",
       headerName: "Venda",
       headerClassName: "super-app-theme--header",
-      width: 350,
+      width: 270,
       editable: true,
     },
     {
       field: "vendedor",
       headerName: "Vendedor",
       headerClassName: "super-app-theme--header",
-      width: 230,
+      width: 270,
       renderCell: (params) => {
         const isInEditMode = rowModesModel[params.row.id]?.mode === GridRowModes.Edit;
-   
+    
         if (isInEditMode) {
           return (
             <select
@@ -226,19 +231,22 @@ const Vendas = () => {
               value={params.value}
               onChange={(e) => {
                 const newValue = e.target.value;
+                const cpf = e.target.options[e.target.selectedIndex].dataset.cpf; // Obtenha o CPF do vendedor selecionado
                 const id = params.row.id;
                 const updatedRows = rows.map((row) => {
                   if (row.id === id) {
-                    return { ...row, vendedor: newValue };
+                    return { ...row, vendedor: newValue, cpf: cpf }; // Inclua o CPF na atualização
                   }
                   return row;
                 });
                 setRows(updatedRows);
               }}
+              
+              
             >
               {chartVendedores.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+              <option key={option.id} value={option.value} data-cpf={option.cpf}>
+                {option.label} - {option.cpf} {/* Exibir o CPF ao lado do nome */}
                 </option>
               ))}
             </select>
@@ -247,12 +255,19 @@ const Vendas = () => {
           return <div>{params.value}</div>;
         }
       },
-    },
+    },  
+    {
+      field: "cpf",
+      headerName: "cpf",
+      headerClassName: "super-app-theme--header",
+      width: 170,
+      editable: false,
+    }, 
     {
       field: "data",
       headerName: "Data",
       headerClassName: "super-app-theme--header",
-      width: 170,
+      width: 140,
       align: "left",
       headerAlign: "left",
       type: "date",
@@ -264,7 +279,7 @@ const Vendas = () => {
       headerName: "Valor da Venda",
       headerClassName: "super-app-theme--header",
       type: "number",
-      width: 190,
+      width: 170,
       align: "left",
       headerAlign: "left",
       editable: true,

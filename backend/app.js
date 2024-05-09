@@ -197,7 +197,7 @@ async function exportar() {
               // Aqui você executa a lógica para atualizar os dados no banco de dados
               // Por exemplo, você pode iterar sobre os dados atualizados e executar uma query SQL de UPDATE para cada registro
               for (const data of updatedData) {
-                await connection.query('UPDATE informacoes SET Vendedor = ?, Valor_de_Venda = ?, Forma_de_Pagamento = ? WHERE id = ?', [data.Vendedor, data.Valor_de_Venda, data.Forma_de_Pagamento, data.id]);
+                await connection.query('UPDATE informacoes SET Vendedor = ?, CPF_Vendedor = ?, Valor_de_Venda = ?, Forma_de_Pagamento = ? WHERE id = ?', [data.Vendedor,data.CPF_Vendedor, data.Valor_de_Venda, data.Forma_de_Pagamento, data.id]);
               }
           
               // Se os dados foram atualizados com sucesso, você pode enviar uma resposta de sucesso

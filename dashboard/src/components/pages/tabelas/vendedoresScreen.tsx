@@ -89,6 +89,41 @@ const Vendedores = () => {
     }
   };
 
+  const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
+    try {
+      console.log('Chamando função saveChangesToDatabase');
+      
+      // Mapeia os dados atualizados para o formato esperado pelo backend
+      const updatedData = updatedRows.map(row => ({
+        id: row.id,
+        Vendedor: row.vendedor,
+        CPF_Vendedor: row.cpf,
+      }));
+      // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
+      console.log("Updated Data OBJ: ")
+      console.log(updatedData)
+      await axios.put('http://localhost:8080/vendedores_update', updatedData);
+  
+      // Agora, para cada vendedor atualizado, também atualizamos as vendas associadas a ele
+      updatedRows.forEach(async (row) => {
+        const response = await axios.get(`http://localhost:8080/vendas?CPF_Vendedor=${row.cpf}`);
+        const vendas = response.data;
+        // Atualize as vendas associadas a esse vendedor
+        const updatedVendas = vendas.map(venda => ({
+          ...venda,
+          Vendedor: row.vendedor, // Atualize o nome do vendedor, se necessário
+          // Atualize outras propriedades da venda, se necessário
+        }));
+        await axios.put('http://localhost:8080/vendas_update', updatedVendas);
+      });
+  
+      console.log("Dados atualizados com sucesso!");
+    } catch (error) {
+      console.error('Erro ao salvar os dados:', error);
+    }
+  };
+  
+
   //adicionar na tabela
   interface EditToolbarProps {
     setRows: (newRows: GridRowModel[]) => void;
@@ -182,9 +217,13 @@ const Vendedores = () => {
   };
 
   //atualizar quando a linha nova for salva
-  const processRowUpdate = (newRow: GridRowModel) => {
+  const processRowUpdate = async (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  
+    // Chama a função para salvar as mudanças no banco de dados
+    await saveChangesToDatabase([updatedRow]);
+    
     return updatedRow;
   };
 
@@ -210,7 +249,7 @@ const Vendedores = () => {
       width: 190,
       align: "left",
       headerAlign: "left",
-      editable: true,
+      editable: false,
     },
     {
       field: "ultimaVenda",
@@ -220,7 +259,7 @@ const Vendedores = () => {
       align: "left",
       headerAlign: "left",
       type: "date",
-      editable: true,
+      editable: false,
       valueGetter: (value) => value && new Date(value),
     },
     {
@@ -231,7 +270,7 @@ const Vendedores = () => {
       width: 190,
       align: "left",
       headerAlign: "left",
-      editable: true,
+      editable: false,
       valueGetter: (value) => `R$${value}`,
     },
     {
@@ -241,7 +280,7 @@ const Vendedores = () => {
       width: 350,
       align: "left",
       headerAlign: "left",
-      editable: true,
+      editable: false,
       type: "singleSelect",
       valueOptions: ["Produto Novo", "Cliente Novo", "Produto Antigo"],
     },

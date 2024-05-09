@@ -278,6 +278,25 @@ async function exportar() {
             }
         });
 
+        app.put('/vendedores_update', async (req, res) => {
+            const updatedData = req.body; // Os dados atualizados são enviados no corpo da requisição
+         
+            try {
+              // Aqui você executa a lógica para atualizar os dados no banco de dados
+              // Por exemplo, você pode iterar sobre os dados atualizados e executar uma query SQL de UPDATE para cada registro
+              for (const data of updatedData) {
+                await connection.query('UPDATE vendedor SET Vendedor = ?, CPF_Vendedor = ? WHERE id = ?', [data.Vendedor, data.CPF_Vendedor, data.id]);
+                await connection.query('UPDATE informacoes SET Vendedor = ?, CPF_Vendedor = ? WHERE CPF_Vendedor = ?', [data.Vendedor, data.CPF_Vendedor, data.CPF_Vendedor]);
+              }
+         
+              // Se os dados foram atualizados com sucesso, você pode enviar uma resposta de sucesso
+              res.status(200).send('Dados atualizados com sucesso');
+            } catch (error) {
+              console.error('Erro ao atualizar os dados:', error);
+              res.status(500).send('Erro ao atualizar os dados');
+            }
+          });
+
         app.delete('/vendedores/:id', async (req, res) => {
             const vendedorId = req.params.id;
             try {

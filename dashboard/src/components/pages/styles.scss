@@ -19,7 +19,7 @@ body{
     align-items: center;
 
 .title-label {
-    color: var(--page-cadastro);
+    color: var(--page-cadastro-titulo);
     font-size: 32px;
     font-weight: 700;
     font-family: var(--font-family-manrope);
@@ -77,15 +77,18 @@ body{
     cursor: pointer;
     padding: 14px;
     background-color: var(--page-cadastro2);
-    color: var(--fourth-color);
+    color: white;
     margin-right: 10px;
   }
 }
 
 .submit:hover{
-    background: var(--base-text-color);
-    color: var(--page-cadastro);
+    background: var(--page-cadastro-hover);
+    color: var(--page-cadastro-hover-text);
     font-weight: bold;
+    padding: 11px;
+    border: solid;
+    border-color: var(--page-cadastro-hover-border);
 }
 
 .gray{

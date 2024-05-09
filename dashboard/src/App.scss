@@ -53,8 +53,12 @@
     --light-color: #292929;
     --light-shadow1: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     --calendar-day-color: #292929;
-    --page-cadastro: #333; 
-    --page-cadastro2: #333;
+    --page-cadastro: #d6d6d6;
+    --page-cadastro2: #007bff;
+    --page-cadastro-titulo: #292929;
+    --page-cadastro-hover: #ececec;  
+    --page-cadastro-hover-border: #007bff;
+    --page-cadastro-hover-text: #292929;
   }
   
   @mixin darkMode {
@@ -98,6 +102,12 @@
     --calendar-day-color: #F3F5F7;
     --page-cadastro: #eaeaea;
     --page-cadastro2: #007bff;
+    --page-cadastro-titulo: #eaeaea;
+    //--page-cadastro-hover: #525252;
+    //--page-cadastro-hover-border: #525252;
+    --page-cadastro-hover-text: #292929;
+    --page-cadastro-hover: #ececec;  
+    --page-cadastro-hover-border: #007bff;
   }
 
 * {

@@ -1,9 +1,7 @@
 import { Request, response, Response } from 'express';
-import { getCustomRepository } from 'typeorm';
-import UserRepository from '../repositories/UserRepository';
 import { AppDataSource } from '../database/data-source';
 import User from '../models/User';
-import { hash } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 import Role from '../models/Role';
 import { request } from 'http';
 import { decode } from 'jsonwebtoken';
@@ -78,6 +76,39 @@ class UserController {
             return response.json(roles);
         } catch(err) {
             return response.status(400).send();
+        }
+    }
+
+    async changePassword(request: Request, response: Response) {
+        const { login, senhaAntiga, novaSenha } = request.body;
+        const userRepository = AppDataSource.getRepository(User);
+
+        try {
+            // Busca o usuário pelo CPF
+            const user = await userRepository.findOne({ where: { login } });
+
+            // Verifica se o usuário existe
+            if (!user) {
+                return response.status(404).json({ message: "Usuário não encontrado!" });
+            }
+
+            // Verifica se a senha antiga está correta
+            const senhaCorreta = await compare(senhaAntiga, user.senha);
+            if (!senhaCorreta) {
+                return response.status(401).json({ message: "Senha antiga inválida!" });
+            }
+
+            // Criptografa a nova senha
+            const novaSenhaHashed = await hash(novaSenha, 8);
+
+            // Atualiza a senha do usuário no banco de dados
+            user.senha = novaSenhaHashed;
+            await userRepository.save(user);
+
+            return response.status(200).json({ message: "Senha alterada com sucesso!" });
+        } catch (error) {
+            console.error("Erro ao alterar a senha:", error);
+            return response.status(500).json({ message: "Erro interno do servidor" });
         }
     }
 }

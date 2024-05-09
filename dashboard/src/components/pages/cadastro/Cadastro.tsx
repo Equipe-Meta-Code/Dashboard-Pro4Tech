@@ -115,8 +115,8 @@ const Cadastro = () => {
               <img src={user_icon} alt="" />
               <select className="select" value={roles} onChange={(event) => setRoles(event.target.value)}>
                   <option value="">Selecione</option>
-                  <option value="4">Administrador</option>
-                  <option value="3">Vendedor</option>
+                  <option value="1">Administrador</option>
+                  <option value="2">Vendedor</option>
               </select>
           </div>
         </div>

@@ -17,10 +17,13 @@ body{
     margin-top: 60px;
     padding: 30px;
     align-items: center;
+    background-color: black;
+    width: 400px;
+    border-radius: 15px;
 
 .title-label {
     color: var(--page-cadastro-titulo);
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 700;
     font-family: var(--font-family-manrope);
 }
@@ -38,7 +41,7 @@ body{
     align-items: center;
     margin: auto;
     width: 300px;
-    height: 60px;
+    height: 50px;
     background: var(--page-cadastro);
     border-radius: 10px;
     margin-bottom: 15px;
@@ -48,13 +51,21 @@ body{
     margin: 0px 10px;
 }
 
+.input .eye-icon img {
+    margin: 0px 10px;
+    border: none; /* Remove a borda se estiver presente */
+    width: 27px;
+    height: 27px;
+    padding-top: 5px;
+}
+
 .input input{
     height: 30px;
     width: 400px;
     background: transparent;
     outline: none;
     border: none;
-    font-size: 20px;
+    font-size: 18px;
     padding: 10px;
 }
 
@@ -67,16 +78,16 @@ body{
 .submit{
     align-items: center;
     text-align: center;
-    border-radius: 50px;
-    width: 200px;
-    height: 50px;
+    border-radius: 20px;
+    width: 170px;
+    height: 40px;
     background: var(--page-cadastro);
     color: var(--background-color);
     font-weight: 700;
     font-size: 18px;
     cursor: pointer;
-    padding: 14px;
-    background-color: var(--page-cadastro2);
+    padding: 9px;
+    background-color: #22458b;
     color: white;
     margin-right: 10px;
   }
@@ -122,5 +133,32 @@ body{
     border-radius: 5px;
     margin-bottom: 10px;
     text-align: center;
+  }
+
+.input select {
+    height: 30px;
+    width: 400px;
+    background: transparent;
+    outline: none;
+    border: none;
+    font-size: 18px;
+    padding: 5px; /* Reduzido para manter o tamanho do seletor alinhado com outros campos */
+    -webkit-appearance: none; /* Remove a aparência padrão do seletor */
+    -moz-appearance: none;
+    appearance: none;
+    background-size: 20px; /* Tamanho da imagem da seta */
+    padding-right: 30px; /* Espaçamento para acomodar a imagem da seta */
+    color: #555; /* Cor do texto */
+    border-radius: 5px; /* Borda arredondada */
+    cursor: pointer; /* Cursor ao passar o mouse */
+  }
+  
+  .input select option {
+    background-color: #eaeaea; /* Cor de fundo das opções */
+    color: #555; /* Cor do texto das opções */
+  }
+  
+  .input select:focus {
+    outline: none; /* Remove o contorno ao focar */
   }
   

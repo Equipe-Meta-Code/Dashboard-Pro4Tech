@@ -10,6 +10,7 @@ interface AuthContextState {
     token: TokenState;
     signIn({login, senha}: UserData): Promise<void>;
     userLogged():boolean;
+    signOut():void;
 }
 
 interface UserData {
@@ -59,6 +60,13 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         api.defaults.headers.authorization = `Bearer ${token}`;
     }, []);
 
+     const signOut = useCallback(() => {
+        setToken({ token: '' });
+        localStorage.removeItem('@Upload:token');
+        
+        window.location.href = '/';
+    }, []);
+
     const userLogged = useCallback(() => {
         const token = localStorage.getItem('@Upload:token');
         if(token) {
@@ -68,7 +76,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     }, []);
 
     return (
-        <AuthContext.Provider value={{ token, signIn, userLogged }}>
+        <AuthContext.Provider value={{ token, signIn, userLogged, signOut }}>
             {/* Renderize o conteúdo dos filhos */}
             {children}
             

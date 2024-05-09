@@ -13,7 +13,11 @@ function AppRoutes() {
         <Routes>
             <Route path="/" element={<Login />} />
             <Route path="login" element={<Login />} />
-            <Route path="cadastro" element={<Cadastro />} />
+          
+            <Route element={<PrivateRoutes role="Admin_Role" />}>
+                <Route path="cadastro" element={<Cadastro />} />
+            </Route>
+          
             <Route element={<BaseLayout />}>
             <Route path="*" element={<PageNotFound />} />
 
@@ -34,6 +38,8 @@ function AppRoutes() {
             <Route element={<PrivateRoutes role="Admin_Role" />}>
                 <Route path="comissoes" element={<Comissao />} />
             </Route>
+
+            <Route path="novaSenha" element={<NovaSenha />} />
 
           </Route>
         </Routes>

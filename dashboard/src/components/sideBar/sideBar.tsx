@@ -1,33 +1,16 @@
 import { useState } from "react";
 import "./Sidebar.scss";
-//import { SidebarContext } from "../../context/SidebarContext";
-//import { useContext, useRef, useEffect } from "react";
 import { FaEnvelope, FaUsers } from "react-icons/fa";
+import { FaCircleUser } from "react-icons/fa6";
 import { MdCloudUpload, MdWork, MdSell } from "react-icons/md";
 import { RiDashboardFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import PermissionComponent from "../PermissionComponent";
+import { useAuth } from "../../context/AuthContext";
 
 const Sidebar = () => {
-  /*const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
-  const navbarRef = useRef<HTMLDivElement>(null);
-
-  const handleClickOutside = (event:MouseEvent) => {
-    if (
-      navbarRef.current &&
-      !navbarRef.current.contains(event.target as Node) &&
-      event.target instanceof Element && event.target.className !== "sidebar-open-btn"
-    ) {
-      closeSidebar();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);*/
+  
+  const { signOut } = useAuth();
 
   const [fileInput, setFileInput] = useState(null);
   const [showSendButton, setShowSendButton] = useState(false);
@@ -76,6 +59,10 @@ const Sidebar = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     window.location.reload();
+  };
+
+  const handleLogout = () => {
+    signOut(); 
   };
 
   return (
@@ -147,6 +134,32 @@ const Sidebar = () => {
 
         <div className="sidebar-menu side-menu2">
           <ul className="menu-list">
+            <PermissionComponent role="Admin_Role">
+              <li className="menu-item">
+                  <Link to="/cadastro" className="menu-link">
+                    <span className="menu-link-icon">
+                      <FaCircleUser size={17} />
+                    </span>
+                    <span className="menu-link-text">Cadastrar</span>
+                  </Link>
+              </li>
+            </PermissionComponent>
+            <li className="menu-item">
+                  <Link to="/novaSenha" className="menu-link">
+                    <span className="menu-link-icon">
+                      <FaKey size={16} />
+                    </span>
+                    <span className="menu-link-text">Alterar Senha</span>
+                  </Link>
+                </li>
+            <li className="menu-item">
+              <button className="menu-link" onClick={handleLogout}>   
+                  <span className="menu-link-icon">
+                    <FaSignOutAlt size={16} />
+                  </span>
+                  <span className="menu-link-text">Sair</span>     
+              </button>
+            </li>
             <li className="menu-item">
               <form onSubmit={handleSubmit}>
                 <label htmlFor="fileInput" className="menu-link">

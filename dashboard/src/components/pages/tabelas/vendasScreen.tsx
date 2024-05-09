@@ -45,7 +45,7 @@ const Vendas = () => {
       
       const processedData = data.map(item => ({
         id: item.id,
-        venda: item.tipoVendaProduto,
+        venda: item.tipoVendaGeral,
         vendedor: item.Vendedor.split(' ').slice(0, 2).join(' '),
         data: item.Data_da_Venda,
         valor: item.Valor_de_Venda,

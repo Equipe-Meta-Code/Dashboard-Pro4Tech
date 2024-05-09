@@ -160,6 +160,11 @@ const adicionarTipoVenda = (rows) => {
             venda.tipoVendaCliente = venda === ultimaVenda ? 'Cliente Novo' : 'Cliente Antigo';
         });
     });
+    
+    // Adicionar o campo tipoVendaGeral combinando os tipos de venda individuais
+    rows.forEach(row => {
+        row.tipoVendaGeral = `${row.tipoVendaProduto} - ${row.tipoVendaCliente}`;
+    });
 
     return rows;
 };

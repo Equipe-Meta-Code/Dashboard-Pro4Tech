@@ -136,11 +136,28 @@ const adicionarTipoVenda = (rows) => {
         vendasPorProduto[row.Produto].push(row);
     });
 
-    // Iterar sobre as vendas de cada produto e adicionar o tipo de venda
+    // Iterar sobre as vendas de cada produto e adicionar o tipo de venda do produto
     Object.values(vendasPorProduto).forEach(vendas => {
         const ultimaVenda = vendas[vendas.length - 1]; // Pegar a última venda
         vendas.forEach(venda => {
-            venda.tipoVenda = venda === ultimaVenda ? 'Produto Novo' : 'Produto Antigo';
+            venda.tipoVendaProduto = venda === ultimaVenda ? 'Produto Novo' : 'Produto Antigo';
+        });
+    });
+
+    // Agrupar as vendas por cliente
+    const vendasPorCliente = {};
+    rows.forEach(row => {
+        if (!vendasPorCliente[row.Cliente]) {
+            vendasPorCliente[row.Cliente] = [];
+        }
+        vendasPorCliente[row.Cliente].push(row);
+    });
+
+    // Iterar sobre as vendas de cada cliente e adicionar o tipo de venda do cliente
+    Object.values(vendasPorCliente).forEach(vendas => {
+        const ultimaVenda = vendas[vendas.length - 1]; // Pegar a última venda
+        vendas.forEach(venda => {
+            venda.tipoVendaCliente = venda === ultimaVenda ? 'Cliente Novo' : 'Cliente Antigo';
         });
     });
 

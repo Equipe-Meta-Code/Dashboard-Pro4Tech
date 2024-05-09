@@ -14,21 +14,25 @@ const Login = () => {
 
     const [login, setLogin] = useState('');
     const [senha, setSenha] = useState('');
-
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const { signIn } = useAuth();
 
-    const handleSubmit = useCallback( async (event: { preventDefault: () => void; }) => {
+    const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
-         await signIn({ login, senha });
-         navigate('dashboard');
-
+        if (!login || !senha) { // Verifica se os campos de login e senha estão vazios
+            setError("Por favor, preencha todos os campos.");
+            return;
+        }
+        try {
+            await signIn({ login, senha });
+            navigate('dashboard');
+        } catch (error) {
+            setError("Credenciais inválidas. Por favor, verifique seu login e senha.");
+        }
     }, [login, senha]);
 
-    const cadastroSubmit = () => {
-        navigate('/cadastro');
-    };
 
   return (
     <div className="container">
@@ -44,13 +48,13 @@ const Login = () => {
                 <input type="password" placeholder="Senha" onChange={event => setSenha(event.target.value)}/>
             </div>
             </div>
+           {error && <div className="error-message">{error}</div>}
             <div className="submit-container">
                 <div className="submit" onClick={handleSubmit}>Entrar</div>
-                <div className="submit" onClick={cadastroSubmit}>Cadastrar</div>
             </div>
-            </div>
-        </div>                
-  );
+        </div>
+    </div>                
+    );
 };
 
 export default Login;

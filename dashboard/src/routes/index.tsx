@@ -5,6 +5,7 @@ import BaseLayout from "../layout/baseLayout";
 import PageNotFound from "../screens/error/pageNotFound";
 import Dashboard from "../screens/dashboard/dashboardScreen";
 import PrivateRoutes from "./PrivateRoutes";
+import NovaSenha from "../components/pages/novaSenha/novaSenha";
 
 
 function AppRoutes() {

@@ -65,12 +65,13 @@ const Cadastro = () => {
         senha,
         roles
       });
-      
+      console.log(response.data);
       if (roles == '1' || roles == '3'){
           const respons = await axios.post('http://localhost:8080/vendedores_adicionar', {
           Vendedor: nome,
           CPF_Vendedor: cpf.replace(/\D/g, ''),
           });
+        console.log(response.data);
       }
       
       
@@ -127,6 +128,7 @@ const Cadastro = () => {
               <select className="select" value={roles} onChange={(event) => setRoles(event.target.value)}>
                   <option value="">Selecione</option>
                   <option value="2">Administrador</option>
+                  <option value="3">Administrador/Vendedor</option>
                   <option value="1">Vendedor</option>
               </select>
           </div>

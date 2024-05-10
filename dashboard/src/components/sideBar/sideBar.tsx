@@ -89,7 +89,7 @@ const Sidebar = () => {
                 <span className="menu-link-text">Visão Geral</span>
               </Link>
             </li>
-            <PermissionComponent role="Admin_Role">
+            <PermissionComponent role="Admin_Role,Admin/Vendedor_Role">
                 <li className="menu-item">
                   <Link to="/vendedores" className="menu-link">
                     <span className="menu-link-icon">
@@ -99,7 +99,7 @@ const Sidebar = () => {
                   </Link>
                 </li>
             </PermissionComponent>
-            <PermissionComponent role="Admin_Role">
+            <PermissionComponent role="Admin_Role,Admin/Vendedor_Role">
                 <li className="menu-item">
                   <Link to="/vendas" className="menu-link">
                     <span className="menu-link-icon">
@@ -109,7 +109,7 @@ const Sidebar = () => {
                   </Link>
                 </li>
             </PermissionComponent>
-            <PermissionComponent role="Admin_Role">
+            <PermissionComponent role="Admin_Role,Admin/Vendedor_Role">
                 <li className="menu-item">
                   <Link to="/clientes" className="menu-link">
                     <span className="menu-link-icon">
@@ -119,7 +119,7 @@ const Sidebar = () => {
                   </Link>
                 </li>
             </PermissionComponent>
-            <PermissionComponent role="Admin_Role">
+            <PermissionComponent role="Admin_Role,Admin/Vendedor_Role">
                 <li className="menu-item">
                   <Link to="/comissoes" className="menu-link">
                     <span className="menu-link-icon">
@@ -134,7 +134,7 @@ const Sidebar = () => {
 
         <div className="sidebar-menu side-menu2">
           <ul className="menu-list">
-            <PermissionComponent role="Admin_Role">
+            <PermissionComponent role="Admin_Role,Admin/Vendedor_Role">
               <li className="menu-item">
                   <Link to="/cadastro" className="menu-link">
                     <span className="menu-link-icon">

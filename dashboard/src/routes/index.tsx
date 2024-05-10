@@ -15,7 +15,7 @@ function AppRoutes() {
             <Route path="/" element={<Login />} />
             <Route path="login" element={<Login />} />
           
-            <Route element={<PrivateRoutes role="Admin_Role" />}>
+            <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />}>
                 <Route path="cadastro" element={<Cadastro />} />
             </Route>
           
@@ -24,19 +24,19 @@ function AppRoutes() {
 
             <Route path="dashboard" element={<Dashboard />} />
 
-            <Route element={<PrivateRoutes role="Admin_Role" />}>
+            <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />}>
                 <Route path="vendedores" element={<Vendedores />} />
             </Route>
 
-            <Route element={<PrivateRoutes role="Admin_Role" />}>
+            <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />}>
                 <Route path="clientes" element={<Clientes/> } />
             </Route>
 
-            <Route element={<PrivateRoutes role="Admin_Role" />}>
+            <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />}>
                 <Route path="vendas" element={<Vendas />} />
             </Route>
 
-            <Route element={<PrivateRoutes role="Admin_Role" />}>
+            <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />}>
                 <Route path="comissoes" element={<Comissao />} />
             </Route>
 

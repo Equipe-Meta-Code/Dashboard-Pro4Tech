@@ -5,6 +5,7 @@ import user_icon from "../../../assets/person.png";
 import password_icon from "../../../assets/password.png";
 import eyeOpen from "../../../assets/eyeOpen.png";
 import eyeClose from "../../../assets/eyeClose.png";
+import axios from "axios";
 
 const Cadastro = () => {
 
@@ -64,6 +65,16 @@ const Cadastro = () => {
         senha,
         roles
       });
+      
+      if (roles == '1' || roles == '3'){
+          const respons = await axios.post('http://localhost:8080/vendedores_adicionar', {
+          Vendedor: nome,
+          CPF_Vendedor: cpf.replace(/\D/g, ''),
+          });
+      }
+      
+      
+
       console.log(response.data);
       setSuccessMessage("Usuário cadastrado com sucesso!");
       setTimeout(() => {
@@ -115,8 +126,8 @@ const Cadastro = () => {
               <img src={user_icon} alt="" />
               <select className="select" value={roles} onChange={(event) => setRoles(event.target.value)}>
                   <option value="">Selecione</option>
-                  <option value="1">Administrador</option>
-                  <option value="2">Vendedor</option>
+                  <option value="2">Administrador</option>
+                  <option value="1">Vendedor</option>
               </select>
           </div>
         </div>

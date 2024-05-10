@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./Sidebar.scss";
-import { FaEnvelope, FaUsers } from "react-icons/fa";
+import { FaEnvelope, FaKey, FaSignOutAlt, FaUsers } from "react-icons/fa";
 import { FaCircleUser } from "react-icons/fa6";
 import { MdCloudUpload, MdWork, MdSell } from "react-icons/md";
 import { RiDashboardFill } from "react-icons/ri";

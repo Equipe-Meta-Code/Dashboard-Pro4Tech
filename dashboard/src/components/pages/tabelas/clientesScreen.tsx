@@ -97,8 +97,8 @@ const Clientes = () => {
       console.log('Chamando função saveChangesToDatabase');
       // Mapeia os dados atualizados para o formato esperado pelo backend
       const updatedData = updatedRows.map(row => ({
-        Cliente: row.nome,
-        CNPJ_CPF_Cliente: row.cadastro,
+        Cliente: row.cliente,
+        CNPJ_CPF_Cliente: row.cpf,
       }));
       // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
       console.log("Updated Data OBJ: ")

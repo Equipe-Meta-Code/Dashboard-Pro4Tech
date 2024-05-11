@@ -21,39 +21,37 @@
     z-index: 1000;
     width: 500px;
     height: 500px;
-    background-color: var(--background-color);
-    box-shadow: var(--light-shadow1);
+    background-color: var(--modal-background);//mudar
+    box-shadow: var(--modal-shadow);
     border-radius: 30px;
-    color: black;
   }
   .botao-fechar{
     display: flex;
     margin-left:420px;
-
     align-items: center;
     text-align: center;
     justify-content: center;
     border-radius: 30px;
     width: 30px;
     height: 30px;
-    color: var(--background-color);
     font-weight: 700;
     font-size: 18px;
     cursor: pointer;
-    color: white;
+    color: var(--modal-botao-fechar);
     margin-bottom: 100;
   }
   .botao-fechar:hover{
-    color: var(--page-cadastro-hover-border);
+    color: var(--modal-botao-fechar-hover);
     font-weight: bold;
     border: solid;
-    border-color: var(--page-cadastro-hover-border);
+    border-color: var(--modal-botao-hover);
 }
 .espaco{
   height: 40px;
 }
 .title-modal {
-  color: var(--page-cadastro-titulo);
+  text-align: center;
+  color: var(--modal-titulo);
   font-size: 32px;
   font-weight: 700;
   font-family: var(--font-family-manrope);
@@ -75,7 +73,7 @@
   margin: auto;
   width: 300px;
   height: 60px;
-  background: var(--page-cadastro);
+  background: var(--modal-campo-digitar);
   border-radius: 10px;
   margin-bottom: 15px;
 }
@@ -106,21 +104,19 @@
   border-radius: 50px;
   width: 200px;
   height: 50px;
-  background: var(--page-cadastro);
-  color: var(--background-color);
   font-weight: 700;
   font-size: 18px;
   cursor: pointer;
   padding: 14px;
-  background-color: var(--page-cadastro2);
+  background-color: var(--modal-botao-enviar);
   color: white;
   margin-right: 10px;
 }
 .submit-modal:hover{
-  background: var(--page-cadastro-hover);
-  color: var(--page-cadastro-hover-text);
+  background: var(--modal-botao-enviar-hover);
+  color: var(--modal-botao-enviar-hover-text);
   font-weight: bold;
   padding: 11px;
   border: solid;
-  border-color: var(--page-cadastro-hover-border);
+  border-color: var(--modal-botao-enviar-hover-border);
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from 'react';
-
+import InputMask from 'react-input-mask';
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -22,6 +22,9 @@ import {
 } from "@mui/x-data-grid";
 
 import axios from "axios";
+
+import Modal from "../modal/modal";
+import user_icon from '../../../assets/person.png'
 
 const Clientes = () => {
   const [chartData, setChartData] = useState([]);
@@ -72,7 +75,7 @@ const Clientes = () => {
           // Se não houver compras para o cliente atual, define vazio par os campos
           return {
             id: itemCliente.id,
-            vendedor: itemCliente.Cliente.split(' ').slice(0, 2).join(' '),
+            cliente: itemCliente.Cliente.split(' ').slice(0, 2).join(' '),
             cpf: itemCliente.CNPJ_CPF_Cliente,
             valor: '', 
             ultimaCompra: '',
@@ -133,16 +136,67 @@ const Clientes = () => {
       }));
     };
 
+    const handleAdicionar = async (Cliente, CNPJ_CPF_Cliente) => {
+      try {
+        const newData = {
+          Cliente: Cliente,
+          CNPJ_CPF_Cliente: CNPJ_CPF_Cliente,
+        };
+        
+        console.log("Adicionando vendedor", newData);
+    
+        // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
+        await axios.post('http://localhost:8080/clientes_adicionar', newData);
+
+
+        window.location.reload();
+      } catch (error) {
+        console.error("Erro ao adicionar vendedor:", error);
+      }
+      
+    };
+
+    const [openModal, setOpenModal] = useState(false)
+    const [Cliente, setVendedor] = useState('');
+    const [CNPJ_CPF_Cliente, setCPF_Vendedor] = useState('');
+    
+
     //botão de adicionar vendedor
     return (
       <GridToolbarContainer>
-        <Button 
-          className="text-button"
+        <Button className="text-button"
           startIcon={<MdAdd size={20} className="edit-button"/>}
-          onClick={handleClick}
-        >
-          Adicionar
-        </Button>
+          onClick={() => setOpenModal(true)}>Adicionar</Button>
+          <Modal isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}> 
+              <div className="container-modal">
+                <div className="title-modal">Adicionar Cliente</div>
+                <div className="content-modal"> 
+                    <div className="inputs-modal">
+
+                      <div className="input-modal">
+                        <img src={user_icon} alt="" />
+                        <input type="text" placeholder="Nome do Cliente" onChange={event => setVendedor(event.target.value)}/>
+                      </div>
+
+                      <div className="input-modal"> 
+                        <img src={user_icon} alt="" />
+                        <InputMask
+                          mask="999.999.999-99"
+                          value={CNPJ_CPF_Cliente}
+                          onChange={event => setCPF_Vendedor(event.target.value)}
+                          placeholder="CNPJ/CPF do Cliente"
+                        />
+                      </div>
+
+                    </div>
+
+                      <div className="submit-container-modal">
+                        <div className="submit-modal" onClick={() => handleAdicionar(Cliente, CNPJ_CPF_Cliente)}>Adicionar</div>
+                      </div>
+
+                </div>
+              </div>      
+          </Modal>
       </GridToolbarContainer>
     );
   }

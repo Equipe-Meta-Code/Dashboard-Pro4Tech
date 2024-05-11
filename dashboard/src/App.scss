@@ -53,12 +53,23 @@
     --light-color: #292929;
     --light-shadow1: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     --calendar-day-color: #292929;
-    --page-cadastro: #d6d6d6;
+    --page-cadastro: #eaeaea;
     --page-cadastro2: #007bff;
     --page-cadastro-titulo: #292929;
     --page-cadastro-hover: #ececec;  
     --page-cadastro-hover-border: #007bff;
     --page-cadastro-hover-text: #292929;
+    //modal
+    --modal-background:#ffffff ;
+    --modal-shadow: rgba(0, 0, 0, 0.05) 0px 5px 16px;//LIGHT shadow
+    --modal-botao-fechar: #292929;//calendar-day
+    --modal-botao-fechar-hover: #3c65d6;;
+    --modal-titulo:#292929 ;
+    --modal-campo-digitar: #eaeaea;
+    --modal-botao-enviar: #22458b;
+    --modal-botao-enviar-hover:#ececec ;
+    --modal-botao-enviar-hover-text:#292929 ;
+    --modal-botao-enviar-hover-border:#3c65d6 ;
   }
   
   @mixin darkMode {
@@ -108,6 +119,19 @@
     --page-cadastro-hover-text: #292929;
     --page-cadastro-hover: #ececec;  
     --page-cadastro-hover-border: #007bff;
+    //modal
+    --modal-background:#21222d ;
+    --modal-shadow: rgba(0, 0, 0, 0.2) 0px 6px 16px;//LIGHT shadow
+    --modal-botao-fechar: #F3F5F7;//calendar-day
+    --modal-botao-fechar-hover: #3c65d6;;
+    --modal-titulo:#f3f5f7 ;
+    --modal-campo-digitar: #eaeaea;
+    --modal-botao-enviar: #22458b;
+    --modal-botao-enviar-hover:#ececec ;
+    --modal-botao-enviar-hover-text:#292929 ;
+    --modal-botao-enviar-hover-border:#3c65d6 ;
+  
+
   }
 
 * {

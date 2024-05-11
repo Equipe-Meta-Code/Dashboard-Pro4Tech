@@ -83,6 +83,9 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
                 const existingVendedor = await db.Vendedor.findOne({
                     where: { Vendedor: row.Vendedor }
                 });
+                const existingCliente = await db.Cliente.findOne({
+                    where: { Cliente: row.Cliente }
+                });
                 const existingProduto = await db.Informacoes.findOne({
                     where: { Produto: row.Produto }
                 });
@@ -99,10 +102,13 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
                         Valor_de_Venda: row.Valor_de_Venda
                     });
                 }
-                await db.Cliente.create({
-                    Cliente: row.Cliente,
-                    CNPJ_CPF_Cliente: row.CNPJ_CPF_Cliente
-                });   
+                if (!existingCliente) {
+                    // Se o Cliente não existir, cria um novo registro na tabela Cliente
+                    await db.Cliente.create({
+                        Cliente: row.Cliente,
+                        CNPJ_CPF_Cliente: row.CNPJ_CPF_Cliente,
+                    });
+                }
                 await db.Comissao.create({
                     Vendedor: row.Vendedor,
                     CPF_Vendedor: row.CPF_Vendedor,

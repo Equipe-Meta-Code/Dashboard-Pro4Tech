@@ -1,0 +1,126 @@
+.background-modal{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  
+    backdrop-filter: blur(2px); /* Aplica o efeito de embaçamento */
+    z-index: 1000;
+  }
+  
+  .modal{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 500px;
+    height: 500px;
+    background-color: var(--background-color);
+    box-shadow: var(--light-shadow1);
+    border-radius: 30px;
+    color: black;
+  }
+  .botao-fechar{
+    display: flex;
+    margin-left:420px;
+
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    border-radius: 30px;
+    width: 30px;
+    height: 30px;
+    color: var(--background-color);
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    margin-bottom: 100;
+  }
+  .botao-fechar:hover{
+    color: var(--page-cadastro-hover-border);
+    font-weight: bold;
+    border: solid;
+    border-color: var(--page-cadastro-hover-border);
+}
+.espaco{
+  height: 40px;
+}
+.title-modal {
+  color: var(--page-cadastro-titulo);
+  font-size: 32px;
+  font-weight: 700;
+  font-family: var(--font-family-manrope);
+}
+.modal-conteudo{
+  height: 400px;
+}
+
+.inputs-modal{
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 20px; 
+}
+
+.input-modal{
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 300px;
+  height: 60px;
+  background: var(--page-cadastro);
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.input-modal img{
+  margin: 0px 10px;
+}
+
+.input-modal input{
+  height: 30px;
+  width: 400px;
+  background: transparent;
+  outline: none;
+  border: none;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.submit-container-modal{
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.submit-modal{
+  align-items: center;
+  text-align: center;
+  border-radius: 50px;
+  width: 200px;
+  height: 50px;
+  background: var(--page-cadastro);
+  color: var(--background-color);
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 14px;
+  background-color: var(--page-cadastro2);
+  color: white;
+  margin-right: 10px;
+}
+.submit-modal:hover{
+  background: var(--page-cadastro-hover);
+  color: var(--page-cadastro-hover-text);
+  font-weight: bold;
+  padding: 11px;
+  border: solid;
+  border-color: var(--page-cadastro-hover-border);
+}

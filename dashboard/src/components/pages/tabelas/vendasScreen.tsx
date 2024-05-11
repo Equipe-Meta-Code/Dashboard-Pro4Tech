@@ -220,13 +220,14 @@ const Vendas = () => {
     
         if (isInEditMode) {
           return (
-            <select
+            <select className="editar-venda"
               style={{
                 width: "100%",
                 padding: "8px",
                 borderRadius: "5px",
-                backgroundColor: "#21222d",
-                color: "#fff",
+                backgroundColor: "var(--chart-secondary-color)",
+                color: "var(--side-text-color3)",
+                
               }}
               value={params.value}
               onChange={(e) => {

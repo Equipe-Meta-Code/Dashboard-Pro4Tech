@@ -17,7 +17,8 @@ body{
     margin-top: 60px;
     padding: 30px;
     align-items: center;
-    background-color: black;
+    background-color: white;
+    box-shadow: var(--light-shadow1);
     width: 400px;
     border-radius: 15px;
 
@@ -97,7 +98,7 @@ body{
     background: var(--page-cadastro-hover);
     color: var(--page-cadastro-hover-text);
     font-weight: bold;
-    padding: 11px;
+    padding: 6px;
     border: solid;
     border-color: var(--page-cadastro-hover-border);
 }

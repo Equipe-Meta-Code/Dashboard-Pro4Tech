@@ -42,28 +42,45 @@ const Clientes = () => {
   const fetchData = async () => {
     try {
 
-      const response = await axios.get('http://localhost:8080/geral');
-      const data = response.data;
-      
-      const processedClients = {};// Objeto para rastrear clientes já processados
-      const processedData = data.reduce((acc, item) => {// Filtrar apenas os dois primeiros nomes de cada cliente
-        const cpf = item.CNPJ_CPF_Cliente;
-        
-        if (!processedClients[cpf]) {// Verificar se o CPF já foi processado
-          
-          processedClients[cpf] = true;// Adicionar o CPF ao objeto de clientes processados
+      const responseClientes = await axios.get('http://localhost:8080/clientes');
+      const dataClientes = responseClientes.data;
 
-          acc.push({// Adicionar os dados do cliente ao conjunto de dados processado
-            id: item.id,
-            cadastro: cpf,
-            nome: item.Cliente,
-            ultimaCompra: item.Data_da_Venda
-          });
+      const responseGeral = await axios.get('http://localhost:8080/geral');
+      const dataGeral = responseGeral.data;
+
+      
+      const processedData = dataClientes.map(itemCliente => {
+        // Filtrar as compras em /geral para o cliente atual
+        const comprasCliente = dataGeral.filter(itemGeral => itemGeral.CNPJ_CPF_Cliente === itemCliente.CNPJ_CPF_Cliente);
+        // Se houver compras para o cliente atual
+        if (comprasCliente.length > 0) {
+          
+          const ultimaCompra = comprasCliente.reduce((prev, current) => (prev.Data_da_Venda > current.Data_da_Venda) ? prev : current);
+   
+          return {
+            id: itemCliente.id,
+            cliente: itemCliente.Cliente.split(' ').slice(0, 2).join(' '),
+            cpf: itemCliente.CNPJ_CPF_Cliente,
+            // Valor_de_Venda da última compra de /geral
+            valor: ultimaCompra.Valor_de_Venda,
+            ultimaCompra: ultimaCompra.Data_da_Venda,
+            tipoVenda: ultimaCompra.tipoVendaProduto
+
+          };
+
+        } else {
+          // Se não houver compras para o cliente atual, define vazio par os campos
+          return {
+            id: itemCliente.id,
+            vendedor: itemCliente.Cliente.split(' ').slice(0, 2).join(' '),
+            cpf: itemCliente.CNPJ_CPF_Cliente,
+            valor: '', 
+            ultimaCompra: '',
+            tipoVenda: ''
+          };
         }
-  
-        return acc;
-      }, []);
-  
+      });
+      
       setChartData(processedData);
       console.log(processedData);
 
@@ -187,14 +204,14 @@ const Clientes = () => {
 
   const columns: GridColDef<(typeof rows)[number]>[] = [
     {
-      field: "cadastro",
+      field: "cpf",
       headerName: "CPF/CNPJ",
       headerClassName: "super-app-theme--header",
       width: 300,
       editable: false,
     },
     {
-      field: "nome",
+      field: "cliente",
       headerName: "Nome",
       headerClassName: "super-app-theme--header",
       width: 350,

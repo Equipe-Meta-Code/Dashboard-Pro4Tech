@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { FaRegEdit } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
+import { MdAdd } from "react-icons/md";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -89,6 +90,45 @@ const Clientes = () => {
       console.error('Erro ao salvar os dados:', error);
     }
   };
+
+  interface EditToolbarProps {
+    setRows: (newRows: GridRowModel[]) => void;
+    setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+    rows: GridRowsProp;
+  }
+
+  function EditToolbar(props: EditToolbarProps) {
+    const { setRows, setRowModesModel, rows } = props;
+
+    const handleClick = () => {
+      //calcula o próximo ID baseado no maior ID existente na tabela
+      const nextId = Math.max(...rows.map((row) => row.id), 0) + 1;
+
+      const newRows = [
+        { id: nextId, venda: "", vendedor: "", isNew: true },
+        ...rows, //adiciona a nova linha no início do array
+      ];
+
+      setRows(newRows);
+      setRowModesModel((oldModel) => ({
+        ...oldModel,
+        [nextId]: { mode: GridRowModes.Edit, fieldToFocus: "venda" },
+      }));
+    };
+
+    //botão de adicionar vendedor
+    return (
+      <GridToolbarContainer>
+        <Button 
+          className="text-button"
+          startIcon={<MdAdd size={20} className="edit-button"/>}
+          onClick={handleClick}
+        >
+          Adicionar
+        </Button>
+      </GridToolbarContainer>
+    );
+  }
 
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
@@ -225,6 +265,16 @@ const Clientes = () => {
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
 
+        slots={{
+          toolbar: (props) => (
+            <EditToolbar
+            setRowModesModel={function (newModel: (oldModel: GridRowModesModel) => GridRowModesModel): void {
+              throw new Error("Function not implemented.");
+            } } {...props}
+            setRows={setRows}
+            rows={rows}            />
+          ),
+        }}
         slotProps={{
           toolbar: { setRowModesModel },
         }}

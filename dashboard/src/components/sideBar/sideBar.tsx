@@ -182,7 +182,7 @@ const Sidebar = () => {
               </form>
 
               {showModal && (
-                <div className="modal">
+                <div className="modal-upload">
                   <div className="modal-content" style={{ color: "white" }}>
                     <p>{modalMessage}</p>
                     <button className="close-button" onClick={handleCloseModal}>

@@ -27,9 +27,12 @@ const Vendas = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
   const [chartVendedores, setChartVendedores] = useState([]);
+  const [chartClientes, setChartClientes] = useState([]);
   
   useEffect(() => {
     fetchData();
+    fetchVendedores();
+    fetchClientes(); // Adicionando busca por clientes
   }, []);
 
   useEffect(() => {
@@ -48,6 +51,8 @@ const Vendas = () => {
         venda: item.tipoVendaGeral,
         vendedor: item.Vendedor.split(' ').slice(0, 2).join(' '),
         cpf: item.CPF_Vendedor,
+        cliente: item.Cliente.split(' ').slice(0, 2).join(' '),
+        cpfCliente: item.CNPJ_CPF_Cliente,
         data: item.Data_da_Venda,
         valor: item.Valor_de_Venda,
         pagamento: item.Forma_de_Pagamento
@@ -79,6 +84,25 @@ const Vendas = () => {
     }
   };
 
+  // Função para buscar os clientes disponíveis
+const fetchClientes = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/clientes');
+    const clientes = response.data;
+
+    const processedClientes = clientes.map(item => ({
+      value: item.Cliente.split(' ').slice(0, 2).join(' '),
+      cpf: item.CNPJ_CPF_Cliente,
+      label: `${item.Cliente.split(' ').slice(0, 2).join(' ')}`,
+    }));
+
+    // Atualizando o state com os clientes disponíveis
+    setChartClientes(processedClientes);
+  } catch (error) {
+    console.error('Erro ao buscar clientes:', error);
+  }
+};
+
   const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
     try {
       console.log('Chamando função saveChangesToDatabase');
@@ -87,6 +111,8 @@ const Vendas = () => {
         id: row.id,
         Vendedor: row.vendedor,
         CPF_Vendedor: row.cpf,
+        Cliente: row.cliente,
+        CNPJ_CPF_Cliente: row.cpfCliente,
         Valor_de_Venda: row.valor,
         Forma_de_Pagamento: row.pagamento
       }));
@@ -184,13 +210,14 @@ const Vendas = () => {
   //atualizar quando a linha nova for salva
   const processRowUpdate = async (newRow: GridRowModel) => {
 
-    const { id, vendedor, cpf, valor, pagamento, data } = newRow; // Extrair os dados da linha
+    const { id, vendedor, cpf,cliente, cpfCliente, valor, pagamento, data } = newRow;
     const updatedRow = { ...newRow, isNew: false };
     // Chama a função para salvar as mudanças no banco de dados, passando o CPF selecionado
-    await saveChangesToDatabase([{ id, vendedor, cpf, valor, pagamento, data }]);
+    await saveChangesToDatabase([{ id, vendedor, cpf, cliente, cpfCliente, valor, pagamento, data }]);
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
+  
 
   //manipulador de eventos chamado quando o modo da linha muda
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -207,7 +234,7 @@ const Vendas = () => {
       field: "venda",
       headerName: "Venda",
       headerClassName: "super-app-theme--header",
-      width: 270,
+      width: 240,
       editable: true,
     },
     {
@@ -253,7 +280,13 @@ const Vendas = () => {
             </select>
           );
         } else {
-          return <div>{params.value}</div>;
+          return <div>{params.value} - {params.row.cpf}</div>;
+        /*return (
+            <div>
+              {params.value} - {params.row.cpfCliente}
+            </div>
+          );
+        */
         }
       },
     },  
@@ -263,12 +296,72 @@ const Vendas = () => {
       headerClassName: "super-app-theme--header",
       width: 170,
       editable: false,
+    },
+    // Coluna de cliente
+    {
+      field: "cliente",
+      headerName: "Cliente",
+      headerClassName: "super-app-theme--header",
+      width: 300,
+      renderCell: (params) => {
+        const isInEditMode = rowModesModel[params.row.id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return (
+            <select
+              className="editar-venda"
+              style={{
+                width: "100%",
+                padding: "8px",
+                borderRadius: "5px",
+                backgroundColor: "var(--chart-secondary-color)",
+                color: "var(--side-text-color3)",
+              }}
+              value={params.value}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                const cpfCliente = e.target.selectedOptions[0].getAttribute("data-cpf"); // Obtenha o CPF do cliente selecionado
+                const id = params.row.id;
+                const updatedRows = rows.map((row) => {
+                  if (row.id === id) {
+                    return { ...row, cliente: newValue, cpfCliente: cpfCliente }; // Inclua o CPF na atualização
+                  }
+                  return row;
+                });
+                setRows(updatedRows);
+              }}
+            >
+              {chartClientes.map((option) => (
+                <option key={option.id} value={option.value} data-cpf={option.cpf}>
+                  {option.label} - {option.cpf} {/* Exibir o CPF ao lado do nome */}
+                </option>
+              ))}
+            </select>
+          );
+        } else {
+          return <div>{params.value} - {params.row.cpfCliente}</div>;
+        /*return (
+            <div>
+              {params.value} - {params.row.cpfCliente}
+            </div>
+          );
+        */
+        }
+      },
+    },
+    {
+      field: "cpfCliente",
+      headerName: "CPF do Cliente",
+      headerClassName: "super-app-theme--header",
+      width: 170,
+      editable: false,
+      
     }, 
     {
       field: "data",
       headerName: "Data",
       headerClassName: "super-app-theme--header",
-      width: 140,
+      width: 115,
       align: "left",
       headerAlign: "left",
       type: "date",
@@ -280,17 +373,18 @@ const Vendas = () => {
       headerName: "Valor da Venda",
       headerClassName: "super-app-theme--header",
       type: "number",
-      width: 170,
+      width: 130,
       align: "left",
       headerAlign: "left",
       editable: true,
-      valueGetter: (value) => `R$${value}`,
+      valueFormatter: (value) => `R$${value || ''}`, // Adiciona "R$" ao valor
     },
+    
     {
       field: "pagamento",
       headerName: "Forma de pagamento",
       headerClassName: "super-app-theme--header",
-      width: 190,
+      width: 150,
       editable: true,
       type: "singleSelect",
       valueOptions: ["À vista", "Parcelado"],
@@ -300,7 +394,7 @@ const Vendas = () => {
       type: "actions",
       headerName: "",
       headerClassName: "super-app-theme--header",
-      width: 100,
+      width: 70,
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -333,6 +427,8 @@ const Vendas = () => {
       },
     },
   ];
+  // Filtrar as colunas para remover as colunas de cpf
+const filteredColumns = columns.filter((col) => col.field !== "cpf" && col.field !== "cpfCliente");
 
   return (
     //tabela
@@ -341,7 +437,7 @@ const Vendas = () => {
       <DataGrid
         className="sx-data-grid"
         rows={rows}
-        columns={columns}
+        columns={filteredColumns}
         //botões de ação
         editMode="row"
         rowModesModel={rowModesModel}

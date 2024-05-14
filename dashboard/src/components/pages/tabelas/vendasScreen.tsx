@@ -25,6 +25,7 @@ import axios from "axios";
 
 import ModalVendas from "../modal/modalVendas";
 import calendario from '../../../assets/icons/calendario.svg';
+import moment from 'moment';
 
 const Vendas = () => {
   const [chartData, setChartData] = useState([]);
@@ -158,15 +159,24 @@ const fetchClientes = async () => {
 
     const handleAdicionar = async (Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento) => {
       try {
+       
+        const dataVenda = moment(Data_da_Venda, 'DD/MM/YYYY');
+     
+        if (!dataVenda.isValid()) {
+          throw new Error('Data_da_Venda inválida');
+        }
+ 
+        const dataFormatada = dataVenda.format('YYYY-MM-DD');
+       
         const newData = {
-          Data_da_Venda: Data_da_Venda, 
+          Data_da_Venda: dataFormatada, // Convertendo a data para o tipo DATE
           Vendedor: Vendedor,
           CPF_Vendedor: CPF_Vendedor,
           Produto: Produto,
-/*           ID_Produto: "ID_Produto", */
+          ID_Produto: "ID_Produto",
           Cliente: Cliente,
           CNPJ_CPF_Cliente: CNPJ_CPF_Cliente,
-/*           Segmento_do_Cliente: "Segmento_do_Cliente", */
+          Segmento_do_Cliente: "Segmento_do_Cliente",
           Valor_de_Venda: Valor_de_Venda,
           Forma_de_Pagamento: Forma_de_Pagamento,
         };

@@ -8,8 +8,8 @@ import ProductController from './controllers/ProductController';
 import { is } from './middlewares/permission';
 
 const router = Router();
-
-router.post("/users", is(['Admin_Role', 'Admin/Vendedor_Role']), UserController.create);
+//router.post("/users", is(['Admin_Role', 'Admin/Vendedor_Role']), UserController.create);
+router.post("/users", UserController.create);
 router.post("/sessions", SessionController.create);
 router.post("/permissions", PermissionController.create);
 router.post("/roles", RoleController.create);

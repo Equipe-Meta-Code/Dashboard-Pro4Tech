@@ -18,7 +18,7 @@ function AppRoutes() {
             {/* <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />}></Route> */}
             <Route path="cadastro" element={<Cadastro />} />
 
-            {/* <Route element={<BaseLayout />}> */}
+            <Route element={<BaseLayout />}>
             <Route path="*" element={<PageNotFound />} />
 
             <Route path="dashboard" element={<Dashboard />} />

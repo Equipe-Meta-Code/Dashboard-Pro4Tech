@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from 'react';
+import InputMask from 'react-input-mask';
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -22,6 +23,9 @@ import {
 } from "@mui/x-data-grid";
 import App from "../../../App";
 import axios from "axios";
+
+import Modal from "../modal/modal";
+import user_icon from '../../../assets/person.png'
 
 const Vendedores = () => {
   const [chartData, setChartData] = useState([]);
@@ -51,7 +55,6 @@ const Vendedores = () => {
       const processedData = dataVendedores.map(itemVendedor => {
         // Filtrar as vendas em /geral para o vendedor atual
         const vendasVendedor = dataGeral.filter(itemGeral => itemGeral.CPF_Vendedor === itemVendedor.CPF_Vendedor);
-   
         // Se houver vendas para o vendedor atual
         if (vendasVendedor.length > 0) {
           // Encontrar a última venda
@@ -65,7 +68,7 @@ const Vendedores = () => {
             // Valor_de_Venda da última venda de /geral
             valor: ultimaVenda.Valor_de_Venda,
             ultimaVenda: ultimaVenda.Data_da_Venda,
-            tipoVenda: ultimaVenda.tipoVenda
+            tipoVenda: ultimaVenda.tipoVendaProduto
             // Adicione outras propriedades de /vendedores, se necessário
           };
         } else {
@@ -150,16 +153,75 @@ const Vendedores = () => {
       }));
     };
 
+    const handleAdicionar = async (Vendedor, CPF_Vendedor) => {
+      try {
+        const newData = {
+          Vendedor: Vendedor,
+          CPF_Vendedor: CPF_Vendedor,
+        };
+        
+        console.log("Adicionando vendedor", newData);
+    
+        // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
+        await axios.post('http://localhost:8080/vendedores_adicionar', newData);
+        const newDataUser = {
+          nome: Vendedor,
+          cpf: CPF_Vendedor,
+          login: CPF_Vendedor,
+          senha: CPF_Vendedor,
+        };
+        await axios.post('http://localhost:8080/vendedores_adicionar_user', newDataUser);
+        setOpenModal(false);
+        console.log("Vendedor adicionado com sucesso!");
+        window.location.reload();
+      } catch (error) {
+        console.error("Erro ao adicionar vendedor:", error);
+      }
+      
+    };
+    
+
+    
+    const [openModal, setOpenModal] = useState(false)
+    const [Vendedor, setVendedor] = useState('');
+    const [CPF_Vendedor, setCPF_Vendedor] = useState('');
+    
     //botão de adicionar vendedor
     return (
       <GridToolbarContainer>
-        <Button 
-          className="text-button"
+        <Button className="text-button"
           startIcon={<MdAdd size={20} className="edit-button"/>}
-          onClick={handleClick}
-        >
-          Adicionar
-        </Button>
+          onClick={() => setOpenModal(true)}>Adicionar</Button>
+          <Modal isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}> 
+              <div className="container-modal">
+                <div className="title-modal">Adicionar Vendedor</div>
+                <div className="content-modal"> 
+                    <div className="inputs-modal">
+
+                      <div className="input-modal">
+                        <img src={user_icon} alt="" />
+                        <input type="text" placeholder="Nome do Vendedor" onChange={event => setVendedor(event.target.value)}/>
+                      </div>
+
+                      <div className="input-modal"> 
+                        <img src={user_icon} alt="" />
+                        <InputMask
+                          mask="999.999.999-99"
+                          value={CPF_Vendedor}
+                          onChange={event => setCPF_Vendedor(event.target.value)}
+                          placeholder="CPF do Vendedor"
+                        />
+                      </div>
+
+                    </div>
+
+                      <div className="submit-container-modal">
+                        <div className="submit-modal" onClick={() => handleAdicionar(Vendedor, CPF_Vendedor)}>Adicionar</div>
+                      </div>
+
+                </div>
+              </div>      
+          </Modal>
       </GridToolbarContainer>
     );
   }
@@ -197,6 +259,7 @@ const Vendedores = () => {
       
       // Atualiza o estado das linhas, removendo a linha deletada
       setRows(rows.filter((row) => row.id !== id));
+      window.location.reload();
     } catch (error) {
       console.error('Erro ao deletar vendedor:', error);
     }

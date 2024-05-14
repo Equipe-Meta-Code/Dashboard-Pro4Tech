@@ -209,7 +209,77 @@ const fetchClientes = async () => {
     const [Forma_de_Pagamento, setForma_de_Pagamento] = useState('');
    /*  const [selectedVendedor, setSelectedVendedor] = useState(''); */
 
-   
+   //botão de adicionar vendas - arrumar com chat gpt ainda
+   return (
+    <GridToolbarContainer>
+      <Button className="text-button"
+        startIcon={<MdAdd size={20} className="edit-button"/>}
+        onClick={() => setOpenModal(true)}>Adicionar</Button>
+        <ModalVendas isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}> 
+            <div className="container-modalVendas">
+              <div className="title-modalVendas">Adicionar Vendas</div>
+              <div className="content-modalVendas"> 
+                  <div className="inputs-modalVendas">
+
+                    <div className="input-modalVendas">
+                      <select value={Vendedor} onChange={(event) => {
+                        setVendedor(event.target.value); // Define o valor do vendedor
+                        setCPF_Vendedor(event.target.selectedOptions[0].getAttribute("data-cpf")); // Define o CPF do vendedor
+                      }}>
+                        <option value="">Selecione um vendedor</option>
+                        {chartVendedores.map((vendedor) => (
+                          <option key={vendedor.value} value={vendedor.value} data-cpf={vendedor.cpf}>{vendedor.label} - {vendedor.cpf}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="input-modalVendas">
+                      <select value={Cliente} onChange={(event) => {
+                        setCliente(event.target.value); // Define o valor do cliente
+                        setCNPJ_CPF_Cliente(event.target.selectedOptions[0].getAttribute("data-cpf")); // Define o CPF do cliente
+                      }}>
+                        <option value="">Selecione um cliente</option>
+                        {chartClientes.map((cliente) => (
+                          <option key={cliente.value} value={cliente.value} data-cpf={cliente.cpf}>{cliente.label} - {cliente.cpf}</option>
+                        ))}
+                      </select>
+                    </div>
+
+
+                    <div className="input-modalVendas"> 
+                        <img src={calendario} alt="" />
+                        <InputMask
+                          mask="99/99/9999"
+                          value={Data_da_Venda}
+                          onChange={event => setData_da_Venda(event.target.value)}
+                          placeholder="DD/MM/AAAA"
+                        />
+                      </div>
+
+                    <div className="input-modalVendas">
+                      <input type="text" placeholder="Produto" onChange={event => setProduto(event.target.value)}/>
+                    </div>
+
+                    <div className="input-modalVendas">
+                      <input type="text" placeholder="Valor da Venda" onChange={event => setValor_de_Venda(event.target.value)}/>
+                    </div>
+
+                    <div className="input-modalVendas">
+                      <input type="text" placeholder="Forma de Pagamento" onChange={event => setForma_de_Pagamento(event.target.value)}/>
+                    </div>
+
+                  </div>
+
+                    <div className="submit-container-modalVendas">
+                      <div className="submit-modalVendas" onClick={() => handleAdicionar(Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento)}>Adicionar</div>
+                    </div>
+
+              </div>
+            </div>      
+        </ModalVendas>
+    </GridToolbarContainer>
+  );
+}
 
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(

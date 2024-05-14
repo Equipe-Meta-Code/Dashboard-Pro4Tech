@@ -60,7 +60,7 @@ const Cadastro = () => {
     try {
       const response = await api.post("/users", {
         nome,
-        cpf: cpf.replace(/\D/g, ''),
+        cpf,
         login,
         senha,
         roles
@@ -69,7 +69,7 @@ const Cadastro = () => {
       if (roles == '1' || roles == '3'){
           const respons = await axios.post('http://localhost:8080/vendedores_adicionar', {
           Vendedor: nome,
-          CPF_Vendedor: cpf.replace(/\D/g, ''),
+          CPF_Vendedor: cpf,
           });
         console.log(response.data);
       }

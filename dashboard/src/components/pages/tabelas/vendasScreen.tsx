@@ -265,7 +265,11 @@ const fetchClientes = async () => {
                     </div>
 
                     <div className="input-modalVendas">
-                      <input type="text" placeholder="Forma de Pagamento" onChange={event => setForma_de_Pagamento(event.target.value)}/>
+                      <select value={Forma_de_Pagamento} onChange={event => setForma_de_Pagamento(event.target.value)}>
+                        <option value="">Selecione a forma de pagamento</option>
+                        <option value="Á vista">Á vista</option>
+                        <option value="Parcelado">Parcelado</option>
+                      </select>
                     </div>
 
                   </div>

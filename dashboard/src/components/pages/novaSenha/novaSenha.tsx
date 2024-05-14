@@ -9,36 +9,55 @@ const NovaSenha = () => {
     const [login, setLogin] = useState("");
     const [senhaAntiga, setSenhaAntiga] = useState("");
     const [novaSenha, setNovaSenha] = useState("");
+    const [confirmarSenha, setConfirmarSenha] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [mostrarAntiga, setMostrarAntiga] = useState(false);
     const [mostrarNova, setMostrarNova] = useState(false);
+    const [mostrarConfirma, setMostrarConfirma] = useState(false);
 
     const handleSubmit = async () => {
         try {
-            const response = await api.put(`/users/changePassword/${login}`, {
+            // Validar se todos os campos estão preenchidos
+            if (!login || !senhaAntiga || !novaSenha || !confirmarSenha) {
+                throw new Error("Por favor, preencha todos os campos.");
+            }
+
+            // Validar a nova senha
+            if (novaSenha.length < 8 || !/\d/.test(novaSenha) || !/[!@#$%^&*(),.?":{}|<>]/.test(novaSenha)) {
+                throw new Error("A nova senha deve ter no mínimo 8 caracteres, pelo menos 1 número e 1 caractere especial.");
+            }
+
+            // Verificar se a nova senha e a confirmação são iguais
+            if (novaSenha !== confirmarSenha) {
+                throw new Error("A nova senha e a confirmação de senha não são iguais.");
+            }
+
+
+            // Fazer a requisição para a API com os dados do formulário
+            const response = await api.put('/updatePassword', {
+                login,
                 senhaAntiga,
                 novaSenha
             });
-            console.log("eeei");
-            setSuccessMessage(response.data.message);
+            
+            // Limpar mensagens de erro/sucesso anteriores
             setErrorMessage("");
+            setSuccessMessage("Senha atualizada com sucesso");
+
+            // Limpar campos do formulário após sucesso
+            setLogin("");
+            setSenhaAntiga("");
+            setNovaSenha("");
+            setConfirmarSenha("");
         } catch (error) {
-            setSuccessMessage("");
-            setErrorMessage(error.response.data.message);
+            // Tratar erros da requisição
+            if (error.response && error.response.data) {
+                setErrorMessage(error.response.data.message);
+            } else {
+                setErrorMessage(error.message);
+            }
         }
-    };
-
-    const handleLoginChange = (event) => {
-        setLogin(event.target.value);
-    };
-
-    const handleSenhaAntigaChange = (event) => {
-        setSenhaAntiga(event.target.value);
-    };
-
-    const handleNovaSenhaChange = (event) => {
-        setNovaSenha(event.target.value);
     };
 
     return (
@@ -48,20 +67,27 @@ const NovaSenha = () => {
                 <div className="inputs">
                     <div className="input">
                         <img src={user_icon} alt="" />
-                        <input type="text" placeholder="Insira seu Login" value={login} onChange={handleLoginChange} />
+                        <input type="text" placeholder="Insira seu login" value={login} onChange={(e) => setLogin(e.target.value)} />
                     </div>
                     <div className="input">
                         <img src={password_icon} alt="" />
-                        <input type={mostrarAntiga ? "text" : "password"} placeholder="Insira sua senha antiga" value={senhaAntiga} onChange={handleSenhaAntigaChange} />
+                        <input type={mostrarAntiga ? "text" : "password"} placeholder="Insira sua senha atual" value={senhaAntiga} onChange={(e) => setSenhaAntiga(e.target.value)} />
                         <button className="eye-icon" onClick={() => setMostrarAntiga(!mostrarAntiga)}>
-                        {mostrarAntiga ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
+                            {mostrarAntiga ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
                         </button>
                     </div>
                     <div className="input">
                         <img src={password_icon} alt="" />
-                        <input type={mostrarNova ? "text" : "password"} placeholder="Insira sua senha nova" value={novaSenha} onChange={handleNovaSenhaChange} />
+                        <input type={mostrarNova ? "text" : "password"} placeholder="Insira sua nova senha" value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} />
                         <button className="eye-icon" onClick={() => setMostrarNova(!mostrarNova)}>
-                        {mostrarNova ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
+                            {mostrarNova ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
+                        </button>
+                    </div>
+                    <div className="input">
+                        <img src={password_icon} alt="" />
+                        <input type={mostrarConfirma ? "text" : "password"} placeholder="Confirme sua nova senha" value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} />
+                        <button className="eye-icon" onClick={() => setMostrarConfirma(!mostrarConfirma)}>
+                            {mostrarConfirma ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
                         </button>
                     </div>
                 </div>

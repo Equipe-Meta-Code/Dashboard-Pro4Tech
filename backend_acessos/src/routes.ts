@@ -20,6 +20,6 @@ router.post("/products", is(['Admin_Role']), ProductController.create);
 router.get("/products", is(['Admin_Role', 'User_Role']), ProductController.index);
 router.get("/products/:id", is(['Admin_Role', 'User_Role']), ProductController.show);
 
-router.put("/users/changePassword/:login", UserController.changePassword);
+router.put("/updatePassword", UserController.updatePassword);
 
 export { router };

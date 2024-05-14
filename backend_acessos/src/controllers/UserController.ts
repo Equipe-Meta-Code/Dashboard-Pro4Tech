@@ -19,7 +19,7 @@ class UserController {
         const existUser = await userRepository.findOneBy({cpf});
 
         if(existUser) {
-            return response.status(400).json({message: 'User already exists!'})
+            return response.status(400).json({message: 'Usuário já existente!'})
         }
 
         //Serve para criptografar a senha do usuário
@@ -79,36 +79,36 @@ class UserController {
         }
     }
 
-    async changePassword(request: Request, response: Response) {
+    async updatePassword(request: Request, response: Response) {
         const { login, senhaAntiga, novaSenha } = request.body;
+    
         const userRepository = AppDataSource.getRepository(User);
-
+    
         try {
-            // Busca o usuário pelo CPF
             const user = await userRepository.findOne({ where: { login } });
-
-            // Verifica se o usuário existe
+    
             if (!user) {
-                return response.status(404).json({ message: "Usuário não encontrado!" });
+                return response.status(404).json({ message: 'Usuário não encontrado' });
             }
-
-            // Verifica se a senha antiga está correta
-            const senhaCorreta = await compare(senhaAntiga, user.senha);
-            if (!senhaCorreta) {
-                return response.status(401).json({ message: "Senha antiga inválida!" });
+    
+            const senhaMatch = await compare(senhaAntiga, user.senha);
+    
+            if (!senhaMatch) {
+                return response.status(401).json({ message: 'Senha atual incorreta' });
             }
-
-            // Criptografa a nova senha
-            const novaSenhaHashed = await hash(novaSenha, 8);
-
-            // Atualiza a senha do usuário no banco de dados
-            user.senha = novaSenhaHashed;
+    
+            const senhaHashed = await hash(novaSenha, 8);
+    
+            user.senha = senhaHashed;
+    
             await userRepository.save(user);
-
-            return response.status(200).json({ message: "Senha alterada com sucesso!" });
+    
+            // Remover a propriedade senha do objeto antes de retornar
+            const userResponse = { ...user, senha: undefined };
+    
+            return response.status(200).json(userResponse);
         } catch (error) {
-            console.error("Erro ao alterar a senha:", error);
-            return response.status(500).json({ message: "Erro interno do servidor" });
+            return response.status(500).json({ message: 'Erro ao atualizar senha' });
         }
     }
 }

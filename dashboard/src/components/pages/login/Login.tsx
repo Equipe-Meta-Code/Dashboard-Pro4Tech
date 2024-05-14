@@ -48,7 +48,7 @@ const Login = () => {
             </div>
            <div className="input">
                 <img src={password_icon} alt="" />
-                <input type={mostrarSenha ? "text" : "password"} placeholder="Senha" value={senha} onChange={(event) => setSenha(event.target.value)} />
+                <input type={mostrarSenha ? "text" : "password"} placeholder="Senha" onChange={(event) => setSenha(event.target.value)} />
                 <button className="eye-icon" onClick={() => setMostrarSenha(!mostrarSenha)}>
                   {mostrarSenha ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
                 </button>

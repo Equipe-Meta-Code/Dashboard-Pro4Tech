@@ -19,15 +19,16 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
-    width: 500px;
+    width: 430px;
     height: 550px;
     background-color: var(--modal-background);//mudar
     box-shadow: var(--modal-shadow);
     border-radius: 30px;
   }
-  .botao-fechar{
+
+  .botao-fecharVendas{
     display: flex;
-    margin-left:420px;
+    margin-left:370px;
     align-items: center;
     text-align: center;
     justify-content: center;
@@ -40,15 +41,17 @@
     color: var(--modal-botao-fechar);
     margin-bottom: 100;
   }
-  .botao-fechar:hover{
+  .botao-fecharVendas:hover{
     color: var(--modal-botao-fechar-hover);
     font-weight: bold;
-    border: solid;
-    border-color: var(--modal-botao-hover);
+    //border: solid;
+    //border-color: var(--modal-botao-hover);
 }
+
 .espaco{
-  height: 40px;
+  height: 0px;
 }
+
 .title-modalVendas {
   text-align: center;
   color: var(--modal-titulo);
@@ -56,8 +59,9 @@
   font-weight: 700;
   font-family: var(--font-family-manrope);
 }
+
 .modalVendas-conteudo{
-  height: 700px;
+  height: 500px;
 }
 
 .inputs-modalVendas{
@@ -108,7 +112,7 @@
 .submit-container-modalVendas{
   display: flex;
   justify-content: center;
-  margin: 20px auto;
+  margin: 10px auto;
 }
 
 .submit-modalVendas{
@@ -125,6 +129,7 @@
   color: white;
   margin-right: 10px;
 }
+
 .submit-modalVendas:hover{
   background: var(--modal-botao-enviar-hover);
   color: var(--modal-botao-enviar-hover-text);

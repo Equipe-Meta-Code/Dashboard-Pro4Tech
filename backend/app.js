@@ -267,6 +267,27 @@ async function exportar() {
             }
         });
 
+        const moment = require('moment'); // Importa a biblioteca moment.js para manipulação de datas
+
+        app.post('/vendedores_adicionar', async (req, res) => {
+          const newData = req.body; // Os dados atualizados são enviados no corpo da requisição
+          try {
+            const now = moment().format('YYYY-MM-DD HH:mm:ss'); // Obtém a data e hora atuais no formato desejado
+        
+            // Adiciona createdAt e updatedAt aos dados recebidos
+            newData.createdAt = now;
+            newData.updatedAt = now;
+        
+            // Insere os dados na tabela vendedor
+            await connection.query('INSERT INTO vendedor SET ?', newData);
+        
+            res.status(200).send('Dados atualizados com sucesso');
+          } catch (error) {
+            console.error('Erro ao atualizar os dados:', error);
+            res.status(500).send('Erro ao atualizar os dados');
+          }
+        });
+
         app.put('/vendedores_update', async (req, res) => {
             const updatedData = req.body; // Os dados atualizados são enviados no corpo da requisição
          

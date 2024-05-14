@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from 'react';
-
+import InputMask from 'react-input-mask';
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -22,6 +22,9 @@ import {
 } from "@mui/x-data-grid";
 
 import axios from "axios";
+
+import ModalVendas from "../modal/modalVendas";
+import calendario from '../../../assets/icons/calendario.svg';
 
 const Vendas = () => {
   const [chartData, setChartData] = useState([]);
@@ -153,19 +156,60 @@ const fetchClientes = async () => {
       }));
     };
 
-    //botão para adicionar nova venda
-    return (
-      <GridToolbarContainer>
-        <Button
-          className="text-button"
-          startIcon={<MdAdd size={20} className="edit-button" />}
-          onClick={handleClick}
-        >
-          Adicionar
-        </Button>
-      </GridToolbarContainer>
-    );
-  }
+    const handleAdicionar = async (Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento) => {
+      try {
+        const newData = {
+          Data_da_Venda: Data_da_Venda, 
+          Vendedor: Vendedor,
+          CPF_Vendedor: CPF_Vendedor,
+          Produto: Produto,
+/*           ID_Produto: "ID_Produto", */
+          Cliente: Cliente,
+          CNPJ_CPF_Cliente: CNPJ_CPF_Cliente,
+/*           Segmento_do_Cliente: "Segmento_do_Cliente", */
+          Valor_de_Venda: Valor_de_Venda,
+          Forma_de_Pagamento: Forma_de_Pagamento,
+        };
+        
+        console.log("Adicionando vendas", newData);
+
+        console.log("DATA", Data_da_Venda);
+        console.log("Vendedor", Vendedor);
+        console.log("CPF DO Vendedor", CPF_Vendedor);
+        console.log("Produto",Produto);
+        console.log("ID_Produto", "id");
+        console.log("Cliente", Cliente);
+        console.log("CPF DO CLIENTE", CNPJ_CPF_Cliente);
+        console.log("Segmento", "Segmento")
+        console.log("Forma de pagamento", Forma_de_Pagamento);
+        console.log("Valor", Valor_de_Venda);
+
+    
+        // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
+        setOpenModal(false);
+        await axios.post('http://localhost:8080/vendas_adicionar', newData);
+        
+        window.location.reload();
+      } catch (error) {
+        console.error("Erro ao adicionar vendedor:", error);
+      }
+      
+    };
+    
+    const [openModal, setOpenModal] = useState(false)
+    const [Data_da_Venda, setData_da_Venda] = useState('');
+    const [Vendedor, setVendedor] = useState('');
+    const [CPF_Vendedor, setCPF_Vendedor] = useState('');
+    const [Produto, setProduto] = useState('');
+    //const [ID_Produto, setID_Produto] = useState('');
+    const [Cliente, setCliente] = useState('');
+    const [CNPJ_CPF_Cliente, setCNPJ_CPF_Cliente] = useState('');
+    //const [Segmento_do_Cliente, setSegmento_do_Cliente] = useState('');
+    const [Valor_de_Venda, setValor_de_Venda] = useState('');
+    const [Forma_de_Pagamento, setForma_de_Pagamento] = useState('');
+   /*  const [selectedVendedor, setSelectedVendedor] = useState(''); */
+
+   
 
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
@@ -447,6 +491,7 @@ const filteredColumns = columns.filter((col) => col.field !== "cpf" && col.field
         slots={{
           toolbar: (props) => (
             <EditToolbar
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             setRowModesModel={function (_newModel: (oldModel: GridRowModesModel) => GridRowModesModel): void {
               throw new Error("Function not implemented.");
             } } {...props}

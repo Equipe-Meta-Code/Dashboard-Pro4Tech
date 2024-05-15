@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Line, LineChart, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import "./AreaCharts.scss";
 import axios from "axios";
+import numeral from 'numeral';
 
 const AreaLineChart = () => {
   const [chartData, setChartData] = useState([]);
@@ -54,7 +55,7 @@ const AreaLineChart = () => {
             <XAxis dataKey="name" />
             <YAxis tickFormatter={(value) => `R$` + `${value.toLocaleString('pt-BR')}`}/>
             {/* Usando o formatter personalizado para incluir "R$" no tooltip */}
-            <Tooltip formatter={(value, name) => [`R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, name]}/>
+            <Tooltip formatter={(value, name) => ['R$ ' + numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ','), name]}/>
             {chartData.length === 0 && (
               <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="white">Não há dados para exibir no gráfico.</text>
             )}

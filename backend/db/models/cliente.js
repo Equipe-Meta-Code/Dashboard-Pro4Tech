@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Cliente.init({
     Cliente: DataTypes.STRING,
-    CNPJ_CPF_Cliente: DataTypes.STRING
+    CNPJ_CPF_Cliente: DataTypes.STRING,
+    Segmento_do_Cliente: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Cliente',

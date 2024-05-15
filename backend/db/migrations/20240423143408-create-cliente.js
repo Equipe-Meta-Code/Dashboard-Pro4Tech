@@ -15,6 +15,9 @@ module.exports = {
       CNPJ_CPF_Cliente: {
         type: Sequelize.STRING
       },
+      Segmento_do_Cliente: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

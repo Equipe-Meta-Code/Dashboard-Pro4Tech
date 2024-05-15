@@ -381,11 +381,11 @@ async function exportar() {
             }
           });
 
-        app.post('/vendas_adicionar', async (req, res) => {
+          app.post('/vendas_adicionar', async (req, res) => {
             const newData = req.body; // Os dados atualizados são enviados no corpo da requisição
             try {
               const now = moment().format('YYYY-MM-DD HH:mm:ss'); // Obtém a data e hora atuais no formato desejado
-              newData.id = 15;
+
               // Adiciona createdAt e updatedAt aos dados recebidos
               newData.createdAt = now;
               newData.updatedAt = now;

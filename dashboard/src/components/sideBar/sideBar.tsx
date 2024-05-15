@@ -8,6 +8,11 @@ import { Link } from "react-router-dom";
 import PermissionComponent from "../PermissionComponent";
 import { useAuth } from "../../context/AuthContext";
 
+import api from "../../services/api";
+import axios from "axios";
+const responseVendedores = await axios.get('http://localhost:8080/vendedores');
+const dataVendedores = responseVendedores.data;
+
 const Sidebar = () => {
   
   const { signOut } = useAuth();
@@ -57,8 +62,22 @@ const Sidebar = () => {
   };
 
   const handleCloseModal = () => {
+  //const handleCloseModal = async () => {
     setShowModal(false);
     window.location.reload();
+    /*
+    const processedData = dataVendedores.map(itemVendedor => {
+      return {
+        nome: itemVendedor.Vendedor.split(' ').slice(0, 2).join(' '),
+        cpf: itemVendedor.CPF_Vendedor,
+        login: itemVendedor.CPF_Vendedor,
+        senha: itemVendedor.CPF_Vendedor,
+        roles: "1"
+      };
+    });
+    
+    const response = await api.post("/users", processedData);
+    */
   };
 
   const handleLogout = () => {

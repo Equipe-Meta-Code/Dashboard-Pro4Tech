@@ -58,6 +58,7 @@ const Vendas = () => {
         cpf: item.CPF_Vendedor,
         cliente: item.Cliente.split(' ').slice(0, 2).join(' '),
         cpfCliente: item.CNPJ_CPF_Cliente,
+        segmento: item.Segmento_do_Cliente,
         data: item.Data_da_Venda,
         valor: item.Valor_de_Venda,
         pagamento: item.Forma_de_Pagamento
@@ -98,6 +99,7 @@ const fetchClientes = async () => {
     const processedClientes = clientes.map(item => ({
       value: item.Cliente.split(' ').slice(0, 2).join(' '),
       cpf: item.CNPJ_CPF_Cliente,
+      segmento: item.Segmento_do_Cliente,
       label: `${item.Cliente.split(' ').slice(0, 2).join(' ')}`,
     }));
 
@@ -108,29 +110,42 @@ const fetchClientes = async () => {
   }
 };
 
-  const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
-    try {
-      console.log('Chamando função saveChangesToDatabase');
-      // Mapeia os dados atualizados para o formato esperado pelo backend
-      const updatedData = updatedRows.map(row => ({
+const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
+  try {
+    console.log('Chamando função saveChangesToDatabase');
+
+    // Busca todos os clientes e armazena os dados localmente
+    const resClientes = await axios.get('http://localhost:8080/clientes');
+    const clientes = resClientes.data;
+
+    // Mapeia os dados atualizados para o formato esperado pelo backend
+    const updatedData = updatedRows.map(row => {
+      // Busca o cliente correspondente pelo CPF
+      const cliente = clientes.find(c => c.CNPJ_CPF_Cliente === row.cpfCliente);
+      const segmentoDoCliente = cliente ? cliente.Segmento_do_Cliente : 'Não encontrado';
+
+      // Cria o objeto rowData com os dados necessários
+      return {
         id: row.id,
         Vendedor: row.vendedor,
         CPF_Vendedor: row.cpf,
         Cliente: row.cliente,
         CNPJ_CPF_Cliente: row.cpfCliente,
         Valor_de_Venda: row.valor,
-        Forma_de_Pagamento: row.pagamento
-      }));
-      // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
-      console.log("Updated Data OBJ: ")
-      console.log(updatedData)
-      console.log("Vendedores: ", chartVendedores)
-      await axios.put('http://localhost:8080/vendas_update', updatedData);
-      console.log("Dados atualizados com sucesso!");
-    } catch (error) {
-      console.error('Erro ao salvar os dados:', error);
-    }
-  };
+        Forma_de_Pagamento: row.pagamento,
+        Segmento_do_Cliente: segmentoDoCliente
+      };
+    });
+
+    // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
+    console.log("Updated Data OBJ: ", updatedData);
+    await axios.put('http://localhost:8080/vendas_update', updatedData);
+    console.log("Dados atualizados com sucesso!");
+  } catch (error) {
+    console.error('Erro ao salvar os dados:', error);
+  }
+};
+
 
   //adicionar na tabela
   interface EditToolbarProps {
@@ -168,6 +183,7 @@ const fetchClientes = async () => {
         }
  
         const dataFormatada = dataVenda.format('YYYY-MM-DD');
+       
         const newData = {
           Data_da_Venda: dataFormatada, // Convertendo a data para o tipo DATE
           Vendedor: Vendedor,
@@ -486,6 +502,14 @@ const fetchClientes = async () => {
       
     }, 
     {
+      field: "segmento",
+      headerName: "Segmento do Cliente",
+      headerClassName: "super-app-theme--header",
+      width: 170,
+      editable: false,
+      
+    }, 
+    {
       field: "data",
       headerName: "Data",
       headerClassName: "super-app-theme--header",
@@ -558,7 +582,7 @@ const fetchClientes = async () => {
     },
   ];
   // Filtrar as colunas para remover as colunas de cpf
-const filteredColumns = columns.filter((col) => col.field !== "cpf" && col.field !== "cpfCliente");
+const filteredColumns = columns.filter((col) => col.field !== "cpf" && col.field !== "cpfCliente" && col.field !== "segmento");
 
   return (
     //tabela

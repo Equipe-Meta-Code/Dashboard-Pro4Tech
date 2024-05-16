@@ -208,7 +208,7 @@ async function exportar() {
               // Aqui você executa a lógica para atualizar os dados no banco de dados
               // Por exemplo, você pode iterar sobre os dados atualizados e executar uma query SQL de UPDATE para cada registro
               for (const data of updatedData) {
-                await connection.query('UPDATE informacoes SET Vendedor = ?, CPF_Vendedor = ?, Cliente = ?, CNPJ_CPF_Cliente = ?, Valor_de_Venda = ?, Forma_de_Pagamento = ? WHERE id = ?', [data.Vendedor, data.CPF_Vendedor, data.Cliente, data.CNPJ_CPF_Cliente, data.Valor_de_Venda, data.Forma_de_Pagamento, data.id]);
+                await connection.query('UPDATE informacoes SET Vendedor = ?, CPF_Vendedor = ?, Cliente = ?, CNPJ_CPF_Cliente = ?, Segmento_do_Cliente = ?, Valor_de_Venda = ?, Forma_de_Pagamento = ? WHERE id = ?', [data.Vendedor, data.CPF_Vendedor, data.Cliente, data.CNPJ_CPF_Cliente, data.Segmento_do_Cliente, data.Valor_de_Venda, data.Forma_de_Pagamento, data.id]);
               }
           
               // Se os dados foram atualizados com sucesso, você pode enviar uma resposta de sucesso
@@ -354,8 +354,8 @@ async function exportar() {
             try {
 
               for (const data of updatedData) {
-                await connection.query('UPDATE informacoes SET Cliente = ? WHERE CNPJ_CPF_Cliente = ?', [data.Cliente, data.CNPJ_CPF_Cliente, data.Segmento_do_Cliente]);
-                await connection.query('UPDATE cliente SET Cliente = ? WHERE CNPJ_CPF_Cliente = ?', [data.Cliente, data.CNPJ_CPF_Cliente, data.Segmento_do_Cliente]);
+                await connection.query('UPDATE informacoes SET Cliente = ?, Segmento_do_Cliente = ? WHERE CNPJ_CPF_Cliente = ?', [data.Cliente, data.Segmento_do_Cliente, data.CNPJ_CPF_Cliente]);
+                await connection.query('UPDATE cliente SET Cliente = ?, Segmento_do_Cliente = ? WHERE CNPJ_CPF_Cliente = ?', [data.Cliente, data.Segmento_do_Cliente, data.CNPJ_CPF_Cliente]);
             }
               res.status(200).send('Dados atualizados com sucesso');
             }

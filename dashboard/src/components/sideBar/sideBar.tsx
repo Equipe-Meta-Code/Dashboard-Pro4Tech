@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./Sidebar.scss";
 import { FaEnvelope, FaKey, FaSignOutAlt, FaUsers } from "react-icons/fa";
-import { FaCircleUser } from "react-icons/fa6";
+import { FaCircleUser, FaBox } from "react-icons/fa6";
 import { MdCloudUpload, MdWork, MdSell } from "react-icons/md";
 import { RiDashboardFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
@@ -135,6 +135,16 @@ const Sidebar = () => {
                       <FaUsers size={18} />
                     </span>
                     <span className="menu-link-text">Clientes</span>
+                  </Link>
+                </li>
+            </PermissionComponent>
+            <PermissionComponent role="Admin_Role,Admin/Vendedor_Role">
+                <li className="menu-item">
+                  <Link to="/produtos" className="menu-link">
+                    <span className="menu-link-icon">
+                      <FaBox size={16} />
+                    </span>
+                    <span className="menu-link-text">Produtos</span>
                   </Link>
                 </li>
             </PermissionComponent>

@@ -7,5 +7,6 @@ export { default as Vendedores } from "./pages/tabelas/vendedoresScreen";
 export { default as Vendas } from "./pages/tabelas/vendasScreen";
 export { default as Clientes } from "./pages/tabelas/clientesScreen";
 export { default as Comissao } from "./pages/tabelas/comissaoScreen";
-export { default as Login} from "./pages/login/Login"
-export { default as Cadastro} from "./pages/cadastro/Cadastro"
+export { default as Produtos } from "./pages/tabelas/produtosScreen";
+export { default as Login} from "./pages/login/Login";
+export { default as Cadastro} from "./pages/cadastro/Cadastro";

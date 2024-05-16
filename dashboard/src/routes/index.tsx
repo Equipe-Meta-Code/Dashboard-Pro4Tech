@@ -1,6 +1,6 @@
 import "../App.scss";
 import { Routes, Route } from "react-router-dom";
-import { Cadastro, Clientes, Comissao, Login, Vendas, Vendedores } from "../components";
+import { Cadastro, Clientes, Comissao, Login, Produtos, Vendas, Vendedores } from "../components";
 import BaseLayout from "../layout/baseLayout";
 import PageNotFound from "../screens/error/pageNotFound";
 import Dashboard from "../screens/dashboard/dashboardScreen";
@@ -33,6 +33,10 @@ function AppRoutes() {
 
             <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />}>
                 <Route path="vendas" element={<Vendas />} />
+            </Route>
+
+            <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />}>
+                <Route path="produtos" element={<Produtos />} />
             </Route>
 
             <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />}>

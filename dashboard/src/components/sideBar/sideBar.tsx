@@ -202,7 +202,7 @@ const Sidebar = () => {
 
               {showModal && (
                 <div className="modal-upload">
-                  <div className="modal-content" style={{ color: "white" }}>
+                  <div className="modal-content" style={{ color: "var(--fourth-color)" }}>
                     <p>{modalMessage}</p>
                     <button className="close-button" onClick={handleCloseModal}>
                       Atualizar

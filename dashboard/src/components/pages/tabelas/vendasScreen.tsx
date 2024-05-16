@@ -26,6 +26,7 @@ import axios from "axios";
 import ModalVendas from "../modal/modalVendas";
 import calendario from '../../../assets/icons/calendario.svg';
 import moment from 'moment';
+import numeral from 'numeral';
 
 const Vendas = () => {
   const [chartData, setChartData] = useState([]);
@@ -167,7 +168,6 @@ const fetchClientes = async () => {
         }
  
         const dataFormatada = dataVenda.format('YYYY-MM-DD');
-       
         const newData = {
           Data_da_Venda: dataFormatada, // Convertendo a data para o tipo DATE
           Vendedor: Vendedor,
@@ -505,9 +505,11 @@ const fetchClientes = async () => {
       align: "left",
       headerAlign: "left",
       editable: true,
-      valueFormatter: (value) => `R$${value || ''}`, // Adiciona "R$" ao valor
+      valueFormatter: (value: number) => {
+        const formattedValue = numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ',');
+        return `R$ ${formattedValue}`;
+      },
     },
-    
     {
       field: "pagamento",
       headerName: "Forma de pagamento",

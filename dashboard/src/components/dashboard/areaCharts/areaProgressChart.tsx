@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "./AreaCharts.scss";
 import { v4 as uuidv4 } from 'uuid';
+import PermissionComponent from '../../PermissionComponent';
 
 const AreaProgressChart = () => {
   const [chartData, setChartData] = useState([]);
@@ -12,21 +13,28 @@ const AreaProgressChart = () => {
     fetchData();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/dados_itens');
-      const data = response.data;
-      setChartData(data);
-      setLoading(false);
+  
+    const fetchData = async () => {
+      try {
+        let response;
+        if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
+          response = await axios.get('http://localhost:8080/dados_itens');
+        } else if (await PermissionComponent.hasPermission("User_Role")) {
+          response = await axios.get('http://localhost:8080/dados_itens_user');
+        }
+        const data = response.data;
+        setChartData(data);
+        setLoading(false);
 
-      // Calculando o total
-      const totalVendido = data.reduce((acc, item) => acc + item.quantidade_vendida, 0);
-      setTotal(totalVendido);
-    } catch (error) {
-      console.error('Erro ao buscar dados:', error);
-      setLoading(false);
-    }
-  };
+        // Calculando o total
+        const totalVendido = data.reduce((acc, item) => acc + item.quantidade_vendida, 0);
+        setTotal(totalVendido);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        setLoading(false);
+      }
+    };
+  
 
   return (
     <div className="progress-bar">

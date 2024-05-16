@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Line, LineChart, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import "./AreaCharts.scss";
 import axios from "axios";
+import PermissionComponent from '../../PermissionComponent';
 
 const AreaLineChart = () => {
   const [chartData, setChartData] = useState([]);
@@ -14,7 +15,12 @@ const AreaLineChart = () => {
  
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/dados_vendas');
+      let response;
+      if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
+        response = await axios.get('http://localhost:8080/dados_vendas');
+      } else if (await PermissionComponent.hasPermission("User_Role")) {
+        response = await axios.get('http://localhost:8080/dados_vendas_user');
+      }
       const data = response.data;
       // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
       const processedData = data.map(item => ({

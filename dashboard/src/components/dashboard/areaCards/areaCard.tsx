@@ -2,13 +2,19 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import axios from "axios";
+import PermissionComponent from "../../PermissionComponent";
 
 const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
   const [totalVendas, setTotalVendas] = useState(null);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/dados_vendas_total');
+      let response;
+        if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
+          response = await axios.get('http://localhost:8080/dados_vendas_total');
+        } else if (await PermissionComponent.hasPermission("User_Role")) {
+          response = await axios.get('http://localhost:8080/dados_vendas_total_user');
+        }
       const data = response.data;
       const totalVendasDoJson = data.total_vendas;
       setTotalVendas(totalVendasDoJson);

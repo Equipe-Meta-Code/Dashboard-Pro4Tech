@@ -61,23 +61,44 @@ const Sidebar = () => {
     }
   };
 
-  const handleCloseModal = () => {
-  //const handleCloseModal = async () => {
+  const saveVendedoresToUsers = async () => {
+    try {
+      // Busca todos os vendedores
+      const resVendedores = await axios.get('http://localhost:8080/vendedores');
+      const dataVendedores = resVendedores.data;
+
+      // Processa os dados dos vendedores para o formato necessário
+      const processedData = dataVendedores.map(itemVendedor => {
+        return {
+          nome: itemVendedor.Vendedor.split(' ').slice(0, 2).join(' '),
+          cpf: itemVendedor.CPF_Vendedor,
+          login: itemVendedor.CPF_Vendedor,
+          senha: itemVendedor.CPF_Vendedor,
+          roles: 1
+        };
+      });
+
+      // Envia uma requisição POST para inserir cada vendedor individualmente
+      for (const userData of processedData) {
+        try {
+          const response = await axios.post('http://localhost:3333/users', userData);
+          console.log(`Usuário ${userData.nome} inserido com sucesso!`, response.data);
+        } catch (error) {
+          console.error(`Erro ao inserir usuário ${userData.nome}:`, error.response ? error.response.data : error.message);
+        }
+      }
+
+      console.log('Todos os vendedores foram inseridos com sucesso!');
+    } catch (error) {
+      console.error('Erro ao buscar ou processar vendedores:', error.response ? error.response.data : error.message);
+    }
+  };
+
+  const handleCloseModal = async () => {
     setShowModal(false);
-    window.location.reload();
-    /*
-    const processedData = dataVendedores.map(itemVendedor => {
-      return {
-        nome: itemVendedor.Vendedor.split(' ').slice(0, 2).join(' '),
-        cpf: itemVendedor.CPF_Vendedor,
-        login: itemVendedor.CPF_Vendedor,
-        senha: itemVendedor.CPF_Vendedor,
-        roles: "1"
-      };
-    });
-    
-    const response = await api.post("/users", processedData);
-    */
+      // Chama a função para executar o processo
+    saveVendedoresToUsers();
+    //window.location.reload();
   };
 
   const handleLogout = () => {

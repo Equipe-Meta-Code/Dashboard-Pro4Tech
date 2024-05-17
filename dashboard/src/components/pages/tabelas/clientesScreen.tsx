@@ -302,6 +302,20 @@ const Clientes = () => {
       valueGetter: (value) => value && new Date(value),
     },
     {
+      field: "valor",
+      headerName: "Valor",
+      headerClassName: "super-app-theme--header",
+      width: 80,
+      editable: false,
+    },
+    {
+      field: "tipoVenda",
+      headerName: "Tipo de Venda",
+      headerClassName: "super-app-theme--header",
+      width: 120,
+      editable: false,
+    },
+    {
       field: "actions",
       type: "actions",
       headerName: "",

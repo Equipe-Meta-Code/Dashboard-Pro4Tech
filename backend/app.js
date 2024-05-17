@@ -107,6 +107,7 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
                     await db.Cliente.create({
                         Cliente: row.Cliente,
                         CNPJ_CPF_Cliente: row.CNPJ_CPF_Cliente,
+                        Segmento_do_Cliente: row.Segmento_do_Cliente
                     });
                 }
                 await db.Comissao.create({
@@ -115,6 +116,10 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
                     Produto: row.Produto,
                     ID_Produto: row.ID_Produto,
                     Valor_da_Venda: row.Valor_de_Venda
+                });
+                await db.Produtos.create({
+                    Produto: row.Produto,
+                    Valor_de_Venda: row.Valor_de_Venda
                 });
             }
         }
@@ -203,7 +208,7 @@ async function exportar() {
               // Aqui você executa a lógica para atualizar os dados no banco de dados
               // Por exemplo, você pode iterar sobre os dados atualizados e executar uma query SQL de UPDATE para cada registro
               for (const data of updatedData) {
-                await connection.query('UPDATE informacoes SET Vendedor = ?, CPF_Vendedor = ?, Cliente = ?, CNPJ_CPF_Cliente = ?, Valor_de_Venda = ?, Forma_de_Pagamento = ? WHERE id = ?', [data.Vendedor, data.CPF_Vendedor, data.Cliente, data.CNPJ_CPF_Cliente, data.Valor_de_Venda, data.Forma_de_Pagamento, data.id]);
+                await connection.query('UPDATE informacoes SET Vendedor = ?, CPF_Vendedor = ?, Cliente = ?, CNPJ_CPF_Cliente = ?, Segmento_do_Cliente = ?, Valor_de_Venda = ?, Forma_de_Pagamento = ? WHERE id = ?', [data.Vendedor, data.CPF_Vendedor, data.Cliente, data.CNPJ_CPF_Cliente, data.Segmento_do_Cliente, data.Valor_de_Venda, data.Forma_de_Pagamento, data.id]);
               }
           
               // Se os dados foram atualizados com sucesso, você pode enviar uma resposta de sucesso
@@ -413,7 +418,7 @@ async function exportar() {
 
         app.get('/clientes', async (req, res) => {
             try {
-                const [rows, fields] = await connection.query('SELECT id,Cliente, CNPJ_CPF_Cliente FROM cliente');
+                const [rows, fields] = await connection.query('SELECT id,Cliente, CNPJ_CPF_Cliente, Segmento_do_Cliente FROM cliente');
                 res.json(rows);
             } catch (error) {
                 console.error('Erro ao buscar dados de vendas:', error);
@@ -427,8 +432,8 @@ async function exportar() {
             try {
 
               for (const data of updatedData) {
-                await connection.query('UPDATE informacoes SET Cliente = ? WHERE CNPJ_CPF_Cliente = ?', [data.Cliente, data.CNPJ_CPF_Cliente]);
-                await connection.query('UPDATE cliente SET Cliente = ? WHERE CNPJ_CPF_Cliente = ?', [data.Cliente, data.CNPJ_CPF_Cliente]);
+                await connection.query('UPDATE informacoes SET Cliente = ?, Segmento_do_Cliente = ? WHERE CNPJ_CPF_Cliente = ?', [data.Cliente, data.Segmento_do_Cliente, data.CNPJ_CPF_Cliente]);
+                await connection.query('UPDATE cliente SET Cliente = ?, Segmento_do_Cliente = ? WHERE CNPJ_CPF_Cliente = ?', [data.Cliente, data.Segmento_do_Cliente, data.CNPJ_CPF_Cliente]);
             }
               res.status(200).send('Dados atualizados com sucesso');
             }
@@ -459,11 +464,11 @@ async function exportar() {
             }
           });
 
-        app.post('/vendas_adicionar', async (req, res) => {
+          app.post('/vendas_adicionar', async (req, res) => {
             const newData = req.body; // Os dados atualizados são enviados no corpo da requisição
             try {
               const now = moment().format('YYYY-MM-DD HH:mm:ss'); // Obtém a data e hora atuais no formato desejado
-              newData.id = 15;
+
               // Adiciona createdAt e updatedAt aos dados recebidos
               newData.createdAt = now;
               newData.updatedAt = now;
@@ -487,7 +492,72 @@ async function exportar() {
                 res.status(500).send('Erro ao buscar as vendas do vendedor');
             }
         });
+
+        app.get('/produtos', async (req, res) => {
+            try {
+                const [rows, fields] = await connection.query('SELECT id, Produto, Valor_de_Venda from produtos');
+                res.json(rows);
+            } catch (error) {
+                console.error('Erro ao buscar produtos:', error);
+                res.status(500).send('Erro ao buscar produtos');
+            }
+        });
+
+        app.post('/produtos_adicionar', async (req, res) => {
+            const newData = req.body; // Os dados atualizados são enviados no corpo da requisição
+            try {
+              const now = moment().format('YYYY-MM-DD HH:mm:ss'); // Obtém a data e hora atuais no formato desejado
+              // Adiciona createdAt e updatedAt aos dados recebidos
+              newData.createdAt = now;
+              newData.updatedAt = now;
+          
+              // Insere os dados na tabela produtos
+              await connection.query('INSERT INTO produtos SET ?', newData);
+          
+              res.status(200).send('Dados atualizados com sucesso');
+            } catch (error) {
+              console.error('Erro ao atualizar os dados:', error);
+              res.status(500).send('Erro ao atualizar os dados');
+            }
+        });
+
+        app.put('/vendas_update_produto', async (req, res) => {
+            const updatedData = req.body; // Os dados atualizados são enviados no corpo da requisição
+          
+            try {
+              // Aqui você executa a lógica para atualizar os dados no banco de dados
+              // Por exemplo, você pode iterar sobre os dados atualizados e executar uma query SQL de UPDATE para cada registro
+              for (const data of updatedData) {
+                await connection.query('UPDATE informacoes SET Produto = ?, Valor_de_Venda = ? WHERE id = ?', [data.Produto, data.Valor_de_Venda, data.id]);
+              }
+          
+              // Se os dados foram atualizados com sucesso, você pode enviar uma resposta de sucesso
+              res.status(200).send('Dados atualizados com sucesso');
+            } catch (error) {
+              console.error('Erro ao atualizar os dados:', error);
+              res.status(500).send('Erro ao atualizar os dados');
+            }
+        });
         
+        app.put('/produtos_update', async (req, res) => {
+            const updatedData = req.body; // Os dados atualizados são enviados no corpo da requisição
+
+            try {
+
+              for (const data of updatedData) {
+                await connection.query('UPDATE informacoes SET Produto = ?, Valor_de_Venda = ? WHERE id = ?', [data.Produto, data.Valor_de_Venda, data.id]);
+                await connection.query('UPDATE produtos SET Produto = ?, Valor_de_Venda = ? WHERE id = ?', [data.Produto, data.Valor_de_Venda, data.id]);
+            }
+              res.status(200).send('Dados atualizados com sucesso');
+            }
+            
+            catch (error) {
+
+              console.error('Erro ao atualizar os dados:', error);
+              res.status(500).send('Erro ao atualizar os dados');
+            }
+
+          });
         
     } catch (error) {
         console.error('Erro ao conectar ao banco de dados:', error);

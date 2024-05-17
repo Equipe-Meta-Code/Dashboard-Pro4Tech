@@ -26,6 +26,7 @@ import axios from "axios";
 
 import Modal from "../modal/modal";
 import user_icon from '../../../assets/person.png'
+import numeral from 'numeral';
 
 const Vendedores = () => {
   const [chartData, setChartData] = useState([]);
@@ -334,7 +335,10 @@ const Vendedores = () => {
       align: "left",
       headerAlign: "left",
       editable: false,
-      valueGetter: (value) => `R$${value}`,
+      valueFormatter: (value: number) => {
+        const formattedValue = numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ',');
+        return `R$ ${formattedValue}`;
+      },
     },
     {
       field: "tipoVenda",

@@ -7,7 +7,7 @@ export default function Modal({isOpen, setModalOpen, children}) {
     return (
       <div className="background-modalVendas">
         <div className="modalVendas">
-            <button onClick={setModalOpen} className='botao-fechar'>
+            <button onClick={setModalOpen} className='botao-fecharVendas'>
               <MdClose />
             </button>
             <div className='espaco'>

@@ -64,6 +64,7 @@ const Clientes = () => {
             id: itemCliente.id,
             cliente: itemCliente.Cliente.split(' ').slice(0, 2).join(' '),
             cpf: itemCliente.CNPJ_CPF_Cliente,
+            segmento: itemCliente.Segmento_do_Cliente,
             // Valor_de_Venda da última compra de /geral
             valor: ultimaCompra.Valor_de_Venda,
             ultimaCompra: ultimaCompra.Data_da_Venda,
@@ -77,6 +78,7 @@ const Clientes = () => {
             id: itemCliente.id,
             cliente: itemCliente.Cliente.split(' ').slice(0, 2).join(' '),
             cpf: itemCliente.CNPJ_CPF_Cliente,
+            segmento: itemCliente.Segmento_do_Cliente,
             valor: '', 
             ultimaCompra: '',
             tipoVenda: ''
@@ -99,6 +101,7 @@ const Clientes = () => {
       const updatedData = updatedRows.map(row => ({
         Cliente: row.cliente,
         CNPJ_CPF_Cliente: row.cpf,
+        Segmento_do_Cliente: row.segmento,
       }));
       // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
       console.log("Updated Data OBJ: ")
@@ -136,11 +139,12 @@ const Clientes = () => {
       }));
     };
 
-    const handleAdicionar = async (Cliente, CNPJ_CPF_Cliente) => {
+    const handleAdicionar = async (Cliente, CNPJ_CPF_Cliente,Segmento_do_Cliente) => {
       try {
         const newData = {
           Cliente: Cliente,
           CNPJ_CPF_Cliente: CNPJ_CPF_Cliente,
+          Segmento_do_Cliente: Segmento_do_Cliente,
         };
         
         console.log("Adicionando vendedor", newData);
@@ -159,6 +163,7 @@ const Clientes = () => {
     const [openModal, setOpenModal] = useState(false)
     const [Cliente, setVendedor] = useState('');
     const [CNPJ_CPF_Cliente, setCPF_Vendedor] = useState('');
+    const [Segmento_do_Cliente, setSegmento_do_Cliente] = useState('');
     
 
     //botão de adicionar vendedor
@@ -188,10 +193,15 @@ const Clientes = () => {
                         />
                       </div>
 
+                      <div className="input-modal">
+                        <img src={user_icon} alt="" />
+                        <input type="text" placeholder="Segmento do Cliente" onChange={event => setSegmento_do_Cliente(event.target.value)}/>
+                      </div>
+
                     </div>
 
                       <div className="submit-container-modal">
-                        <div className="submit-modal" onClick={() => handleAdicionar(Cliente, CNPJ_CPF_Cliente)}>Adicionar</div>
+                        <div className="submit-modal" onClick={() => handleAdicionar(Cliente, CNPJ_CPF_Cliente, Segmento_do_Cliente)}>Adicionar</div>
                       </div>
 
                 </div>
@@ -272,6 +282,15 @@ const Clientes = () => {
       editable: true,
     },
     {
+      field: "segmento",
+      headerName: "Segmento do Cliente",
+      headerClassName: "super-app-theme--header",
+      width: 170,
+      align: "left",
+      headerAlign: "left",
+      editable: true,
+    },
+    {
       field: "ultimaCompra",
       headerName: "Última Compra",
       headerClassName: "super-app-theme--header",
@@ -281,6 +300,20 @@ const Clientes = () => {
       type: "date",
       editable: false,
       valueGetter: (value) => value && new Date(value),
+    },
+    {
+      field: "valor",
+      headerName: "Valor",
+      headerClassName: "super-app-theme--header",
+      width: 80,
+      editable: false,
+    },
+    {
+      field: "tipoVenda",
+      headerName: "Tipo de Venda",
+      headerClassName: "super-app-theme--header",
+      width: 120,
+      editable: false,
     },
     {
       field: "actions",

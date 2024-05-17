@@ -31,9 +31,14 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
     fetchData();
   }, []);
 
+  // Formatando o valor monetário
+  const formatCurrency = (value) => {
+    return 'R$ ' + numeral(value).format('0,0.00').replace(',', '_').replace('.', ',').replace('_', '.');
+  };
+
   // Calculando o valor restante necessário para atingir a meta
   const valorRestante = metaVendas - (totalVendas !== null ? totalVendas : 0);
-  const percentualRestante = (valorRestante / metaVendas) * 100;
+  const valorRestanteFormatado = Math.abs(valorRestante); // Valor absoluto para mostrar corretamente
   const filledValue = ((metaVendas - valorRestante) / metaVendas) * 360;
   const remainedValue = 360 - filledValue;
 
@@ -51,12 +56,12 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
       <div className="area-card-info">
         <h5 className="info-title">Ganhos Mensais</h5>
         <div className="info-value">
-          {totalVendas !== null ? `R$${totalVendas}` : "Carregando..."}
+          {totalVendas !== null ? formatCurrency(totalVendas) : "Carregando..."}
         </div>
         {valorRestante >= 0 ? (
-          <p className="info-text">Faltam R${valorRestante.toFixed(2)} para atingir a meta de vendas</p>
+          <p className="info-text">Faltam {formatCurrency(valorRestante)} para atingir a meta de vendas</p>
         ) : (
-          <p className="info-text">A meta de vendas foi ultrapassada em R${Math.abs(valorRestante)}</p>
+          <p className="info-text">A meta de vendas foi ultrapassada em {formatCurrency(valorRestanteFormatado)}</p>
         )}
       </div>
       <div className="area-card-chart">
@@ -64,7 +69,7 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
           <Pie
             data={data}
             cx={100}
-            cy={130}
+            cy={100}
             innerRadius={50}
             fill="#e4e8ef"
             paddingAngle={0}
@@ -89,7 +94,6 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
 
 AreaCard.propTypes = {
   colors: PropTypes.array.isRequired,
-  percentFillValue: PropTypes.number.isRequired,
   metaVendas: PropTypes.number.isRequired, // Adicione a validação para a meta de vendas
 };
 

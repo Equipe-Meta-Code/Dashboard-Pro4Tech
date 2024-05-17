@@ -1,12 +1,17 @@
 import { useState } from "react";
 import "./Sidebar.scss";
 import { FaEnvelope, FaKey, FaSignOutAlt, FaUsers } from "react-icons/fa";
-import { FaCircleUser } from "react-icons/fa6";
+import { FaCircleUser, FaBox } from "react-icons/fa6";
 import { MdCloudUpload, MdWork, MdSell } from "react-icons/md";
 import { RiDashboardFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import PermissionComponent from "../PermissionComponent";
 import { useAuth } from "../../context/AuthContext";
+
+import api from "../../services/api";
+import axios from "axios";
+const responseVendedores = await axios.get('http://localhost:8080/vendedores');
+const dataVendedores = responseVendedores.data;
 
 const Sidebar = () => {
   
@@ -56,9 +61,44 @@ const Sidebar = () => {
     }
   };
 
-  const handleCloseModal = () => {
+  const saveVendedoresToUsers = async () => {
+    try {
+      // Busca todos os vendedores
+      const resVendedores = await axios.get('http://localhost:8080/vendedores');
+      const dataVendedores = resVendedores.data;
+
+      // Processa os dados dos vendedores para o formato necessário
+      const processedData = dataVendedores.map(itemVendedor => {
+        return {
+          nome: itemVendedor.Vendedor.split(' ').slice(0, 2).join(' '),
+          cpf: itemVendedor.CPF_Vendedor,
+          login: itemVendedor.CPF_Vendedor,
+          senha: itemVendedor.CPF_Vendedor,
+          roles: 1
+        };
+      });
+
+      // Envia uma requisição POST para inserir cada vendedor individualmente
+      for (const userData of processedData) {
+        try {
+          const response = await axios.post('http://localhost:3333/users', userData);
+          console.log(`Usuário ${userData.nome} inserido com sucesso!`, response.data);
+        } catch (error) {
+          console.error(`Erro ao inserir usuário ${userData.nome}:`, error.response ? error.response.data : error.message);
+        }
+      }
+
+      console.log('Todos os vendedores foram inseridos com sucesso!');
+    } catch (error) {
+      console.error('Erro ao buscar ou processar vendedores:', error.response ? error.response.data : error.message);
+    }
+  };
+
+  const handleCloseModal = async () => {
     setShowModal(false);
-    window.location.reload();
+      // Chama a função para executar o processo
+    saveVendedoresToUsers();
+    //window.location.reload();
   };
 
   const handleLogout = () => {
@@ -116,6 +156,16 @@ const Sidebar = () => {
                       <FaUsers size={18} />
                     </span>
                     <span className="menu-link-text">Clientes</span>
+                  </Link>
+                </li>
+            </PermissionComponent>
+            <PermissionComponent role="Admin_Role,Admin/Vendedor_Role">
+                <li className="menu-item">
+                  <Link to="/produtos" className="menu-link">
+                    <span className="menu-link-icon">
+                      <FaBox size={16} />
+                    </span>
+                    <span className="menu-link-text">Produtos</span>
                   </Link>
                 </li>
             </PermissionComponent>
@@ -183,7 +233,7 @@ const Sidebar = () => {
 
               {showModal && (
                 <div className="modal-upload">
-                  <div className="modal-content" style={{ color: "white" }}>
+                  <div className="modal-content" style={{ color: "var(--fourth-color)" }}>
                     <p>{modalMessage}</p>
                     <button className="close-button" onClick={handleCloseModal}>
                       Atualizar

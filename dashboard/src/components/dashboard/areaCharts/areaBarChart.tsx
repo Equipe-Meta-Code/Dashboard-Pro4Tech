@@ -81,7 +81,7 @@ const AreaBarChart = () => {
                 <XAxis dataKey="mes" />
                 <YAxis tickFormatter={(value) => `R$` + `${value.toLocaleString('pt-BR')}`}/>
                 {/* Usando o formatter personalizado para incluir "R$" no tooltip */}
-                <Tooltip formatter={(value, name) => [`R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, name]}/>
+                <Tooltip formatter={(value, name) => ['R$ ' + numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ','), name]}/>
                 <Area
                   type="monotone"
                   dataKey="total_vendas"

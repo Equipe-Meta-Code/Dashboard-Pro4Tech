@@ -18,14 +18,16 @@ const AreaProgressChart = () => {
   
     const fetchData = async () => {
       try {
+
         let response;
-      if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-        response = await axios.get('http://localhost:8080/dados_itens');
-      } else if (await PermissionComponent.hasPermission("User_Role")) {
-        response = await axios.get('http://localhost:8080/dados_itens_user', {
-          params: { vendedor: login }
-        });
-      }
+        if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
+          response = await axios.get('http://localhost:8080/dados_itens');
+        } else if (await PermissionComponent.hasPermission("User_Role")) {
+          response = await axios.get('http://localhost:8080/dados_itens_user', {
+            params: { vendedor: login }
+          });
+        }
+
         const data = response.data;
         setChartData(data);
         setLoading(false);
@@ -69,7 +71,7 @@ const AreaProgressChart = () => {
               </div>
             ))
           ) : (
-            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill={getComputedStyle(document.documentElement).getPropertyValue('--fourth-color') || '#000000'}>Não há dados para exibir no gráfico.</text>
+            <span>Não há dados para exibir no gráfico.</span>
           )
         )}
       </div>

@@ -231,7 +231,6 @@ async function exportar() {
             }
         });
 
-       // backend.js (ou o arquivo onde sua rota está definida)
         app.get('/dados_vendas_user', async (req, res) => {
             try {
                 const vendedor = req.query.vendedor;
@@ -262,12 +261,7 @@ async function exportar() {
         app.get('/dados_itens_user', async (req, res) => {
             try {
                 const vendedor = req.query.vendedor;
-                if (!vendedor) {
-                    return res.status(400).send('Vendedor não fornecido');
-                }
-                
                 const query = 'SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes WHERE CPF_Vendedor = ? GROUP BY Produto ORDER BY quantidade_vendida DESC';
-                
                 const [rows, fields] = await connection.query(query, [vendedor]);
                 res.json(rows);
             } catch (error) {
@@ -275,6 +269,8 @@ async function exportar() {
                 res.status(500).send('Erro ao buscar os itens mais vendidos');
             }
         });
+        
+        
 
         app.get('/dados_vendas_mes', async (req, res) => {
             try {

@@ -28,39 +28,46 @@ const Login = () => {
             return;
         }
         try {
-            const sanitizedLogin = isCPF(login) ? sanitizeCPF(login) : login;
-            await signIn({ login: sanitizedLogin, senha });
+            await signIn({ login, senha });
             navigate('dashboard');
         } catch (error) {
             setError("Credenciais inválidas. Por favor, verifique seu login e senha.");
         }
     }, [login, senha, signIn, navigate]);
 
-    const sanitizeCPF = (cpf) => {
-        return cpf.replace(/[^\d]/g, '');
+    const handleLoginChange = (event) => {
+        const value = event.target.value;
+        // Verificar se o valor é um CPF (11 dígitos)
+        if (value.length === 11) {
+            // Formatar o CPF
+            const formattedCPF = formatCPF(value);
+            setLogin(formattedCPF);
+        } else {
+            // Se não for um CPF, manter o valor sem formatação
+            setLogin(value);
+        }
     };
 
-    const formatCPF = (cpf) => {
-        const cleaned = cpf.replace(/[^\d]/g, '');
+    const handleSenhaChange = (event) => {
+        const value = event.target.value;
+        // Verificar se o valor é um CPF (11 dígitos)
+        if (value.length === 11) {
+            // Formatar o CPF
+            const formattedCPF = formatCPF(value);
+            setSenha(formattedCPF);
+        } else {
+            // Se não for um CPF, manter o valor sem formatação
+            setSenha(value);
+        }
+    };
+
+    const formatCPF = (input) => {
+        const cleaned = input.replace(/[^\d]/g, '');
         const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2})$/);
         if (match) {
             return [match[1], match[2], match[3], match[4]].filter(Boolean).join('.').replace(/\.$/, '').replace(/\.(?=\d{1,2}$)/, '-');
         }
-        return cpf;
-    };
-
-    const isCPF = (login) => {
-        // Se o login contém apenas números e tem 11 dígitos, é considerado um CPF
-        return /^\d{11}$/.test(sanitizeCPF(login));
-    };
-
-    const handleLoginChange = (event) => {
-        const value = event.target.value;
-        if (isCPF(value)) {
-            setLogin(formatCPF(value));
-        } else {
-            setLogin(value);
-        }
+        return input;
     };
 
     return (
@@ -72,9 +79,10 @@ const Login = () => {
                         <img src={user_icon} alt="" />
                         <input 
                             type="text" 
-                            placeholder="CPF ou E-mail" 
+                            placeholder="Login" 
                             value={login}
                             onChange={handleLoginChange}
+                            maxLength={14} // Limitar o campo para 14 caracteres (com pontos e traços)
                         />
                     </div>
                     <div className="input">
@@ -82,7 +90,9 @@ const Login = () => {
                         <input 
                             type={mostrarSenha ? "text" : "password"} 
                             placeholder="Senha" 
-                            onChange={event => setSenha(event.target.value)} 
+                            value={senha}
+                            onChange={handleSenhaChange}
+                            maxLength={14} // Limitar o campo para 14 caracteres (com pontos e traços)
                         />
                         <button className="eye-icon" onClick={() => setMostrarSenha(!mostrarSenha)}>
                             {mostrarSenha ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}

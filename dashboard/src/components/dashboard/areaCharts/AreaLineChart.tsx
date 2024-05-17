@@ -4,6 +4,7 @@ import "./AreaCharts.scss";
 import axios from "axios";
 import PermissionComponent from '../../PermissionComponent';
 import { useAuth } from '../../../context/AuthContext';
+import numeral from 'numeral';
 
 const AreaLineChart = () => {
   const { login } = useAuth();

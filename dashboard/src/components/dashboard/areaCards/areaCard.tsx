@@ -4,6 +4,7 @@ import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import axios from "axios";
 import PermissionComponent from "../../PermissionComponent";
 import { useAuth } from '../../../context/AuthContext';
+import numeral from 'numeral';
 
 const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
   const { login } = useAuth();
@@ -30,6 +31,7 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
 
   // Formatando o valor monetário
   const formatCurrency = (value) => {

@@ -3,6 +3,7 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 import axios from 'axios';
 import PermissionComponent from '../../PermissionComponent';
 import { useAuth } from '../../../context/AuthContext';
+import numeral from 'numeral';
 
 const AreaBarChart = () => {
   const { login } = useAuth();

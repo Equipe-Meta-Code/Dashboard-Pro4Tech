@@ -344,7 +344,7 @@ const Vendedores = () => {
       field: "tipoVenda",
       headerName: "Tipo de Venda",
       headerClassName: 'super-app-theme--header',
-      width: 350,
+      width: 200,
       align: "left",
       headerAlign: "left",
       editable: false,
@@ -393,6 +393,17 @@ const Vendedores = () => {
         ];
       },
     },
+    {
+      field: "view",
+      headerName: "",
+      headerClassName: 'super-app-theme--header',
+      width: 80,
+      renderCell: () => {
+        return (
+            <div className="viewButton">ABRIR</div>
+        )
+      }
+    }
   ];
 
   return (

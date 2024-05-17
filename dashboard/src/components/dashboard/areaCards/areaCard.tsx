@@ -3,18 +3,22 @@ import PropTypes from "prop-types";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import axios from "axios";
 import PermissionComponent from "../../PermissionComponent";
+import { useAuth } from '../../../context/AuthContext';
 
 const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
+  const { login } = useAuth();
   const [totalVendas, setTotalVendas] = useState(null);
 
   const fetchData = async () => {
     try {
       let response;
-        if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-          response = await axios.get('http://localhost:8080/dados_vendas_total');
-        } else if (await PermissionComponent.hasPermission("User_Role")) {
-          response = await axios.get('http://localhost:8080/dados_vendas_total_user');
-        }
+      if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
+        response = await axios.get('http://localhost:8080/dados_vendas_total');
+      } else if (await PermissionComponent.hasPermission("User_Role")) {
+        response = await axios.get('http://localhost:8080/dados_vendas_total_user', {
+          params: { vendedor: login }
+        });
+      }
       const data = response.data;
       const totalVendasDoJson = data.total_vendas;
       setTotalVendas(totalVendasDoJson);

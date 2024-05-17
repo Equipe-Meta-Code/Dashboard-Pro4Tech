@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import axios from 'axios';
 import PermissionComponent from '../../PermissionComponent';
+import { useAuth } from '../../../context/AuthContext';
 
 const AreaBarChart = () => {
+  const { login } = useAuth();
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,11 +19,13 @@ const AreaBarChart = () => {
       const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
       let response;
-        if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-          response = await axios.get('http://localhost:8080/dados_vendas_mes');
-        } else if (await PermissionComponent.hasPermission("User_Role")) {
-          response = await axios.get('http://localhost:8080/dados_vendas_mes_user');
-        }
+      if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
+        response = await axios.get('http://localhost:8080/dados_vendas_mes');
+      } else if (await PermissionComponent.hasPermission("User_Role")) {
+        response = await axios.get('http://localhost:8080/dados_vendas_mes_user', {
+          params: { vendedor: login }
+        });
+      }
       const data = response.data.map(item => {
         // Convertendo o número do mês para o nome completo do mês
         const monthIndex = item.mes - 1; // Mês em JavaScript é baseado em zero

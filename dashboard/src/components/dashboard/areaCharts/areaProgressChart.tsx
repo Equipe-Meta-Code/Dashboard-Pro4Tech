@@ -3,8 +3,10 @@ import axios from 'axios';
 import "./AreaCharts.scss";
 import { v4 as uuidv4 } from 'uuid';
 import PermissionComponent from '../../PermissionComponent';
+import { useAuth } from '../../../context/AuthContext';
 
 const AreaProgressChart = () => {
+  const { login } = useAuth();
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0); // Adicionando o estado para o total
@@ -17,11 +19,13 @@ const AreaProgressChart = () => {
     const fetchData = async () => {
       try {
         let response;
-        if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-          response = await axios.get('http://localhost:8080/dados_itens');
-        } else if (await PermissionComponent.hasPermission("User_Role")) {
-          response = await axios.get('http://localhost:8080/dados_itens_user');
-        }
+      if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
+        response = await axios.get('http://localhost:8080/dados_itens');
+      } else if (await PermissionComponent.hasPermission("User_Role")) {
+        response = await axios.get('http://localhost:8080/dados_itens_user', {
+          params: { vendedor: login }
+        });
+      }
         const data = response.data;
         setChartData(data);
         setLoading(false);

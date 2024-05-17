@@ -18,6 +18,12 @@ const AreaBarChart = () => {
       // Definindo os nomes dos meses
       const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
+      // Criando um array inicial com todos os meses e total_vendas igual a zero
+      const initialData = monthNames.map((month, index) => ({
+        mes: month,
+        total_vendas: 0
+      }));
+
       let response;
       if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
         response = await axios.get('http://localhost:8080/dados_vendas_mes');
@@ -26,15 +32,19 @@ const AreaBarChart = () => {
           params: { vendedor: login }
         });
       }
-      const data = response.data.map(item => {
-        // Convertendo o número do mês para o nome completo do mês
-        const monthIndex = item.mes - 1; // Mês em JavaScript é baseado em zero
-        const monthName = monthNames[monthIndex];
-        return { ...item, mes: monthName };
+
+      const apiData = response.data.map(item => ({
+        mes: monthNames[item.mes - 1], // Convertendo o número do mês para o nome completo do mês
+        total_vendas: item.total_vendas
+      }));
+
+      // Mesclando os dados da API com o array inicial
+      const mergedData = initialData.map(monthData => {
+        const monthSales = apiData.find(apiMonthData => apiMonthData.mes === monthData.mes);
+        return monthSales ? { ...monthData, total_vendas: monthSales.total_vendas } : monthData;
       });
-      // Ordenando os dados por ordem dos meses
-      data.sort((a, b) => monthNames.indexOf(a.mes) - monthNames.indexOf(b.mes));
-      setChartData(data);
+
+      setChartData(mergedData);
       setLoading(false);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import axios from 'axios';
-import PermissionComponent from '../../PermissionComponent';
-import { useAuth } from '../../../context/AuthContext';
 import numeral from 'numeral';
 
 const AreaBarChart = () => {
-  const { login } = useAuth();
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [yDomain, setYDomain] = useState([0, 10000]); // Inicialize com um valor padrão
 
   useEffect(() => {
     fetchData();
@@ -19,33 +17,25 @@ const AreaBarChart = () => {
       // Definindo os nomes dos meses
       const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-      // Criando um array inicial com todos os meses e total_vendas igual a zero
-      const initialData = monthNames.map((month, index) => ({
-        mes: month,
-        total_vendas: 0
-      }));
-
-      let response;
-      if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-        response = await axios.get('http://localhost:8080/dados_vendas_mes');
-      } else if (await PermissionComponent.hasPermission("User_Role")) {
-        response = await axios.get('http://localhost:8080/dados_vendas_mes_user', {
-          params: { vendedor: login }
-        });
-      }
-
-      const apiData = response.data.map(item => ({
-        mes: monthNames[item.mes - 1], // Convertendo o número do mês para o nome completo do mês
-        total_vendas: item.total_vendas
-      }));
-
-      // Mesclando os dados da API com o array inicial
-      const mergedData = initialData.map(monthData => {
-        const monthSales = apiData.find(apiMonthData => apiMonthData.mes === monthData.mes);
-        return monthSales ? { ...monthData, total_vendas: monthSales.total_vendas } : monthData;
+      const response = await axios.get('http://localhost:8080/dados_vendas_mes');
+      const data = response.data.map(item => {
+        // Convertendo o número do mês para o nome completo do mês
+        const monthIndex = item.mes - 1; // Mês em JavaScript é baseado em zero
+        const monthName = monthNames[monthIndex];
+        return { ...item, mes: monthName };
       });
 
-      setChartData(mergedData);
+      // Encontrar os valores mínimos e máximos de vendas
+      const salesValues = data.map(item => item.total_vendas);
+      const minSales = Math.min(...salesValues);
+      const maxSales = Math.max(...salesValues);
+
+      // Definir o domínio do eixo Y com base nos valores mínimos e máximos de vendas
+      setYDomain([minSales, Math.ceil(maxSales * 1)]); // Ajuste conforme necessário para espaço extra
+
+      // Ordenando os dados por ordem dos meses
+      data.sort((a, b) => monthNames.indexOf(a.mes) - monthNames.indexOf(b.mes));
+      setChartData(data);
       setLoading(false);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
@@ -74,13 +64,14 @@ const AreaBarChart = () => {
                 margin={{
                   top: 10,
                   right: 30,
-                  left: 0,
+                  left: 20,
                   bottom: 0,
                 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="mes" />
-                <YAxis tickFormatter={(value) => `R$` + `${value.toLocaleString('pt-BR')}`}/>
+                {/* forma que eu achei pra arrumar, ver se consigo voltar ao jeito antigo */}
+                <YAxis domain={yDomain} tickCount={6} tickFormatter={(value) => `R$${value.toFixed().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}/>
                 {/* Usando o formatter personalizado para incluir "R$" no tooltip */}
                 <Tooltip formatter={(value, name) => ['R$ ' + numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ','), name]}/>
                 <Area

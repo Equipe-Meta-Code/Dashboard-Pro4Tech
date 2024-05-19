@@ -3,6 +3,11 @@ import { useEffect, useState } from 'react';
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 import { FaRegEdit } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
 import { MdDeleteOutline, MdAdd } from "react-icons/md";
@@ -20,12 +25,12 @@ import {
   GridRowEditStopReasons,
   GridSlots,
 } from "@mui/x-data-grid";
-import App from "../../../App";
 import axios from "axios";
 
 const Comissao = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
+  const [cardData, setCardData] = useState({ venda1: 10, venda2: 15, venda3: 20, venda4: 25 });
 
   useEffect(() => {
     fetchData();
@@ -45,7 +50,6 @@ const Comissao = () => {
       const data = response.data;
 
       // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
-      
       const processedData = data.map(item => ({
         id: item.id,
         vendedor: item.Vendedor.split(' ').slice(0, 2).join(' '),
@@ -53,7 +57,7 @@ const Comissao = () => {
         produto: item.Produto,
         id_produto: item.ID_Produto,
         valor_da_venda: item.Valor_de_Venda,
-        tipoVenda: item.tipoVenda,
+        tipoVenda: item.tipoVendaGeral,
         porcentagem: item.Porcentagem
       }));
       setChartData(processedData)
@@ -62,6 +66,36 @@ const Comissao = () => {
       console.error('Erro ao buscar dados:', error);
     }
   };
+  const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
+    
+  }
+
+  const updatePercentages = (key, value) => {
+    let tipoVenda;
+    switch (key) {
+      case "venda1":
+        tipoVenda = "Produto Antigo - Cliente Antigo";
+        break;
+      case "venda2":
+        tipoVenda = "Produto Novo - Cliente Novo";
+        break;
+      case "venda3":
+        tipoVenda = "Produto Novo - Cliente Antigo";
+        break;
+      case "venda4":
+        tipoVenda = "Produto Antigo - Cliente Novo";
+        break;
+      default:
+        return;
+    }
+  
+    setRows(prevRows => 
+      prevRows.map(row => 
+        row.tipoVenda === tipoVenda ? { ...row, porcentagem: value } : row
+      )
+    );
+  };
+  
 
   //adicionar na tabela
   interface EditToolbarProps {
@@ -145,10 +179,12 @@ const Comissao = () => {
   };
 
   //atualizar quando a linha nova for salva
-  const processRowUpdate = (newRow: GridRowModel) => {
+  const processRowUpdate = async (newRow: GridRowModel) => {
+    const { vendedor, cpf, produto,id_produto, valor_da_venda, tipoVenda, porcentagem} = newRow;
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
+    await saveChangesToDatabase([{vendedor, cpf, produto,id_produto, valor_da_venda, tipoVenda, porcentagem }]);
   };
 
   //manipulador de eventos chamado quando o modo da linha muda
@@ -156,7 +192,11 @@ const Comissao = () => {
     setRowModesModel(newRowModesModel);
   };
 
-
+  const handleCardChange = (key: string, value: number) => {
+    setCardData(prev => ({ ...prev, [key]: value }));
+    updatePercentages(key, value);
+  };
+  
 
   const columns: GridColDef[] = [
     {
@@ -203,13 +243,13 @@ const Comissao = () => {
         align: "left",
         headerAlign: "left",
         editable: true,
-        valueGetter: (value) => `R$${value}`,
+        valueGetter: (value)=> `R$${value}`,
       },
     {
       field: "tipoVenda",
       headerName: "Tipo de Venda",
       headerClassName: "super-app-theme--header",
-      width: 150,
+      width: 240,
       align: "left",
       headerAlign: "left",
       editable: true,
@@ -269,7 +309,6 @@ const Comissao = () => {
   ];
 
   return (
-    //tabela
     <Box className="sx-box">
       <h2 className="area-top-title">Comissões</h2>
       <DataGrid
@@ -287,7 +326,6 @@ const Comissao = () => {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        //a tabela divide - mostra 10 vendedores por página
         initialState={{
           pagination: {
             paginationModel: {
@@ -297,9 +335,38 @@ const Comissao = () => {
         }}
         pageSizeOptions={[20]}
       />
+     <Box className="cards-container" sx={{ flexGrow: 1, marginTop: 2 }}>
+        <Grid container spacing={2}>
+          {[
+            { key: "venda1", label: "Produto Antigo e Cliente Antigo" },
+            { key: "venda2", label: "Produto Novo e Cliente Novo" },
+            { key: "venda3", label: "Produto Novo e Cliente Antigo" },
+            { key: "venda4", label: "Produto Antigo e Cliente Novo" },
+          ].map((item, index) => (
+            <Grid item xs={12} sm={6} key={index}>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    {item.label}
+                  </Typography>
+                  <TextField
+                    variant="outlined"
+                    label="Porcentagem"
+                    value={cardData[item.key]}
+                    onChange={(e) => handleCardChange(item.key, Number(e.target.value))}
+                    InputProps={{
+                      endAdornment: <Typography>%</Typography>
+                    }}
+                    sx={{ marginTop: 2 }}
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </Box>
   );
 };
 
 export default Comissao;
-

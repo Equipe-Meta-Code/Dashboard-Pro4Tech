@@ -108,6 +108,10 @@ Criar a Models Comissões
 ```
 npx sequelize-cli model:generate --name comissao --attributes Vendedor:string,CPF_Vendedor:string,Produto:string,ID_Produto:string,Valor_da_Venda:string,Tipo_de_Venda:string,Porcentagem:string
 ```
+Criar a Models Porcentagem de Venda
+```
+npx sequelize-cli model:generate --name porcentagem --attributes Tipo_de_Venda:string,Porcentagem:string
+```
 
 Executar as migrations
 ```

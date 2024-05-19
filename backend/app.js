@@ -563,6 +563,15 @@ async function exportar() {
     }
 }
 
+app.get('/vendas_filtradas', async (req, res) => {
+    try {
+        const [rows, fields] = await connection.query('SELECT createdAt FROM informacoes');
+        res.json(rows);
+    } catch (error) {
+        console.error('Erro ao buscar as vendas', error);
+        res.status(500).send('Erro ao buscar as vendas');
+    }
+});
 exportar();
 
 // Iniciar o servidor na porta 8080

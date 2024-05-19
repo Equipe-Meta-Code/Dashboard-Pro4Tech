@@ -16,21 +16,23 @@ const AreaProgressChart = () => {
   }, []);
 
   
-    const fetchData = async () => {
-      try {
+  const fetchData = async () => {
+    try {
+      let response;
+      if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
+        response = await axios.get('http://localhost:8080/dados_itens');
+      } else {
+        response = await axios.get('http://localhost:8080/dados_itens_user', {
+          params: { vendedor: login }
+        });
+      }
 
-        let response;
-        if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-          response = await axios.get('http://localhost:8080/dados_itens');
-        } else if (await PermissionComponent.hasPermission("User_Role")) {
-          response = await axios.get('http://localhost:8080/dados_itens_user', {
-            params: { vendedor: login }
-          });
-        }
+      const data = response.data;
+      console.log("Received data:", data);
+      setChartData(data);
+      setLoading(false);
 
-        const data = response.data;
-        setChartData(data);
-        setLoading(false);
+  
 
         // Calculando o total
         const totalVendido = data.reduce((acc, item) => acc + item.quantidade_vendida, 0);

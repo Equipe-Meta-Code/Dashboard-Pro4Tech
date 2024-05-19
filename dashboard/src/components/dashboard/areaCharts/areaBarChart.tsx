@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import axios from 'axios';
 import numeral from 'numeral';
+import PermissionComponent from '../../PermissionComponent';
+import { useAuth } from '../../../context/AuthContext';
 
 const AreaBarChart = () => {
+  const { login } = useAuth();
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [yDomain, setYDomain] = useState([0, 10000]); // Inicialize com um valor padrão
@@ -17,7 +20,15 @@ const AreaBarChart = () => {
       // Definindo os nomes dos meses
       const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-      const response = await axios.get('http://localhost:8080/dados_vendas_mes');
+      let response;
+      if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
+        response = await axios.get('http://localhost:8080/dados_vendas_mes');
+      } else {
+        response = await axios.get('http://localhost:8080/dados_vendas_mes_user', {
+          params: { vendedor: login }
+        });
+      }
+      
       const data = response.data.map(item => {
         // Convertendo o número do mês para o nome completo do mês
         const monthIndex = item.mes - 1; // Mês em JavaScript é baseado em zero
@@ -25,8 +36,20 @@ const AreaBarChart = () => {
         return { ...item, mes: monthName };
       });
 
+      // Criando um objeto para representar todos os meses do ano com vendas zeradas
+      const allMonthsData = monthNames.map(month => ({
+        mes: month,
+        total_vendas: 0
+      }));
+
+      // Mesclando os dados recebidos com os meses do ano
+      const mergedData = allMonthsData.map(monthData => {
+        const foundData = data.find(item => item.mes === monthData.mes);
+        return foundData ? foundData : monthData;
+      });
+
       // Encontrar os valores mínimos e máximos de vendas
-      const salesValues = data.map(item => item.total_vendas);
+      const salesValues = mergedData.map(item => item.total_vendas);
       const minSales = Math.min(...salesValues);
       const maxSales = Math.max(...salesValues);
 
@@ -34,8 +57,8 @@ const AreaBarChart = () => {
       setYDomain([minSales, Math.ceil(maxSales * 1)]); // Ajuste conforme necessário para espaço extra
 
       // Ordenando os dados por ordem dos meses
-      data.sort((a, b) => monthNames.indexOf(a.mes) - monthNames.indexOf(b.mes));
-      setChartData(data);
+      mergedData.sort((a, b) => monthNames.indexOf(a.mes) - monthNames.indexOf(b.mes));
+      setChartData(mergedData);
       setLoading(false);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);

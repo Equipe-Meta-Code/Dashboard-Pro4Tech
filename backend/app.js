@@ -261,8 +261,11 @@ async function exportar() {
         app.get('/dados_itens_user', async (req, res) => {
             try {
                 const vendedor = req.query.vendedor;
+                console.log("Vendedor:", vendedor); // Adiciona um console log para verificar o valor de vendedor
                 const query = 'SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes WHERE CPF_Vendedor = ? GROUP BY Produto ORDER BY quantidade_vendida DESC';
+                console.log("Query:", query); // Adiciona um console log para verificar a query sendo executada
                 const [rows, fields] = await connection.query(query, [vendedor]);
+                console.log("Rows:", rows); // Adiciona um console log para verificar os resultados da consulta
                 res.json(rows);
             } catch (error) {
                 console.error('Erro ao buscar os itens mais vendidos:', error);

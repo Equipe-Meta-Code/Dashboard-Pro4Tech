@@ -15,7 +15,7 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
       let response;
       if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
         response = await axios.get('http://localhost:8080/dados_vendas_total');
-      } else if (await PermissionComponent.hasPermission("User_Role")) {
+      } else {
         response = await axios.get('http://localhost:8080/dados_vendas_total_user', {
           params: { vendedor: login }
         });

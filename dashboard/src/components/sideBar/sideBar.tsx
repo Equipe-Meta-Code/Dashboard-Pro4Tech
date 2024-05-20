@@ -98,7 +98,7 @@ const Sidebar = () => {
     setShowModal(false);
       // Chama a função para executar o processo
     saveVendedoresToUsers();
-    //window.location.reload();
+    window.location.reload();
   };
 
   const handleLogout = () => {

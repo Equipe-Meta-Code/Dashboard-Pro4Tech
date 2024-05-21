@@ -97,7 +97,7 @@ const Sidebar = () => {
   const handleCloseModal = async () => {
     setShowModal(false);
       // Chama a função para executar o processo
-    saveVendedoresToUsers();
+    await saveVendedoresToUsers();
     window.location.reload();
   };
 

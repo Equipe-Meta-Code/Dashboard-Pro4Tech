@@ -22,28 +22,23 @@ const AreaTop = () => {
     },
   ]);
 
-  const handleSelect = (date) => {
-    let filtrar = totalVendas.filter((venda) => {
-      let vendaData = new Date(venda["createdAt"]);
-      return ( 
-        vendaData >= date.selection.startDate && 
-        vendaData <= date.selection.endDate
-      )
-    })
-    setStartDate(date.selection.startDate)
-    setEndDate(date.selection.endDate)
-    setVendas(filtrar);
-  }
-
   useEffect(() => {
-    axios
-    .get("'http://localhost:8080/vendas_filtradas")
-    .then((response) => {
-      setVendas(response.data)
-      setTotalVendas(response.data)
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/vendas_filtradas", {
+          params: {
+            startDate: state[0].startDate.toISOString(),
+            endDate: state[0].endDate.toISOString(),
+          },
+        });
+        setVendas(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar as vendas', error);
+      }
+    };
 
-    })
-});
+    fetchData();
+  }, [state]);
 
   //const [showDatePicker, setShowDatePicker] = useState(false);
   const dateRangeRef = useRef(null);
@@ -63,7 +58,7 @@ const AreaTop = () => {
         <div className="custom-date-range" ref={dateRangeRef}>
           <DateRange
             editableDateInputs={true}
-            onChange={handleSelect}
+            onChange={(item) => setState([item.selection])}
             moveRangeOnFirstSelection={false}
             ranges={state}
             showMonthAndYearPickers={false}

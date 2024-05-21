@@ -21,7 +21,7 @@ const Login = () => {
 
     const { signIn } = useAuth();
 
-    const handleSubmit = useCallback(async (event) => {
+    const handleSubmit = useCallback(async() => {
         event.preventDefault();
         if (!login || !senha) {
             setError("Por favor, preencha todos os campos.");
@@ -61,6 +61,12 @@ const Login = () => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSubmit();
+        }
+    };
+
     const formatCPF = (input) => {
         const cleaned = input.replace(/[^\d]/g, '');
         const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2})$/);
@@ -82,6 +88,7 @@ const Login = () => {
                             placeholder="Login" 
                             value={login}
                             onChange={handleLoginChange}
+                            onKeyPress={handleKeyPress}
                             maxLength={14} // Limitar o campo para 14 caracteres (com pontos e traços)
                         />
                     </div>
@@ -92,6 +99,7 @@ const Login = () => {
                             placeholder="Senha" 
                             value={senha}
                             onChange={handleSenhaChange}
+                            onKeyPress={handleKeyPress}
                             maxLength={14} // Limitar o campo para 14 caracteres (com pontos e traços)
                         />
                         <button className="eye-icon" onClick={() => setMostrarSenha(!mostrarSenha)}>

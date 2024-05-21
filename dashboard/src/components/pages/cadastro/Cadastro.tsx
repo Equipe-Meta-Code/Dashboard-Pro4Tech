@@ -31,6 +31,12 @@ const Cadastro = () => {
     setCpf(formattedCPF);
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
   const handleSubmit = async () => {
     setError(""); // Limpar mensagem de erro anterior
     setSuccessMessage(""); // Limpar mensagem de sucesso anterior
@@ -110,14 +116,14 @@ const Cadastro = () => {
           </div>
           <div className="input">
             <img src={password_icon} alt="" />
-            <input type={mostrarSenha ? "text" : "password"} placeholder="Senha" value={senha} onChange={(event) => setSenha(event.target.value)} />
+            <input type={mostrarSenha ? "text" : "password"} placeholder="Senha" value={senha} onChange={(event) => setSenha(event.target.value)} onKeyPress={handleKeyPress} />
             <button className="eye-icon" onClick={() => setMostrarSenha(!mostrarSenha)}>
               {mostrarSenha ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
             </button>
           </div>
           <div className="input">
             <img src={password_icon} alt="" />
-            <input type={mostrarConfirmarSenha ? "text" : "password"} placeholder="Confirmar senha" onChange={(event) => setConfirmarSenha(event.target.value)} />
+            <input type={mostrarConfirmarSenha ? "text" : "password"} placeholder="Confirmar senha" onChange={(event) => setConfirmarSenha(event.target.value)} onKeyPress={handleKeyPress}/>
             <button className="eye-icon" onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}>
               {mostrarConfirmarSenha ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
             </button>

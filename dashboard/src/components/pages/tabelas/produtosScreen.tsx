@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit, FaSearch } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
-import { MdDeleteOutline, MdAdd } from "react-icons/md";
+import { MdDeleteOutline, MdAdd, MdOutlineCleaningServices } from "react-icons/md";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -118,6 +118,7 @@ const Produtos = () => {
 
   function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel, rows } = props;
+    const [filter, setFilter] = useState("");
 
     const handleClick = () => {
       //calcula o próximo ID baseado no maior ID existente na tabela
@@ -155,6 +156,18 @@ const Produtos = () => {
       }
     };
 
+    const handleFiltrar = async (Filtro) => {}
+    const applyFilter = () => {
+      const filteredRows = chartData.filter(row =>
+        row.produto.toLowerCase().startsWith(filter.toLowerCase())
+      );
+      setRows(filteredRows);
+    };
+
+    const limparFiltro = async () => {
+      setRows(chartData)
+     }
+
     const [openModal, setOpenModal] = useState(false);
     const [Produto, setProduto] = useState("");
     const [Valor_de_Venda, setValor_de_Venda] = useState("");
@@ -162,6 +175,29 @@ const Produtos = () => {
     //botão de adicionar
     return (
       <GridToolbarContainer>
+        <div 
+          className="toolbar-content" 
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            width: '100%' 
+          }}
+        >
+          <div className="inputs-modal" style={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'flex-start'}}>
+            <div className="input-filtro">
+              <img src={user_icon} alt="" />
+              <input
+                type="text"
+                placeholder="Nome do Produto"
+                value={filter}
+                onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+              />
+            </div>
+            <button onClick={applyFilter}><FaSearch size={22} className="filtro-button"/></button>
+            <button onClick={limparFiltro}><MdOutlineCleaningServices size={22} className="filtro-button" /></button>
+          </div>
+
         <Button
           className="text-button"
           startIcon={<MdAdd size={20} className="edit-button" />}
@@ -169,6 +205,7 @@ const Produtos = () => {
         >
           Adicionar
         </Button>
+      </div>
         <Modal isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}>
           <div className="container-modal">
             <div className="title-modal">Adicionar Produto</div>

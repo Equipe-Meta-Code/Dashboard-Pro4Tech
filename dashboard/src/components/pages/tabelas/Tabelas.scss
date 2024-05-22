@@ -10,21 +10,22 @@
 .edit-button {
   color: var(--logo-color);
 }
+
 .limpar-button {
   color: var(--logo-color);
   margin-left: 10px;
 }
-.inputs-filtros{
+
+.inputs-filtros {
   display: flex;
   flex-direction: row;
   align-items: start;
   justify-content: flex-start;
   width: 360px;
   gap: 1px;
-  //margin-top: 20px; 
 }
 
-.inputs-selection{
+.inputs-selection {
   margin-left: 0px;
   display: flex;
   align-items: center;
@@ -38,19 +39,21 @@
   margin-right: 10px;
   margin-top: 10px;
 }
+
 .filtro-button {
   color: var(--logo-color);
   margin-top: 22px;
   margin-left: 10px;
 }
-.inputs-filtro{
+
+.inputs-filtro {
   display: flex;
   flex-direction: column;
   gap: 1px;
   margin-top: 20px; 
 }
 
-.input-filtro{
+.input-filtro {
   display: flex;
   align-items: center;
   margin: auto;
@@ -62,11 +65,11 @@
   margin-top: 10px;
 }
 
-.input-filtro img{
+.input-filtro img {
   margin: 0px 10px;
 }
 
-.input-filtro input{
+.input-filtro input {
   height: 30px;
   width: 310px;
   background: transparent;

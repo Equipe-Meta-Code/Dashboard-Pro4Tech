@@ -4,9 +4,9 @@ import InputMask from 'react-input-mask';
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit, FaSearch } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
-import { MdAdd } from "react-icons/md";
+import { MdDeleteOutline, MdAdd, MdOutlineCleaningServices } from "react-icons/md";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -29,6 +29,7 @@ import user_icon from '../../../assets/person.png'
 const Clientes = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
+  
   
   useEffect(() => {
     fetchData();
@@ -122,6 +123,7 @@ const Clientes = () => {
 
   function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel, rows } = props;
+    const [filter, setFilter] = useState("");
 
     const handleClick = () => {
       //calcula o próximo ID baseado no maior ID existente na tabela
@@ -164,50 +166,87 @@ const Clientes = () => {
     const [Cliente, setVendedor] = useState('');
     const [CNPJ_CPF_Cliente, setCPF_Vendedor] = useState('');
     const [Segmento_do_Cliente, setSegmento_do_Cliente] = useState('');
+
+    const handleFiltrar = async (Filtro) => {}
+    const applyFilter = () => {
+      const filteredRows = chartData.filter(row =>
+        row.cliente.toLowerCase().startsWith(filter.toLowerCase())
+      );
+      setRows(filteredRows);
+    };
+
+    const limparFiltro = async () => {
+      setRows(chartData)
+     }
+
+
     
 
     //botão de adicionar vendedor
     return (
       <GridToolbarContainer>
-        <Button className="text-button"
-          startIcon={<MdAdd size={20} className="edit-button"/>}
-          onClick={() => setOpenModal(true)}>Adicionar</Button>
-          <Modal isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}> 
-              <div className="container-modal">
-                <div className="title-modal">Adicionar Cliente</div>
-                <div className="content-modal"> 
-                    <div className="inputs-modal">
+        <div 
+          className="toolbar-content" 
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            width: '100%' 
+          }}
+        >
+          <div className="inputs-modal" style={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'flex-start'}}>
+            <div className="input-filtro">
+              <img src={user_icon} alt="" />
+              <input
+                type="text"
+                placeholder="Nome do Cliente"
+                value={filter}
+                onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+              />
+            </div>
+            <button onClick={applyFilter}><FaSearch size={22} className="filtro-button"/></button>
+            <button onClick={limparFiltro}><MdOutlineCleaningServices size={22} className="filtro-button" /></button>
+          </div>
 
-                      <div className="input-modal">
-                        <img src={user_icon} alt="" />
-                        <input type="text" placeholder="Nome do Cliente" onChange={event => setVendedor(event.target.value)}/>
-                      </div>
+          <Button className="text-button"
+            startIcon={<MdAdd size={20} className="edit-button"/>}
+            onClick={() => setOpenModal(true)}>Adicionar</Button>
+        </div>
 
-                      <div className="input-modal"> 
-                        <img src={user_icon} alt="" />
-                        <InputMask
-                          mask="999.999.999-99"
-                          value={CNPJ_CPF_Cliente}
-                          onChange={event => setCPF_Vendedor(event.target.value)}
-                          placeholder="CNPJ/CPF do Cliente"
-                        />
-                      </div>
-
-                      <div className="input-modal">
-                        <img src={user_icon} alt="" />
-                        <input type="text" placeholder="Segmento do Cliente" onChange={event => setSegmento_do_Cliente(event.target.value)}/>
-                      </div>
-
-                    </div>
-
-                      <div className="submit-container-modal">
-                        <div className="submit-modal" onClick={() => handleAdicionar(Cliente, CNPJ_CPF_Cliente, Segmento_do_Cliente)}>Adicionar</div>
-                      </div>
-
+        <Modal isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}> 
+          <div className="container-modal">
+            <div className="title-modal">Adicionar Cliente</div>
+            <div className="content-modal"> 
+              <div className="inputs-modal">
+                <div className="input-modal">
+                  <img src={user_icon} alt="" />
+                  <input type="text" placeholder="Nome do Cliente" onChange={event => setVendedor(event.target.value)}/>
                 </div>
-              </div>      
-          </Modal>
+
+                <div className="input-modal"> 
+                  <img src={user_icon} alt="" />
+                  <InputMask
+                    mask="999.999.999-99"
+                    value={CNPJ_CPF_Cliente}
+                    onChange={event => setCPF_Vendedor(event.target.value)}
+                    placeholder="CNPJ/CPF do Cliente"
+                  />
+                </div>
+
+                <div className="input-modal">
+                  <img src={user_icon} alt="" />
+                  <input type="text" placeholder="Segmento do Cliente" onChange={event => setSegmento_do_Cliente(event.target.value)}/>
+                </div>
+              </div>
+
+              <div className="submit-container-modal">
+                <div className="submit-modal" onClick={() => handleAdicionar(Cliente, CNPJ_CPF_Cliente, Segmento_do_Cliente)}>Adicionar</div>
+              </div>
+            </div>
+          </div>      
+        </Modal>
       </GridToolbarContainer>
+
     );
   }
 

@@ -117,10 +117,12 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
                     ID_Produto: row.ID_Produto,
                     Valor_da_Venda: row.Valor_de_Venda
                 });
-                await db.Produtos.create({
-                    Produto: row.Produto,
-                    Valor_de_Venda: row.Valor_de_Venda
-                });
+                if (!existingProduto) {
+                    await db.Produtos.create({
+                        Produto: row.Produto,
+                        Valor_de_Venda: row.Valor_de_Venda
+                    });
+                }
             }
         }
 

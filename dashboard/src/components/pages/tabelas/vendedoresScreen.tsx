@@ -74,7 +74,7 @@ const Vendedores = () => {
           // Construir o objeto combinando as propriedades de /vendedores e a última venda de /geral
           return {
             id: itemVendedor.id,
-            vendedor: itemVendedor.Vendedor.split(" ").slice(0, 2).join(" "),
+            vendedor: itemVendedor.Vendedor,
             cpf: itemVendedor.CPF_Vendedor,
             // Valor_de_Venda da última venda de /geral
             valor: ultimaVenda.Valor_de_Venda,
@@ -173,7 +173,7 @@ const Vendedores = () => {
       const filteredRows = chartData.filter((row) =>
         row.vendedor.toLowerCase().startsWith(filter.toLowerCase())
       );
-      
+
       setRows(filteredRows);
     };
 
@@ -189,7 +189,7 @@ const Vendedores = () => {
             <img src={user_icon} alt="" />
             <input
               type="text"
-              placeholder="Nome do Vendedor"
+              placeholder="Buscar por nome do Vendedor"
               value={filter}
               onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
             />

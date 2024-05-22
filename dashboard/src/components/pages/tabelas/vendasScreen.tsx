@@ -387,7 +387,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                 <img src={user_icon} alt="" />
                 <input
                   type="text"
-                  placeholder="Nome do Vendedor"
+                  placeholder="Buscar por nome do Vendedor"
                   value={filter}
                   onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
                 />
@@ -406,7 +406,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
               <img src={user_icon} alt="" />
               <input
                 type="text"
-                placeholder="Nome do Cliente"
+                placeholder="Buscar por nome do Cliente"
                 value={filter}
                 onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
               />
@@ -525,11 +525,12 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
             <select className="editar-venda"
               style={{
                 width: "100%",
-                padding: "8px",
+                height: "100%",
+                //padding: "8px",
                 borderRadius: "5px",
                 backgroundColor: "var(--chart-secondary-color)",
                 color: "var(--side-text-color3)",
-                
+                fontSize: "15px"
               }}
               value={params.value}
               onChange={(e) => {
@@ -587,10 +588,12 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
               className="editar-venda"
               style={{
                 width: "100%",
-                padding: "8px",
+                height: "100%",
+                //padding: "8px",
                 borderRadius: "5px",
                 backgroundColor: "var(--chart-secondary-color)",
                 color: "var(--side-text-color3)",
+                fontSize: "15px"
               }}
               value={params.value}
               onChange={(e) => {

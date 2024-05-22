@@ -5,9 +5,11 @@ import InputMask from "react-input-mask";
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FaRegEdit, FaSearch } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
+import { TfiEraser } from "react-icons/tfi";
+import { IoSearchSharp } from "react-icons/io5";
 import { RxCheck, RxCross2 } from "react-icons/rx";
-import { MdDeleteOutline, MdAdd, MdOutlineCleaningServices } from "react-icons/md";
+import { MdDeleteOutline, MdAdd} from "react-icons/md";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -166,11 +168,12 @@ const Vendedores = () => {
       }));
     };
 
-    const handleFiltrar = async (Filtro) => {};
     const applyFilter = () => {
+
       const filteredRows = chartData.filter((row) =>
         row.vendedor.toLowerCase().startsWith(filter.toLowerCase())
       );
+      
       setRows(filteredRows);
     };
 
@@ -192,8 +195,8 @@ const Vendedores = () => {
             />
           </div>
 
-          <button onClick={applyFilter}><FaSearch size={22} className="filtro-button"/></button>
-          <button onClick={limparFiltro}><MdOutlineCleaningServices size={22} className="filtro-button" /></button>
+          <button onClick={applyFilter}><IoSearchSharp size={26} className="filtro-button" title="Buscar"/></button>
+          <button onClick={limparFiltro}><TfiEraser size={26} className="filtro-button" title="Apagar Filtro"/></button>
       
       </div>
     );

@@ -4,9 +4,12 @@ import InputMask from 'react-input-mask';
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FaRegEdit, FaSearch } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
+import { IoSearchSharp } from "react-icons/io5";
 import { RxCheck, RxCross2 } from "react-icons/rx";
-import { MdAdd, MdOutlineCleaningServices } from "react-icons/md";
+import { CiEraser } from "react-icons/ci";
+import { TfiEraser } from "react-icons/tfi";
+import { MdAdd} from "react-icons/md";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -355,22 +358,25 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
 
     <div className="inputs-filtros" >
         <div className="inputs-selection">
-          <select style={{
+        <select
+              style={{
                 width: "315px",
-                padding: "8px",
+                padding: "12px",
                 borderRadius: "5px",
                 backgroundColor: "var(--chart-secondary-color)",
                 color: "var(--side-text-color3)",
-              }} onChange={event => setSelectedOption(event.target.value)}>
-                
-            <option value="">Selecione uma opção</option>
-            <option value="vendedor">Vendedor</option>
-            <option value="cliente">Cliente</option>
-            <option value="data">Data</option>
-          </select>
+                fontSize: "16px" // Aumenta o tamanho do texto
+              }}
+          onChange={event => setSelectedOption(event.target.value)}
+        >
+          <option value="" style={{ fontSize: "16px" }}>Selecione uma opção</option>
+          <option value="vendedor" style={{ fontSize: "16px" }}>Vendedor</option>
+          <option value="cliente" style={{ fontSize: "16px" }}>Cliente</option>
+          <option value="data" style={{ fontSize: "16px" }}>Data</option>
+        </select>
 
-          <button onClick={limparFiltro}>
-            <MdOutlineCleaningServices size={22} className="limpar-button" />
+          <button onClick={limparFiltro} title="Apagar Filtro">
+            <TfiEraser size={26} className="limpar-button" />
           </button>
         </div>
         
@@ -388,7 +394,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
               </div>
 
               <button onClick={applyFilter}>
-                <FaSearch size={22} className="filtro-button"/>
+                <IoSearchSharp size={26} className="filtro-button" title="Buscar"/>
               </button>
           </div>
       
@@ -407,7 +413,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
             </div>
 
             <button onClick={applyFilter}>
-              <FaSearch size={22} className="filtro-button"/>
+              <IoSearchSharp size={26} className="filtro-button" title="Buscar"/>
             </button>
           </div>
         )}
@@ -424,7 +430,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
             </div>
 
             <button onClick={applyFilter}>
-              <FaSearch size={22} className="filtro-button"/>
+              <IoSearchSharp size={26} className="filtro-button" title="Buscar"/>
             </button>
         </div>
         )}

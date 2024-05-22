@@ -4,9 +4,6 @@ import InputMask from "react-input-mask";
 import "./VendasVendedor.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FaRegEdit } from "react-icons/fa";
-import { RxCheck, RxCross2 } from "react-icons/rx";
-import { MdAdd } from "react-icons/md";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -25,22 +22,26 @@ import ModalVendas from "../../pages/modal/modalVendas";
 import calendario from "../../../assets/icons/calendario.svg";
 import moment from "moment";
 import numeral from "numeral";
-
 //tabela no perfil do vendedor - últimas vendas dele
 
+interface VendasVendedorProps {
+  vendedorId: string;
+}
+
 // componente para a tabela de vendas
-const VendasVendedor = () => {
+const VendasVendedor: React.FC<VendasVendedorProps> = ({ vendedorId }) => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
   const [chartVendedores, setChartVendedores] = useState([]);
   const [chartClientes, setChartClientes] = useState([]);
 
+
   // busca dados iniciais quando o componente é montado
   useEffect(() => {
     fetchData();
     fetchVendedores();
-    fetchClientes(); // adicionando busca por clientes
-  }, []);
+    fetchClientes();
+  }, [vendedorId]);
 
   // atualiza as linhas da tabela quando chartData muda
   useEffect(() => {
@@ -54,8 +55,12 @@ const VendasVendedor = () => {
       const response = await axios.get("http://localhost:8080/geral");
       const data = response.data;
       
+      // filtrar dados para pegar apenas as vendas do vendedor atual
+      const filteredData = data.filter((item) => item.CPF_Vendedor === vendedorId);
+
+
       // pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
-      const processedData = data.map((item) => ({
+      const processedData = filteredData.map((item) => ({
         id: item.id,
         venda: item.tipoVendaGeral,
         vendedor: item.Vendedor.split(" ").slice(0, 2).join(" "),
@@ -67,6 +72,7 @@ const VendasVendedor = () => {
         valor: item.Valor_de_Venda,
         pagamento: item.Forma_de_Pagamento,
       }));
+
       setChartData(processedData);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
@@ -254,14 +260,6 @@ const VendasVendedor = () => {
 
     //botão de adicionar vendas e o modal
     return (
-      <GridToolbarContainer>
-        <Button
-          className="text-button"
-          startIcon={<MdAdd size={20} className="edit-button" />}
-          onClick={() => setOpenModal(true)}
-        >
-          Adicionar
-        </Button>
         <ModalVendas
           isOpen={openModal}
           setModalOpen={() => setOpenModal(!openModal)}
@@ -378,7 +376,6 @@ const VendasVendedor = () => {
             </div>
           </div>
         </ModalVendas>
-      </GridToolbarContainer>
     );
   }
 
@@ -387,7 +384,7 @@ const VendasVendedor = () => {
     {}
   );
 
-  //função que interrompe a edição da linha quando o foco sai dela
+  /* //função que interrompe a edição da linha quando o foco sai dela
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
     event
@@ -438,7 +435,7 @@ const VendasVendedor = () => {
   //manipulador de eventos chamado quando o modo da linha muda
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
-  };
+  }; */
 
   const columns: GridColDef<(typeof rows)[number]>[] = [
     {
@@ -582,43 +579,6 @@ const VendasVendedor = () => {
       editable: true,
       valueGetter: (value) => `%${value}`,
     },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "",
-      headerClassName: "super-app-theme--header",
-      width: 70,
-      cellClassName: "actions",
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        //modo edição
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<RxCheck size={32} className="edit-button" />}
-              label="Save"
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<RxCross2 size={27} className="edit-button" />}
-              label="Cancel"
-              onClick={handleCancelClick(id)}
-            />,
-          ];
-        }
-
-        //botão de editar
-        return [
-          <GridActionsCellItem
-            icon={<FaRegEdit size={22} className="edit-button" />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-          />,
-        ];
-      },
-    },
   ];
   // filtrar as colunas para remover as colunas de cpf
   const filteredColumns = columns.filter(
@@ -637,11 +597,11 @@ const VendasVendedor = () => {
         rows={rows}
         columns={filteredColumns}
         //botões de ação
-        editMode="row"
+        /* editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
+        processRowUpdate={processRowUpdate} */
         slots={{
           toolbar: (props) => (
             <EditToolbar
@@ -660,15 +620,15 @@ const VendasVendedor = () => {
         slotProps={{
           toolbar: { setRowModesModel },
         }}
-        //a tabela divide - mostra 20 vendas por página
+        //a tabela divide - mostra 9 vendas por página
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 20,
+              pageSize: 9,
             },
           },
         }}
-        pageSizeOptions={[20]}
+        pageSizeOptions={[9]}
       />
     </Box>
   );

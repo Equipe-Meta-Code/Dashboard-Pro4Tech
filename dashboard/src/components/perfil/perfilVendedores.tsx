@@ -8,7 +8,6 @@ import AreaProgressChart from "../dashboard/areaCharts/areaProgressChart";
 import AreaCards from "../dashboard/areaCards/areaCards";
 import VendasVendedor from "./tabela/vendasVendedor";
 
-//http://localhost:5173/perfil
 const Perfil = () => {
   const { id } = useParams();
   const [isEditing, setIsEditing] = useState(false); // estado para controlar se o modo de edição está ativado ou não
@@ -192,7 +191,7 @@ const Perfil = () => {
           </div>
         </div>
         <div className="bottom">
-          <VendasVendedor />
+          <VendasVendedor vendedorId="vendedorId" />
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { FaRegEdit, FaSearch } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
-import { MdDeleteOutline, MdAdd } from "react-icons/md";
+import { MdDeleteOutline, MdAdd, MdOutlineCleaningServices } from "react-icons/md";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -174,30 +174,27 @@ const Vendedores = () => {
       setRows(filteredRows);
     };
 
+    const limparFiltro = async () => {
+      setRows(chartData)
+     }
+  
     //botão de adicionar vendedor
     return (
-      <div
-        className="inputs-modal"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "start",
-          justifyContent: "flex-start",
-          width: "450px",
-        }}
-      >
-        <div className="input-filtro">
-          <img src={user_icon} alt="" />
-          <input
-            type="text"
-            placeholder="Nome do Vendedor"
-            value={filter}
-            onChange={(event) => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
-          />
-        </div>
-        <button onClick={applyFilter}>
-          <FaSearch size={22} className="filtro-button" />
-        </button>
+      <div className="inputs-filtros">
+     
+          <div className="input-filtro">
+            <img src={user_icon} alt="" />
+            <input
+              type="text"
+              placeholder="Nome do Vendedor"
+              value={filter}
+              onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+            />
+          </div>
+
+          <button onClick={applyFilter}><FaSearch size={22} className="filtro-button"/></button>
+          <button onClick={limparFiltro}><MdOutlineCleaningServices size={22} className="filtro-button" /></button>
+      
       </div>
     );
   }

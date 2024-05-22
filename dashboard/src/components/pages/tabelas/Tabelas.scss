@@ -10,9 +10,38 @@
 .edit-button {
   color: var(--logo-color);
 }
+.limpar-button {
+  color: var(--logo-color);
+  margin-left: 10px;
+}
+.inputs-filtros{
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: flex-start;
+  width: 360px;
+  gap: 1px;
+  //margin-top: 20px; 
+}
+
+.inputs-selection{
+  margin-left: 0px;
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 350px;
+  height: 45px;
+  background: var(--chart-secondary-color);
+  box-shadow: var(--light-shadow1);
+  border-radius: 10px;
+  margin-bottom: 15px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
 .filtro-button {
   color: var(--logo-color);
-  margin-top: 10px;
+  margin-top: 22px;
+  margin-left: 10px;
 }
 .inputs-filtro{
   display: flex;
@@ -30,6 +59,7 @@
   background: var(--input-filtro);
   border-radius: 10px;
   margin-bottom: 15px;
+  margin-top: 10px;
 }
 
 .input-filtro img{

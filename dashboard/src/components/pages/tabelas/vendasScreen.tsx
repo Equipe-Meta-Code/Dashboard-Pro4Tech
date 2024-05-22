@@ -4,9 +4,9 @@ import InputMask from 'react-input-mask';
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit, FaSearch } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdOutlineCleaningServices } from "react-icons/md";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -27,7 +27,7 @@ import ModalVendas from "../modal/modalVendas";
 import calendario from '../../../assets/icons/calendario.svg';
 import moment from 'moment';
 import numeral from 'numeral';
-
+import user_icon from '../../../assets/person.png'
 const Vendas = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
@@ -196,10 +196,10 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
           Valor_de_Venda: Valor_de_Venda,
           Forma_de_Pagamento: Forma_de_Pagamento,
         };
-        
-        console.log("Adicionando vendas", newData);
+        console.log("Adicionando Venda")
+        console.table(newData);
 
-        console.log("DATA", Data_da_Venda);
+        /* console.log("DATA", Data_da_Venda);
         console.log("Vendedor", Vendedor);
         console.log("CPF DO Vendedor", CPF_Vendedor);
         console.log("Produto",Produto);
@@ -208,14 +208,14 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
         console.log("CPF DO CLIENTE", CNPJ_CPF_Cliente);
         console.log("Segmento", "Segmento")
         console.log("Forma de pagamento", Forma_de_Pagamento);
-        console.log("Valor", Valor_de_Venda);
+        console.log("Valor", Valor_de_Venda); */
 
     
         // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
         setOpenModal(false);
         await axios.post('http://localhost:8080/vendas_adicionar', newData);
         
-        window.location.reload();
+        //window.location.reload();
       } catch (error) {
         console.error("Erro ao adicionar vendedor:", error);
       }
@@ -235,12 +235,56 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
     const [Forma_de_Pagamento, setForma_de_Pagamento] = useState('');
    /*  const [selectedVendedor, setSelectedVendedor] = useState(''); */
 
+   const [filter, setFilter] = useState("");
+   const [data, setData] = useState("");
+   const [selectedOption, setSelectedOption] = useState('');
+   const [selectedOptionModal, setSelectedOptionModal] = useState(''); 
+
+   const applyFilter = () => {
+
+    if(selectedOption === 'vendedor'){
+      const filteredRows = chartData.filter(row =>
+        row.vendedor.toLowerCase().startsWith(filter.toLowerCase())
+      );
+      setRows(filteredRows);
+    }
+    if(selectedOption === 'cliente'){
+      const filteredRows = chartData.filter(row =>
+        row.cliente.toLowerCase().startsWith(filter.toLowerCase())
+      );
+      setRows(filteredRows);
+    }
+    if (selectedOption === 'data') {
+      const filteredRows = chartData.filter(row => {
+        const rowDate = new Date(row.data); // Supondo que row.data seja uma string de data ou um objeto Date
+        // Formatar a data em 'DD/MM/AAAA' para comparação
+        const formattedRowDate = formatDate(rowDate);
+        // Verificar se a data formatada começa com o filtro
+        return formattedRowDate.startsWith(data);
+        
+      });
+      setRows(filteredRows);
+    }
+
+  };
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses começam do 0
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+  const limparFiltro = async () => {
+    setRows(chartData)
+   }
    //botão de adicionar vendas - arrumar com chat gpt ainda
    return (
+
+    <div>
     <GridToolbarContainer>
       <Button className="text-button"
         startIcon={<MdAdd size={20} className="edit-button"/>}
-        onClick={() => setOpenModal(true)}>Adicionar</Button>
+        onClick={() => setOpenModal(true)}>Adicionar
+      </Button>
         <ModalVendas isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}> 
             <div className="container-modalVendas">
               <div className="title-modalVendas">Adicionar Vendas</div>
@@ -300,15 +344,96 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
 
                   </div>
 
-                    <div className="submit-container-modalVendas">
-                      <div className="submit-modalVendas" onClick={() => handleAdicionar(Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento)}>Adicionar</div>
-                    </div>
+                  <div className="submit-container-modalVendas">
+                    <div className="submit-modalVendas" onClick={() => handleAdicionar(Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento)}>Adicionar</div>
+                  </div>
 
               </div>
             </div>      
         </ModalVendas>
     </GridToolbarContainer>
+
+    <div className="inputs-filtros" >
+        <div className="inputs-selection">
+          <select style={{
+                width: "315px",
+                padding: "8px",
+                borderRadius: "5px",
+                backgroundColor: "var(--chart-secondary-color)",
+                color: "var(--side-text-color3)",
+              }} onChange={event => setSelectedOption(event.target.value)}>
+                
+            <option value="">Selecione uma opção</option>
+            <option value="vendedor">Vendedor</option>
+            <option value="cliente">Cliente</option>
+            <option value="data">Data</option>
+          </select>
+
+          <button onClick={limparFiltro}>
+            <MdOutlineCleaningServices size={22} className="limpar-button" />
+          </button>
+        </div>
+        
+        {selectedOption === 'vendedor' && (
+  
+          <div className="inputs-filtros">
+            <div className="input-filtro">
+                <img src={user_icon} alt="" />
+                <input
+                  type="text"
+                  placeholder="Nome do Vendedor"
+                  value={filter}
+                  onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+                />
+              </div>
+
+              <button onClick={applyFilter}>
+                <FaSearch size={22} className="filtro-button"/>
+              </button>
+          </div>
+      
+        )}
+
+        {selectedOption === 'cliente' && (
+          <div className="inputs-filtros" >
+            <div className="input-filtro">
+              <img src={user_icon} alt="" />
+              <input
+                type="text"
+                placeholder="Nome do Cliente"
+                value={filter}
+                onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+              />
+            </div>
+
+            <button onClick={applyFilter}>
+              <FaSearch size={22} className="filtro-button"/>
+            </button>
+          </div>
+        )}
+        {selectedOption === 'data' && (
+          <div className="inputs-filtros">
+            <div className="input-filtro" style={{width: '240px'}}>
+              <img src={user_icon} alt="" />
+              <InputMask style={{width: '170'}}
+                mask="99/99/9999"
+                value={data}
+                onChange={event => setData(event.target.value)}
+                placeholder="Data (DD/MM/AAAA)"
+                />
+            </div>
+
+            <button onClick={applyFilter}>
+              <FaSearch size={22} className="filtro-button"/>
+            </button>
+        </div>
+        )}
+
+    </div>
+    
+    </div>
   );
+  
 }
 
   const [rows, setRows] = React.useState(initialRows);

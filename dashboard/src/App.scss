@@ -72,6 +72,7 @@
     --modal-botao-enviar-hover:#ececec ;
     --modal-botao-enviar-hover-text:#292929 ;
     --modal-botao-enviar-hover-border:#3c65d6 ;
+    --input-filtro:#eaeaea;
   }
   
   @mixin darkMode {
@@ -134,8 +135,7 @@
     --modal-botao-enviar-hover:#ececec ;
     --modal-botao-enviar-hover-text:#292929 ;
     --modal-botao-enviar-hover-border:#3c65d6 ;
-  
-
+    --input-filtro: #dbdbdb;
   }
 
 * {

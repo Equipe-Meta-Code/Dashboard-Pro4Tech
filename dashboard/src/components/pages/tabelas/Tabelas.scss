@@ -10,6 +10,41 @@
 .edit-button {
   color: var(--logo-color);
 }
+.filtro-button {
+  color: var(--logo-color);
+  margin-top: 10px;
+}
+.inputs-filtro{
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 20px; 
+}
+
+.input-filtro{
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 350px;
+  height: 45px;
+  background: var(--input-filtro);
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.input-filtro img{
+  margin: 0px 10px;
+}
+
+.input-filtro input{
+  height: 30px;
+  width: 310px;
+  background: transparent;
+  outline: none;
+  border: none;
+  font-size: 16px;
+  padding: 10px;
+}
 
 //profile view button
 .viewButton{

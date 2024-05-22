@@ -4,7 +4,7 @@ import InputMask from 'react-input-mask';
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit,FaSearch } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
 import { MdDeleteOutline, MdAdd } from "react-icons/md";
 import {
@@ -39,7 +39,7 @@ const Vendedores = () => {
   useEffect(() => {
     setInitialRows(chartData);
   }, [chartData]);
-  
+
   useEffect(() => {
     setRows(chartData);
   }, [chartData]);
@@ -137,7 +137,7 @@ const Vendedores = () => {
 
   function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel, rows } = props;
-
+    const [filter, setFilter] = useState("");
     const handleClick = () => {
       //calcula o próximo ID baseado no maior ID existente na tabela
       const nextId = Math.max(...rows.map((row) => row.id), 0) + 1;
@@ -154,77 +154,33 @@ const Vendedores = () => {
       }));
     };
 
-    const handleAdicionar = async (Vendedor, CPF_Vendedor) => {
-      try {
-        const newData = {
-          Vendedor: Vendedor,
-          CPF_Vendedor: CPF_Vendedor,
-        };
-        
-        console.log("Adicionando vendedor", newData);
-    
-        // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
-        await axios.post('http://localhost:8080/vendedores_adicionar', newData);
-        const newDataUser = {
-          nome: Vendedor,
-          cpf: CPF_Vendedor,
-          login: CPF_Vendedor,
-          senha: CPF_Vendedor,
-        };
-        await axios.post('http://localhost:8080/vendedores_adicionar_user', newDataUser);
-        setOpenModal(false);
-        console.log("Vendedor adicionado com sucesso!");
-        window.location.reload();
-      } catch (error) {
-        console.error("Erro ao adicionar vendedor:", error);
-      }
-      
-    };
-    
 
-    
-    const [openModal, setOpenModal] = useState(false)
-    const [Vendedor, setVendedor] = useState('');
-    const [CPF_Vendedor, setCPF_Vendedor] = useState('');
-    
+    const handleFiltrar = async (Filtro) => {
+
+    }
+    const applyFilter = () => {
+      const filteredRows = chartData.filter(row =>
+        row.vendedor.toLowerCase().startsWith(filter.toLowerCase())
+      );
+      setRows(filteredRows);
+    };
+  
     //botão de adicionar vendedor
     return (
-      <GridToolbarContainer>
-        <Button className="text-button"
-          startIcon={<MdAdd size={20} className="edit-button"/>}
-          onClick={() => setOpenModal(true)}>Adicionar</Button>
-          <Modal isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}> 
-              <div className="container-modal">
-                <div className="title-modal">Adicionar Vendedor</div>
-                <div className="content-modal"> 
-                    <div className="inputs-modal">
-
-                      <div className="input-modal">
-                        <img src={user_icon} alt="" />
-                        <input type="text" placeholder="Nome do Vendedor" onChange={event => setVendedor(event.target.value)}/>
-                      </div>
-
-                      <div className="input-modal"> 
-                        <img src={user_icon} alt="" />
-                        <InputMask
-                          mask="999.999.999-99"
-                          value={CPF_Vendedor}
-                          onChange={event => setCPF_Vendedor(event.target.value)}
-                          placeholder="CPF do Vendedor"
-                        />
-                      </div>
-
-                    </div>
-
-                      <div className="submit-container-modal">
-                        <div className="submit-modal" onClick={() => handleAdicionar(Vendedor, CPF_Vendedor)}>Adicionar</div>
-                      </div>
-
-                </div>
-              </div>      
-          </Modal>
-      </GridToolbarContainer>
-    );
+      <div className="inputs-modal" style={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'flex-start', width: '450px'}}>
+     
+          <div className="input-filtro">
+            <img src={user_icon} alt="" />
+            <input
+              type="text"
+              placeholder="Nome do Vendedor"
+              value={filter}
+              onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+            />
+          </div>
+          <button onClick={applyFilter}><FaSearch size={22} className="filtro-button"/></button>
+    </div>
+  );
   }
 
   const [rows, setRows] = React.useState(chartData);

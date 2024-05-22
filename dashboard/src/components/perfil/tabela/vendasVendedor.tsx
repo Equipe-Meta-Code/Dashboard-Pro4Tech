@@ -20,37 +20,41 @@ import {
   GridRowModel,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-
 import axios from "axios";
-
 import ModalVendas from "../../pages/modal/modalVendas";
 import calendario from "../../../assets/icons/calendario.svg";
 import moment from "moment";
 import numeral from "numeral";
 
+//tabela no perfil do vendedor - últimas vendas dele
+
+// componente para a tabela de vendas
 const VendasVendedor = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
   const [chartVendedores, setChartVendedores] = useState([]);
   const [chartClientes, setChartClientes] = useState([]);
 
+  // busca dados iniciais quando o componente é montado
   useEffect(() => {
     fetchData();
     fetchVendedores();
-    fetchClientes(); // Adicionando busca por clientes
+    fetchClientes(); // adicionando busca por clientes
   }, []);
 
+  // atualiza as linhas da tabela quando chartData muda
   useEffect(() => {
     setRows(chartData);
     setInitialRows(chartData);
   }, [chartData]);
 
+  // função para buscar dados gerais
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:8080/geral");
       const data = response.data;
-      // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
-
+      
+      // pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
       const processedData = data.map((item) => ({
         id: item.id,
         venda: item.tipoVendaGeral,
@@ -69,7 +73,7 @@ const VendasVendedor = () => {
     }
   };
 
-  // Função para buscar os vendedores disponíveis
+  // função para buscar os vendedores disponíveis
   const fetchVendedores = async () => {
     try {
       const response = await axios.get("http://localhost:8080/vendedores");
@@ -81,14 +85,14 @@ const VendasVendedor = () => {
         label: `${item.Vendedor.split(" ").slice(0, 2).join(" ")}`,
       }));
 
-      // Atualizando o state com os vendedores disponíveis
+      // atualizando o state com os vendedores disponíveis
       setChartVendedores(processedVendedores);
     } catch (error) {
       console.error("Erro ao buscar vendedores:", error);
     }
   };
 
-  // Função para buscar os clientes disponíveis
+  // função para buscar os clientes disponíveis
   const fetchClientes = async () => {
     try {
       const response = await axios.get("http://localhost:8080/clientes");
@@ -101,24 +105,25 @@ const VendasVendedor = () => {
         label: `${item.Cliente.split(" ").slice(0, 2).join(" ")}`,
       }));
 
-      // Atualizando o state com os clientes disponíveis
+      // atualizando o state com os clientes disponíveis
       setChartClientes(processedClientes);
     } catch (error) {
       console.error("Erro ao buscar clientes:", error);
     }
   };
 
+  // função para salvar mudanças no banco de dados
   const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
     try {
       console.log("Chamando função saveChangesToDatabase");
 
-      // Busca todos os clientes e armazena os dados localmente
+      // busca todos os clientes e armazena os dados localmente
       const resClientes = await axios.get("http://localhost:8080/clientes");
       const clientes = resClientes.data;
 
-      // Mapeia os dados atualizados para o formato esperado pelo backend
+      // mapeia os dados atualizados para o formato esperado pelo backend
       const updatedData = updatedRows.map((row) => {
-        // Busca o cliente correspondente pelo CPF
+        // busca o cliente correspondente pelo CPF
         const cliente = clientes.find(
           (c) => c.CNPJ_CPF_Cliente === row.cpfCliente
         );
@@ -126,7 +131,7 @@ const VendasVendedor = () => {
           ? cliente.Segmento_do_Cliente
           : "Não encontrado";
 
-        // Cria o objeto rowData com os dados necessários
+        // cria o objeto rowData com os dados necessários
         return {
           id: row.id,
           Vendedor: row.vendedor,
@@ -139,7 +144,7 @@ const VendasVendedor = () => {
         };
       });
 
-      // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
+      // envia requisição PUT para o endpoint adequado no backend para realizar o update
       console.log("Updated Data OBJ: ", updatedData);
       await axios.put("http://localhost:8080/vendas_update", updatedData);
       console.log("Dados atualizados com sucesso!");
@@ -148,7 +153,7 @@ const VendasVendedor = () => {
     }
   };
 
-  //adicionar na tabela
+  // componente para a edição da tabela
   interface EditToolbarProps {
     setRows: (newRows: GridRowModel[]) => void;
     setRowModesModel: (
@@ -157,9 +162,11 @@ const VendasVendedor = () => {
     rows: GridRowsProp;
   }
 
+  // função para edição da tabela
   function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel, rows } = props;
 
+    // função adicionar nova linha
     const handleClick = () => {
       //calcula o próximo ID baseado no maior ID existente na tabela
       const nextId = Math.max(...rows.map((row) => row.id), 0) + 1;
@@ -176,6 +183,7 @@ const VendasVendedor = () => {
       }));
     };
 
+    // função para adicionar vendas ao banco de dados
     const handleAdicionar = async (
       Data_da_Venda,
       Vendedor,
@@ -196,7 +204,7 @@ const VendasVendedor = () => {
         const dataFormatada = dataVenda.format("YYYY-MM-DD");
 
         const newData = {
-          Data_da_Venda: dataFormatada, // Convertendo a data para o tipo DATE
+          Data_da_Venda: dataFormatada,
           Vendedor: Vendedor,
           CPF_Vendedor: CPF_Vendedor,
           Produto: Produto,
@@ -221,7 +229,7 @@ const VendasVendedor = () => {
         console.log("Forma de pagamento", Forma_de_Pagamento);
         console.log("Valor", Valor_de_Venda);
 
-        // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
+        // envia requisição POST para o endpoint adequado no backend para adicionar os dados
         setOpenModal(false);
         await axios.post("http://localhost:8080/vendas_adicionar", newData);
 
@@ -244,7 +252,7 @@ const VendasVendedor = () => {
     const [Forma_de_Pagamento, setForma_de_Pagamento] = useState("");
     /*  const [selectedVendedor, setSelectedVendedor] = useState(''); */
 
-    //botão de adicionar vendas - arrumar com chat gpt ainda
+    //botão de adicionar vendas e o modal
     return (
       <GridToolbarContainer>
         <Button
@@ -266,10 +274,10 @@ const VendasVendedor = () => {
                   <select
                     value={Vendedor}
                     onChange={(event) => {
-                      setVendedor(event.target.value); // Define o valor do vendedor
+                      setVendedor(event.target.value); // define o valor do vendedor
                       setCPF_Vendedor(
                         event.target.selectedOptions[0].getAttribute("data-cpf")
-                      ); // Define o CPF do vendedor
+                      ); // define o CPF do vendedor
                     }}
                   >
                     <option value="">Selecione um vendedor</option>
@@ -289,10 +297,10 @@ const VendasVendedor = () => {
                   <select
                     value={Cliente}
                     onChange={(event) => {
-                      setCliente(event.target.value); // Define o valor do cliente
+                      setCliente(event.target.value); // define o valor do cliente
                       setCNPJ_CPF_Cliente(
                         event.target.selectedOptions[0].getAttribute("data-cpf")
-                      ); // Define o CPF do cliente
+                      ); // define o CPF do cliente
                     }}
                   >
                     <option value="">Selecione um cliente</option>
@@ -446,7 +454,6 @@ const VendasVendedor = () => {
       width: 240,
       editable: true,
     },
-    // Coluna de cliente
     {
       field: "cliente",
       headerName: "Cliente",
@@ -471,7 +478,7 @@ const VendasVendedor = () => {
               onChange={(e) => {
                 const newValue = e.target.value;
                 const cpfCliente =
-                  e.target.selectedOptions[0].getAttribute("data-cpf"); // Obtenha o CPF do cliente selecionado
+                  e.target.selectedOptions[0].getAttribute("data-cpf"); // obter CPF do cliente selecionado
                 const id = params.row.id;
                 const updatedRows = rows.map((row) => {
                   if (row.id === id) {
@@ -479,7 +486,7 @@ const VendasVendedor = () => {
                       ...row,
                       cliente: newValue,
                       cpfCliente: cpfCliente,
-                    }; // Inclua o CPF na atualização
+                    }; // incluir CPF na atualização
                   }
                   return row;
                 });
@@ -601,7 +608,7 @@ const VendasVendedor = () => {
           ];
         }
 
-        //botões de editar e deletar
+        //botão de editar
         return [
           <GridActionsCellItem
             icon={<FaRegEdit size={22} className="edit-button" />}
@@ -613,7 +620,7 @@ const VendasVendedor = () => {
       },
     },
   ];
-  // Filtrar as colunas para remover as colunas de cpf
+  // filtrar as colunas para remover as colunas de cpf
   const filteredColumns = columns.filter(
     (col) =>
       col.field !== "cpf" &&
@@ -622,7 +629,7 @@ const VendasVendedor = () => {
   );
 
   return (
-    //tabela
+    //a tabela
     <Box className="sx-box">
       <h2 className="area-top-title">Últimas Vendas</h2>
       <DataGrid
@@ -653,7 +660,7 @@ const VendasVendedor = () => {
         slotProps={{
           toolbar: { setRowModesModel },
         }}
-        //a tabela divide - mostra 10 vendedores por página
+        //a tabela divide - mostra 20 vendas por página
         initialState={{
           pagination: {
             paginationModel: {

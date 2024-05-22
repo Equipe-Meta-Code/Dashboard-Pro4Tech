@@ -5,18 +5,21 @@ import AreaProgressChart from "../dashboard/areaCharts/areaProgressChart";
 import AreaCards from "../dashboard/areaCards/areaCards";
 import VendasVendedor from "./tabela/vendasVendedor";
 
+//http://localhost:5173/perfil
 const Perfil = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [vendedoresDetails, setVendedoresDetails] = useState({
+  const [isEditing, setIsEditing] = useState(false); // estado para controlar se o modo de edição está ativado ou não
+  const [vendedoresDetails, setVendedoresDetails] = useState({ // armazenar detalhes do vendedor
     name: "Fernanda Carvalho",
     cpf: "121.222.121-22",
     email: "fernanda@gmail.com",
     phone: "+55 (12) 10101-11111",
     address: "Rua Tal, 400",
     country: "Brasil",
-    photo: "https://ogimg.infoglobo.com.br/in/25149803-9ab-ac0/FT1086A/beyonce-2.jpg"
+    photo:
+      "https://ogimg.infoglobo.com.br/in/25149803-9ab-ac0/FT1086A/beyonce-2.jpg",
   });
 
+  // função para lidar com mudanças nos campos de input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setVendedoresDetails((prevState) => ({
@@ -25,13 +28,14 @@ const Perfil = () => {
     }));
   };
 
+  // mudança da foto
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target.result;
-        if (typeof result === 'string') {
+        if (typeof result === "string") {
           setVendedoresDetails((prevState) => ({
             ...prevState,
             photo: result,
@@ -42,6 +46,7 @@ const Perfil = () => {
     }
   };
 
+  // alternar o modo de edição
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
   };
@@ -56,7 +61,7 @@ const Perfil = () => {
             </div>
             <h1 className="title">Informações</h1>
             <div className="item">
-            <img src={vendedoresDetails.photo} alt="" className="itemImg" />
+              <img src={vendedoresDetails.photo} alt="" className="itemImg" /> 
               {isEditing && (
                 <input
                   type="file"

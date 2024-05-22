@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+
 import "./perfilVendedores.scss";
 import AreaBarChart from "../dashboard/areaCharts/areaBarChart";
 import AreaProgressChart from "../dashboard/areaCharts/areaProgressChart";
@@ -7,18 +10,31 @@ import VendasVendedor from "./tabela/vendasVendedor";
 
 //http://localhost:5173/perfil
 const Perfil = () => {
+  const { id } = useParams();
   const [isEditing, setIsEditing] = useState(false); // estado para controlar se o modo de edição está ativado ou não
   const [vendedoresDetails, setVendedoresDetails] = useState({ // armazenar detalhes do vendedor
-    name: "Fernanda Carvalho",
-    cpf: "121.222.121-22",
-    email: "fernanda@gmail.com",
-    phone: "+55 (12) 10101-11111",
-    address: "Rua Tal, 400",
-    country: "Brasil",
-    photo:
-      "https://ogimg.infoglobo.com.br/in/25149803-9ab-ac0/FT1086A/beyonce-2.jpg",
+    name: "",
+    cpf: "",
+    email: "",
+    phone: "",
+    address: "",
+    country: "",
+    photo: "",  
   });
 
+  useEffect(() => {
+    const fetchVendedorDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/vendedores/${id}`);
+        setVendedoresDetails(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar detalhes do vendedor:", error);
+      }
+    };
+
+    fetchVendedorDetails();
+  }, [id]);
+  
   // função para lidar com mudanças nos campos de input
   const handleInputChange = (e) => {
     const { name, value } = e.target;

@@ -23,15 +23,15 @@ function AppRoutes() {
       <Route path="login" element={<Login />} />
       {/* <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />}></Route> */}
       <Route path="cadastro" element={<Cadastro />} />
-      
+
       <Route element={<BaseLayout />}>
 
         <Route path="*" element={<PageNotFound />} />
         <Route path="dashboard" element={<Dashboard />} />
 
         <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />} >
-          <Route path="vendedores" element={<Vendedores />} />
-          {/* <Route path=":cpf" element={<Perfil />} /> */}
+          <Route path="/vendedores" element={<Vendedores />} />
+          <Route path="/vendedores/:id" element={<Perfil />} />
         </Route>
 
         <Route element={<PrivateRoutes role="Admin_Role,Admin/Vendedor_Role" />} >

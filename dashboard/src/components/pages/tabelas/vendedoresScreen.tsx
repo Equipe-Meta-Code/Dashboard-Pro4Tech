@@ -1,10 +1,11 @@
 import * as React from "react";
-import { useEffect, useState } from 'react';
-import InputMask from 'react-input-mask';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import InputMask from "react-input-mask";
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FaRegEdit,FaSearch } from "react-icons/fa";
+import { FaRegEdit, FaSearch } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
 import { MdDeleteOutline, MdAdd } from "react-icons/md";
 import {
@@ -23,19 +24,20 @@ import {
 } from "@mui/x-data-grid";
 import App from "../../../App";
 import axios from "axios";
-
 import Modal from "../modal/modal";
-import user_icon from '../../../assets/person.png'
-import numeral from 'numeral';
+import user_icon from "../../../assets/person.png";
+import numeral from "numeral";
 
 const Vendedores = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   useEffect(() => {
     setInitialRows(chartData);
   }, [chartData]);
@@ -46,98 +48,108 @@ const Vendedores = () => {
 
   const fetchData = async () => {
     try {
-      const responseVendedores = await axios.get('http://localhost:8080/vendedores');
+      const responseVendedores = await axios.get(
+        "http://localhost:8080/vendedores"
+      );
       const dataVendedores = responseVendedores.data;
-      
-      const responseGeral = await axios.get('http://localhost:8080/geral');
+
+      const responseGeral = await axios.get("http://localhost:8080/geral");
       const dataGeral = responseGeral.data;
-   
+
       // Mapear os dados de /vendedores
-      const processedData = dataVendedores.map(itemVendedor => {
+      const processedData = dataVendedores.map((itemVendedor) => {
         // Filtrar as vendas em /geral para o vendedor atual
-        const vendasVendedor = dataGeral.filter(itemGeral => itemGeral.CPF_Vendedor === itemVendedor.CPF_Vendedor);
+        const vendasVendedor = dataGeral.filter(
+          (itemGeral) => itemGeral.CPF_Vendedor === itemVendedor.CPF_Vendedor
+        );
         // Se houver vendas para o vendedor atual
         if (vendasVendedor.length > 0) {
           // Encontrar a última venda
-          const ultimaVenda = vendasVendedor.reduce((prev, current) => (prev.Data_da_Venda > current.Data_da_Venda) ? prev : current);
-   
+          const ultimaVenda = vendasVendedor.reduce((prev, current) =>
+            prev.Data_da_Venda > current.Data_da_Venda ? prev : current
+          );
+
           // Construir o objeto combinando as propriedades de /vendedores e a última venda de /geral
           return {
             id: itemVendedor.id,
-            vendedor: itemVendedor.Vendedor.split(' ').slice(0, 2).join(' '),
+            vendedor: itemVendedor.Vendedor.split(" ").slice(0, 2).join(" "),
             cpf: itemVendedor.CPF_Vendedor,
             // Valor_de_Venda da última venda de /geral
             valor: ultimaVenda.Valor_de_Venda,
             ultimaVenda: ultimaVenda.Data_da_Venda,
-            tipoVenda: ultimaVenda.tipoVendaProduto
+            tipoVenda: ultimaVenda.tipoVendaProduto,
             // Adicione outras propriedades de /vendedores, se necessário
           };
         } else {
           // Se não houver vendas para o vendedor atual, defina o Valor_de_Venda como vazio
           return {
             id: itemVendedor.id,
-            vendedor: itemVendedor.Vendedor.split(' ').slice(0, 2).join(' '),
+            vendedor: itemVendedor.Vendedor.split(" ").slice(0, 2).join(" "),
             cpf: itemVendedor.CPF_Vendedor,
-            valor: '', // Valor_de_Venda vazio
-            ultimaVenda: '',
-            tipoVenda: ''
+            valor: "", // Valor_de_Venda vazio
+            ultimaVenda: "",
+            tipoVenda: "",
             // Adicione outras propriedades de /vendedores, se necessário
           };
         }
       });
-   
+
       setChartData(processedData);
       console.log(processedData);
     } catch (error) {
-      console.error('Erro ao buscar dados:', error);
+      console.error("Erro ao buscar dados:", error);
     }
   };
 
   const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
     try {
-      console.log('Chamando função saveChangesToDatabase');
-      
+      console.log("Chamando função saveChangesToDatabase");
+
       // Mapeia os dados atualizados para o formato esperado pelo backend
-      const updatedData = updatedRows.map(row => ({
+      const updatedData = updatedRows.map((row) => ({
         id: row.id,
         Vendedor: row.vendedor,
         CPF_Vendedor: row.cpf,
       }));
       // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
-      console.log("Updated Data OBJ: ")
-      console.log(updatedData)
-      await axios.put('http://localhost:8080/vendedores_update', updatedData);
-  
+      console.log("Updated Data OBJ: ");
+      console.log(updatedData);
+      await axios.put("http://localhost:8080/vendedores_update", updatedData);
+
       // Agora, para cada vendedor atualizado, também atualizamos as vendas associadas a ele
       updatedRows.forEach(async (row) => {
-        const response = await axios.get(`http://localhost:8080/vendas?CPF_Vendedor=${row.cpf}`);
+        const response = await axios.get(
+          `http://localhost:8080/vendas?CPF_Vendedor=${row.cpf}`
+        );
         const vendas = response.data;
         // Atualize as vendas associadas a esse vendedor
-        const updatedVendas = vendas.map(venda => ({
+        const updatedVendas = vendas.map((venda) => ({
           ...venda,
           Vendedor: row.vendedor, // Atualize o nome do vendedor, se necessário
           // Atualize outras propriedades da venda, se necessário
         }));
-        await axios.put('http://localhost:8080/vendas_update', updatedVendas);
+        await axios.put("http://localhost:8080/vendas_update", updatedVendas);
       });
-  
+
       console.log("Dados atualizados com sucesso!");
     } catch (error) {
-      console.error('Erro ao salvar os dados:', error);
+      console.error("Erro ao salvar os dados:", error);
     }
   };
-  
 
   //adicionar na tabela
   interface EditToolbarProps {
     setRows: (newRows: GridRowModel[]) => void;
-    setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+    setRowModesModel: (
+      newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+    ) => void;
     rows: GridRowsProp;
   }
 
   function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel, rows } = props;
     const [filter, setFilter] = useState("");
+
     const handleClick = () => {
       //calcula o próximo ID baseado no maior ID existente na tabela
       const nextId = Math.max(...rows.map((row) => row.id), 0) + 1;
@@ -154,33 +166,40 @@ const Vendedores = () => {
       }));
     };
 
-
-    const handleFiltrar = async (Filtro) => {
-
-    }
+    const handleFiltrar = async (Filtro) => {};
     const applyFilter = () => {
-      const filteredRows = chartData.filter(row =>
+      const filteredRows = chartData.filter((row) =>
         row.vendedor.toLowerCase().startsWith(filter.toLowerCase())
       );
       setRows(filteredRows);
     };
-  
+
     //botão de adicionar vendedor
     return (
-      <div className="inputs-modal" style={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'flex-start', width: '450px'}}>
-     
-          <div className="input-filtro">
-            <img src={user_icon} alt="" />
-            <input
-              type="text"
-              placeholder="Nome do Vendedor"
-              value={filter}
-              onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
-            />
-          </div>
-          <button onClick={applyFilter}><FaSearch size={22} className="filtro-button"/></button>
-    </div>
-  );
+      <div
+        className="inputs-modal"
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "start",
+          justifyContent: "flex-start",
+          width: "450px",
+        }}
+      >
+        <div className="input-filtro">
+          <img src={user_icon} alt="" />
+          <input
+            type="text"
+            placeholder="Nome do Vendedor"
+            value={filter}
+            onChange={(event) => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+          />
+        </div>
+        <button onClick={applyFilter}>
+          <FaSearch size={22} className="filtro-button" />
+        </button>
+      </div>
+    );
   }
 
   const [rows, setRows] = React.useState(chartData);
@@ -213,12 +232,12 @@ const Vendedores = () => {
     try {
       // Faz uma requisição DELETE para o backend para deletar o vendedor com o ID especificado
       await axios.delete(`http://localhost:8080/vendedores/${id}`);
-      
+
       // Atualiza o estado das linhas, removendo a linha deletada
       setRows(rows.filter((row) => row.id !== id));
       window.location.reload();
     } catch (error) {
-      console.error('Erro ao deletar vendedor:', error);
+      console.error("Erro ao deletar vendedor:", error);
     }
   };
 
@@ -240,10 +259,9 @@ const Vendedores = () => {
   const processRowUpdate = async (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-  
+
     // Chama a função para salvar as mudanças no banco de dados
     await saveChangesToDatabase([updatedRow]);
-    
     return updatedRow;
   };
 
@@ -254,9 +272,18 @@ const Vendedores = () => {
 
   const columns: GridColDef[] = [
     {
+      field: "id",
+      headerName: "ID",
+      headerClassName: "super-app-theme--header",
+      width: 40,
+      align: "center",
+      headerAlign: "center",
+      editable: false,
+    },
+    {
       field: "vendedor",
       headerName: "Vendedor",
-      headerClassName: 'super-app-theme--header',
+      headerClassName: "super-app-theme--header",
       width: 230,
       align: "left",
       headerAlign: "left",
@@ -265,7 +292,7 @@ const Vendedores = () => {
     {
       field: "cpf",
       headerName: "CPF",
-      headerClassName: 'super-app-theme--header',
+      headerClassName: "super-app-theme--header",
       width: 190,
       align: "left",
       headerAlign: "left",
@@ -274,7 +301,7 @@ const Vendedores = () => {
     {
       field: "ultimaVenda",
       headerName: "Última Venda",
-      headerClassName: 'super-app-theme--header',
+      headerClassName: "super-app-theme--header",
       width: 170,
       align: "left",
       headerAlign: "left",
@@ -285,21 +312,25 @@ const Vendedores = () => {
     {
       field: "valor",
       headerName: "Valor da Venda",
-      headerClassName: 'super-app-theme--header',
+      headerClassName: "super-app-theme--header",
       type: "number",
       width: 190,
       align: "left",
       headerAlign: "left",
       editable: false,
       valueFormatter: (value: number) => {
-        const formattedValue = numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ',');
+        const formattedValue = numeral(value)
+          .format("0,0.00")
+          .replace(".", "_")
+          .replace(",", ".")
+          .replace("_", ",");
         return `R$ ${formattedValue}`;
       },
     },
     {
       field: "tipoVenda",
       headerName: "Tipo de Venda",
-      headerClassName: 'super-app-theme--header',
+      headerClassName: "super-app-theme--header",
       width: 200,
       align: "left",
       headerAlign: "left",
@@ -311,7 +342,7 @@ const Vendedores = () => {
       field: "actions",
       type: "actions",
       headerName: "",
-      headerClassName: 'super-app-theme--header',
+      headerClassName: "super-app-theme--header",
       width: 100,
       cellClassName: "actions",
       getActions: ({ id }) => {
@@ -352,14 +383,19 @@ const Vendedores = () => {
     {
       field: "view",
       headerName: "",
-      headerClassName: 'super-app-theme--header',
+      headerClassName: "super-app-theme--header",
       width: 80,
-      renderCell: () => {
+      renderCell: (params) => {
+        const handleOpenProfile = () => {
+          navigate(`/vendedores/${params.id}`);
+        };
         return (
-            <div className="viewButton">ABRIR</div>
-        )
-      }
-    }
+          <div className="viewButton" onClick={handleOpenProfile}>
+            ABRIR
+          </div>
+        );
+      },
+    },
   ];
 
   return (
@@ -379,11 +415,15 @@ const Vendedores = () => {
         slots={{
           toolbar: (props) => (
             <EditToolbar
-            setRowModesModel={function (newModel: (oldModel: GridRowModesModel) => GridRowModesModel): void {
-              throw new Error("Function not implemented.");
-            } } {...props}
-            setRows={setRows}
-            rows={rows}            />
+              setRowModesModel={function (
+                newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+              ): void {
+                throw new Error("Function not implemented.");
+              }}
+              {...props}
+              setRows={setRows}
+              rows={rows}
+            />
           ),
         }}
         slotProps={{

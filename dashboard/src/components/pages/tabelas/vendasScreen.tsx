@@ -354,40 +354,57 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
               </div>
             </div>      
         </ModalVendas>
-    </GridToolbarContainer>
+        <div className="inputs-filtros" >
+          <div className="inputs-selection">
+            <select
+                  style={{
+                    width: "315px",
+                    padding: "12px",
+                    borderRadius: "5px",
+                    backgroundColor: "var(--chart-secondary-color)",
+                    color: "var(--side-text-color3)",
+                    fontSize: "16px" // Aumenta o tamanho do texto
+                  }}
+              onChange={event => setSelectedOption(event.target.value)}
+            >
+              <option value="" style={{ fontSize: "16px" }}>Selecione uma opção</option>
+              <option value="vendedor" style={{ fontSize: "16px" }}>Vendedor</option>
+              <option value="cliente" style={{ fontSize: "16px" }}>Cliente</option>
+              <option value="data" style={{ fontSize: "16px" }}>Data</option>
+            </select>
 
-    <div className="inputs-filtros" >
-        <div className="inputs-selection">
-        <select
-              style={{
-                width: "315px",
-                padding: "12px",
-                borderRadius: "5px",
-                backgroundColor: "var(--chart-secondary-color)",
-                color: "var(--side-text-color3)",
-                fontSize: "16px" // Aumenta o tamanho do texto
-              }}
-          onChange={event => setSelectedOption(event.target.value)}
-        >
-          <option value="" style={{ fontSize: "16px" }}>Selecione uma opção</option>
-          <option value="vendedor" style={{ fontSize: "16px" }}>Vendedor</option>
-          <option value="cliente" style={{ fontSize: "16px" }}>Cliente</option>
-          <option value="data" style={{ fontSize: "16px" }}>Data</option>
-        </select>
+            <button onClick={limparFiltro} title="Apagar Filtro">
+                <TfiEraser size={26} className="limpar-button" />
+            </button>
+          </div>
+          
+          {selectedOption === 'vendedor' && (
+    
+            <div className="inputs-filtros">
+              <div className="input-filtro">
+                  <img src={user_icon} alt="" />
+                  <input
+                    type="text"
+                    placeholder="Buscar por nome do Vendedor"
+                    value={filter}
+                    onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+                  />
+                </div>
 
-          <button onClick={limparFiltro} title="Apagar Filtro">
-            <TfiEraser size={26} className="limpar-button" />
-          </button>
-        </div>
+                <button onClick={applyFilter}>
+                  <IoSearchSharp size={26} className="filtro-button" title="Buscar"/>
+                </button>
+            </div>
         
-        {selectedOption === 'vendedor' && (
-  
-          <div className="inputs-filtros">
-            <div className="input-filtro">
+          )}
+
+          {selectedOption === 'cliente' && (
+            <div className="inputs-filtros" >
+              <div className="input-filtro">
                 <img src={user_icon} alt="" />
                 <input
                   type="text"
-                  placeholder="Buscar por nome do Vendedor"
+                  placeholder="Buscar por nome do Cliente"
                   value={filter}
                   onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
                 />
@@ -396,46 +413,30 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
               <button onClick={applyFilter}>
                 <IoSearchSharp size={26} className="filtro-button" title="Buscar"/>
               </button>
-          </div>
-      
-        )}
-
-        {selectedOption === 'cliente' && (
-          <div className="inputs-filtros" >
-            <div className="input-filtro">
-              <img src={user_icon} alt="" />
-              <input
-                type="text"
-                placeholder="Buscar por nome do Cliente"
-                value={filter}
-                onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
-              />
             </div>
+          )}
+          {selectedOption === 'data' && (
+            <div className="inputs-filtros">
+              <div className="input-filtro" style={{width: '240px'}}>
+                <img src={user_icon} alt="" />
+                <InputMask style={{width: '170'}}
+                  mask="99/99/9999"
+                  value={data}
+                  onChange={event => setData(event.target.value)}
+                  placeholder="Data (DD/MM/AAAA)"
+                  />
+              </div>
 
-            <button onClick={applyFilter}>
-              <IoSearchSharp size={26} className="filtro-button" title="Buscar"/>
-            </button>
+              <button onClick={applyFilter}>
+                <IoSearchSharp size={26} className="filtro-button" title="Buscar"/>
+              </button>
           </div>
-        )}
-        {selectedOption === 'data' && (
-          <div className="inputs-filtros">
-            <div className="input-filtro" style={{width: '240px'}}>
-              <img src={user_icon} alt="" />
-              <InputMask style={{width: '170'}}
-                mask="99/99/9999"
-                value={data}
-                onChange={event => setData(event.target.value)}
-                placeholder="Data (DD/MM/AAAA)"
-                />
-            </div>
+          )}
 
-            <button onClick={applyFilter}>
-              <IoSearchSharp size={26} className="filtro-button" title="Buscar"/>
-            </button>
         </div>
-        )}
+    </GridToolbarContainer>
 
-    </div>
+    
     
     </div>
   );

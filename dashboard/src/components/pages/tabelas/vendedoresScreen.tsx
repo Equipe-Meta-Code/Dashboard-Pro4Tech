@@ -183,7 +183,8 @@ const Vendedores = () => {
   
     //botão de adicionar vendedor
     return (
-      <div className="inputs-filtros">
+      <GridToolbarContainer>
+        <div className="inputs-filtros">
      
           <div className="input-filtro">
             <img src={user_icon} alt="" />
@@ -198,7 +199,9 @@ const Vendedores = () => {
           <button onClick={applyFilter}><IoSearchSharp size={26} className="filtro-button" title="Buscar"/></button>
           <button onClick={limparFiltro}><TfiEraser size={26} className="filtro-button" title="Apagar Filtro"/></button>
       
-      </div>
+        </div>
+      </GridToolbarContainer>
+
     );
   }
 

@@ -1,50 +1,38 @@
-//calendário
+import React, { useEffect, useRef, useState, useContext } from "react";
 import "./AreaTop.scss";
-import { useEffect, useRef, useState } from "react";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
-import axios from "axios";
+import ptBR from 'date-fns/locale/pt-BR';
+import { DateContext } from "../../../context/DateContext";
 
-const AreaTop = () => {
 
-  const [vendas, setVendas] = useState([]);
-  const [totalVendas, setTotalVendas] = useState([]);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+const AreaTop: React.FC = () => {
+  const dateContext = useContext(DateContext);
 
+  if (!dateContext) {
+    throw new Error("AreaTop must be used within a DateProvider");
+  }
+
+  const { dates, setDates } = dateContext;
   const [state, setState] = useState([
     {
-      startDate: startDate,
-      endDate: endDate,
+      startDate: new Date(2023, 0, 1), // 1 de janeiro de 2023
+      endDate: dates.endDate || new Date(), // data atual se endDate não estiver definido
       key: "selection",
     },
   ]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/vendas_filtradas", {
-          params: {
-            startDate: state[0].startDate.toISOString(),
-            endDate: state[0].endDate.toISOString(),
-          },
-        });
-        setVendas(response.data);
-      } catch (error) {
-        console.error('Erro ao buscar as vendas', error);
-      }
-    };
+    setDates({
+      startDate: state[0].startDate,
+      endDate: state[0].endDate
+    });
+  }, [state, setDates]);
 
-    fetchData();
-  }, [state]);
-
-  //const [showDatePicker, setShowDatePicker] = useState(false);
   const dateRangeRef = useRef(null);
 
-  // personalizar o conteúdo dos dias
-  const renderDayContent = (day) => {
+  const renderDayContent = (day: Date) => {
     const date = day.getDate();
     return (
       <div style={{ color: `var(--calendar-day-color)` }}>{date}</div> 
@@ -57,6 +45,7 @@ const AreaTop = () => {
       <div className="area-top-r">
         <div className="custom-date-range" ref={dateRangeRef}>
           <DateRange
+            locale={ptBR}
             editableDateInputs={true}
             onChange={(item) => setState([item.selection])}
             moveRangeOnFirstSelection={false}

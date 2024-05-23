@@ -1,31 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import axios from 'axios';
 import numeral from 'numeral';
 import PermissionComponent from '../../PermissionComponent';
 import { useAuth } from '../../../context/AuthContext';
+import { DateContext } from '../../../context/DateContext'; // Importe o contexto de data
 
 const AreaBarChart = () => {
   const { login } = useAuth();
+  const dateContext = useContext(DateContext); // Obtenha o contexto de data
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [yDomain, setYDomain] = useState([0, 10000]); // Inicialize com um valor padrão
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [dateContext]); // Atualize o useEffect para observar as alterações no contexto de data
 
   const fetchData = async () => {
     try {
+      if (!dateContext) return; // Se o contexto de data não estiver disponível, retorne
+
+      const { startDate, endDate } = dateContext.dates; // Obtenha as datas do contexto de data
+
       // Definindo os nomes dos meses
       const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
       let response;
       if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-        response = await axios.get('http://localhost:8080/dados_vendas_mes');
+        response = await axios.get('http://localhost:8080/dados_vendas_mes', {
+          params: {
+            startDate: startDate.toISOString(), // Use a data de início do contexto de data
+            endDate: endDate.toISOString() // Use a data de término do contexto de data
+          }
+        });
       } else {
         response = await axios.get('http://localhost:8080/dados_vendas_mes_user', {
-          params: { vendedor: login }
+          params: { 
+            vendedor: login,
+            startDate: startDate.toISOString(), // Use a data de início do contexto de data
+            endDate: endDate.toISOString() // Use a data de término do contexto de data
+          }
         });
       }
       

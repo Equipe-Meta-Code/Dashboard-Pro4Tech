@@ -223,109 +223,126 @@ async function exportar() {
 
 
 
-        app.get('/dados_vendas', async (req, res) => {
+          app.get('/dados_vendas', async (req, res) => {
             try {
-                const [rows, fields] = await connection.query('SELECT Vendedor, SUM(Valor_de_Venda) AS total_vendas FROM informacoes GROUP BY Vendedor');
+                // Obter as datas de início e fim do intervalo (por exemplo, passadas como parâmetros na solicitação)
+                const startDate = req.query.startDate;
+                const endDate = req.query.endDate;
+        
+                // Consulta SQL modificada para incluir um filtro de data
+                const sqlQuery = `SELECT Vendedor, SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE Data_da_Venda >= ? AND Data_da_Venda <= ? GROUP BY Vendedor`;
+        
+                // Executar a consulta SQL com os parâmetros de data
+                const [rows, fields] = await connection.query(sqlQuery, [startDate, endDate]);
+                
+                // Enviar os resultados da consulta como resposta JSON
                 res.json(rows);
             } catch (error) {
                 console.error('Erro ao buscar dados de vendas:', error);
                 res.status(500).send('Erro ao buscar dados de vendas');
             }
         });
-
-        app.get('/dados_vendas_user', async (req, res) => {
-            try {
-                const vendedor = req.query.vendedor;
-                if (!vendedor) {
-                    return res.status(400).send('Vendedor não fornecido');
-                }
-
-                const query = 'SELECT Vendedor, SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE CPF_Vendedor = ? GROUP BY Vendedor';
-                const [rows] = await connection.query(query, [vendedor]);
-                res.json(rows);
-            } catch (error) {
-                console.error('Erro ao buscar dados de vendas:', error);
-                res.status(500).send('Erro ao buscar dados de vendas');
-            }
-        });
-
 
         app.get('/dados_itens', async (req, res) => {
-            try {
-                const [rows, fields] = await connection.query('SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes GROUP BY Produto ORDER BY quantidade_vendida DESC');
-                res.json(rows);
-            } catch (error) {
-                console.error('Erro ao buscar dados de itens mais vendidos:', error);
-                res.status(500).send('Erro ao buscar dados de itens mais vendidos');
+            const { startDate, endDate } = req.query;
+          
+            if (!startDate || !endDate) {
+              return res.status(400).send('Os parâmetros startDate e endDate são obrigatórios');
             }
-        });
-        
-        app.get('/dados_itens_user', async (req, res) => {
+          
             try {
-                const vendedor = req.query.vendedor;
-                const query = 'SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes WHERE CPF_Vendedor = ? GROUP BY Produto ORDER BY quantidade_vendida DESC';
-                const [rows, fields] = await connection.query(query, [vendedor]);
+              const [rows, fields] = await connection.query(
+                'SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes WHERE Data_da_Venda >= ? AND Data_da_Venda <= ? GROUP BY Produto ORDER BY quantidade_vendida DESC',
+                [new Date(startDate), new Date(endDate)]
+              );
+              res.json(rows);
+            } catch (error) {
+              console.error('Erro ao buscar dados de itens mais vendidos:', error);
+              res.status(500).send('Erro ao buscar dados de itens mais vendidos');
+            }
+          });
+          
+        
+          app.get('/dados_itens_user', async (req, res) => {
+            try {
+                const { vendedor, startDate, endDate } = req.query;
+                if (!vendedor || !startDate || !endDate) {
+                    return res.status(400).send('Parâmetros incompletos');
+                }
+        
+                const query = 'SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes WHERE CPF_Vendedor = ? AND Data_da_Venda >= ? AND Data_da_Venda <= ? GROUP BY Produto ORDER BY quantidade_vendida DESC';
+                const [rows, fields] = await connection.query(query, [vendedor, startDate, endDate]);
                 res.json(rows);
             } catch (error) {
                 console.error('Erro ao buscar os itens mais vendidos:', error);
                 res.status(500).send('Erro ao buscar os itens mais vendidos');
             }
-        });
-        
-        
+        });        
 
         app.get('/dados_vendas_mes', async (req, res) => {
             try {
-                const [rows, fields] = await connection.query('SELECT MONTH(STR_TO_DATE(Data_da_Venda, "%Y-%m-%d")) AS mes, SUM(Valor_de_Venda) AS total_vendas FROM informacoes GROUP BY mes');
-                res.json(rows);
-            } catch (error) {
-                console.error('Erro ao buscar dados de vendas:', error);
-                res.status(500).send('Erro ao buscar dados de vendas');
-            }
-        });
-        
-        app.get('/dados_vendas_mes_user', async (req, res) => {
-            try {
-                const vendedor = req.query.vendedor;
-                if (!vendedor) {
-                    return res.status(400).send('Vendedor não fornecido');
-                }
+              const startDate = req.query.startDate;
+              const endDate = req.query.endDate;
 
-                const query = 'SELECT MONTH(STR_TO_DATE(Data_da_Venda, "%Y-%m-%d")) AS mes, SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE CPF_Vendedor = ? GROUP BY mes';
-                
-                const [rows, fields] = await connection.query(query, [vendedor]);
+              if (!startDate || !endDate) {
+                return res.status(400).send('Os parâmetros startDate e endDate são obrigatórios');
+              }
+          
+              const [rows, fields] = await connection.query('SELECT MONTH(STR_TO_DATE(Data_da_Venda, "%Y-%m-%d")) AS mes, SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE Data_da_Venda BETWEEN ? AND ? GROUP BY mes', [startDate, endDate]);
+              
+              res.json(rows);
+            } catch (error) {
+              console.error('Erro ao buscar dados de vendas:', error);
+              res.status(500).send('Erro ao buscar dados de vendas');
+            }
+          });
+          
+        
+          app.get('/dados_vendas_mes_user', async (req, res) => {
+            try {
+                const { vendedor, startDate, endDate } = req.query;
+                if (!vendedor || !startDate || !endDate) {
+                    return res.status(400).send('Parâmetros incompletos');
+                }
+        
+                const query = 'SELECT MONTH(STR_TO_DATE(Data_da_Venda, "%Y-%m-%d")) AS mes, SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE CPF_Vendedor = ? AND Data_da_Venda >= ? AND Data_da_Venda <= ? GROUP BY mes';
+                const [rows, fields] = await connection.query(query, [vendedor, startDate, endDate]);
                 res.json(rows);
             } catch (error) {
                 console.error('Erro ao buscar as vendas por mês:', error);
                 res.status(500).send('Erro ao buscar as vendas por mês');
             }
-        });   
-        
-        app.get('/dados_vendas_total', async (req, res) => {
-            try {                
-                const [rows, fields] = await connection.query('SELECT SUM(Valor_de_Venda) AS total_vendas FROM informacoes');
-                res.json(rows[0]); // Retorna apenas a primeira linha do resultado
-            } catch (error) {
-                console.error('Erro ao buscar dados de vendas:', error);
-                res.status(500).send('Erro ao buscar dados de vendas');
-            }
         });
 
-        app.get('/dados_vendas_total_user', async (req, res) => {
-            try {
-                const vendedor = req.query.vendedor;
-                if (!vendedor) {
-                    return res.status(400).send('Vendedor não fornecido');
-                }
-                
-                const query = 'SELECT SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE CPF_Vendedor = ?';
-                const [rows, fields] = await connection.query(query, [vendedor]);
-                res.json(rows[0]); // Retorna apenas a primeira linha do resultado
+        app.get('/dados_vendas_total', async (req, res) => {
+            try {                
+              const { startDate, endDate } = req.query;
+              const query = 'SELECT SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE Data_da_Venda >= ? AND Data_da_Venda <= ?';
+              const [rows, fields] = await connection.query(query, [startDate, endDate]);
+              res.json(rows[0]); // Retorna apenas a primeira linha do resultado
             } catch (error) {
-                console.error('Erro ao buscar dados de vendas:', error);
-                res.status(500).send('Erro ao buscar dados de vendas');
+              console.error('Erro ao buscar dados de vendas:', error);
+              res.status(500).send('Erro ao buscar dados de vendas');
             }
-        });
+          });
+          
+          app.get('/dados_vendas_total_user', async (req, res) => {
+            try {
+              const { vendedor, startDate, endDate } = req.query;
+              
+              if (!vendedor || !startDate || !endDate) {
+                return res.status(400).send('Parâmetros incompletos');
+              }
+              
+              const query = 'SELECT SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE CPF_Vendedor = ? AND Data_da_Venda >= ? AND Data_da_Venda <= ?';
+              const [rows, fields] = await connection.query(query, [vendedor, startDate, endDate]);
+              res.json(rows[0]); // Retorna apenas a primeira linha do resultado
+            } catch (error) {
+              console.error('Erro ao buscar dados de vendas:', error);
+              res.status(500).send('Erro ao buscar dados de vendas');
+            }
+          });
+          
 
         app.get('/vendedores', async (req, res) => {
             try {

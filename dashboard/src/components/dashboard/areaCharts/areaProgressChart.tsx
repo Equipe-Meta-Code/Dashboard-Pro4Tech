@@ -1,48 +1,66 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import "./AreaCharts.scss";
 import { v4 as uuidv4 } from 'uuid';
 import PermissionComponent from '../../PermissionComponent';
 import { useAuth } from '../../../context/AuthContext';
+import { DateContext } from '../../../context/DateContext';
 
-const AreaProgressChart = () => {
+
+
+interface ChartData {
+  Produto: string;
+  quantidade_vendida: number;
+}
+
+const AreaProgressChart: React.FC = () => {
   const { login } = useAuth();
-  const [chartData, setChartData] = useState([]);
+  const dateContext = useContext(DateContext);
+
+  if (!dateContext) {
+    throw new Error("AreaProgressChart must be used within a DateProvider");
+  }
+
+  const { dates } = dateContext;
+  const [chartData, setChartData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [total, setTotal] = useState(0); // Adicionando o estado para o total
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [dates]);
 
-  
   const fetchData = async () => {
     try {
       let response;
       if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-        response = await axios.get('http://localhost:8080/dados_itens');
+        response = await axios.get('http://localhost:8080/dados_itens', {
+          params: {
+            startDate: dates.startDate.toISOString(),
+            endDate: dates.endDate.toISOString()
+          }
+        });
       } else {
         response = await axios.get('http://localhost:8080/dados_itens_user', {
-          params: { vendedor: login }
+          params: { 
+            vendedor: login,
+            startDate: dates.startDate.toISOString(),
+            endDate: dates.endDate.toISOString()
+          }
         });
       }
 
-      const data = response.data;
-      console.log("Received data:", data);
+      const data: ChartData[] = response.data;
       setChartData(data);
       setLoading(false);
 
-  
-
-        // Calculando o total
-        const totalVendido = data.reduce((acc, item) => acc + item.quantidade_vendida, 0);
-        setTotal(totalVendido);
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        setLoading(false);
-      }
-    };
-  
+      const totalVendido = data.reduce((acc, item) => acc + item.quantidade_vendida, 0);
+      setTotal(totalVendido);
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="progress-bar">

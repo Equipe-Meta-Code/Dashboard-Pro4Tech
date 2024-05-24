@@ -4,7 +4,8 @@ import axios from "axios";
 
 import "./perfilVendedores.scss";
 import AreaBarChart from "../dashboard/areaCharts/areaBarChart";
-import AreaProgressChart from "../dashboard/areaCharts/areaProgressChart";
+import AreaProgressChartPerfil from "../dashboard/areaCharts/areaProgressChartPerfil";
+import { DateProvider } from "../../context/DateContext";
 import AreaCards from "../dashboard/areaCards/areaCards";
 import VendasVendedor from "./tabela/vendasVendedor";
 
@@ -24,8 +25,8 @@ const Perfil = () => {
   useEffect(() => {
     const fetchVendedorDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/vendedores/${id}`);
-        setVendedoresDetails(response.data);
+        //const response = await axios.get(`http://localhost:8080/vendedores/${id}`);
+        //setVendedoresDetails(response.data);
       } catch (error) {
         console.error("Erro ao buscar detalhes do vendedor:", error);
       }
@@ -67,6 +68,7 @@ const Perfil = () => {
   };
 
   return (
+    <DateProvider>
     <div className="perfil">
       <div className="perfilContainer">
         <div className="top">
@@ -184,10 +186,10 @@ const Perfil = () => {
         </div>
         <div className="body">
           <div className="left">
-            <AreaCards />
+           <AreaCards />
           </div>
           <div className="right">
-            <AreaProgressChart />
+            <AreaProgressChartPerfil vendedorSelecionado={id} />
           </div>
         </div>
         <div className="bottom">
@@ -195,6 +197,7 @@ const Perfil = () => {
         </div>
       </div>
     </div>
+    </DateProvider>
   );
 };
 

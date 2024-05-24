@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import InputMask from "react-input-mask";
 import "./VendasVendedor.scss";
 import Box from "@mui/material/Box";

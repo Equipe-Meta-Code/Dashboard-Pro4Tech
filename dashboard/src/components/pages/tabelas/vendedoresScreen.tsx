@@ -48,6 +48,11 @@ const Vendedores = () => {
     setRows(chartData);
   }, [chartData]);
 
+  const selecionadoFunc = async (id: GridRowId) => {
+    console.log(id)
+    const selecionado = id
+    return selecionado
+  }
   const fetchData = async () => {
     try {
       const responseVendedores = await axios.get(
@@ -389,7 +394,10 @@ const Vendedores = () => {
       headerClassName: "super-app-theme--header",
       width: 80,
       renderCell: (params) => {
-        const handleOpenProfile = () => {
+        const handleOpenProfile = () => 
+          //aqui
+        {
+          selecionadoFunc(params.id)
           navigate(`/vendedores/${params.id}`);
         };
         return (

@@ -15,10 +15,13 @@ const AreaTop: React.FC = () => {
   }
 
   const { dates, setDates } = dateContext;
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
   const [state, setState] = useState([
     {
-      startDate: new Date(2023, 0, 1), // 1 de janeiro de 2023
-      endDate: dates.endDate || new Date(), // data atual se endDate não estiver definido
+      startDate: startDate,
+      endDate: endDate,
       key: "selection",
     },
   ]);

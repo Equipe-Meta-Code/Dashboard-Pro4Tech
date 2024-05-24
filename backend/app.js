@@ -245,11 +245,7 @@ async function exportar() {
 
         app.get('/dados_itens', async (req, res) => {
             const { startDate, endDate } = req.query;
-          
-            if (!startDate || !endDate) {
-              return res.status(400).send('Os parâmetros startDate e endDate são obrigatórios');
-            }
-          
+
             try {
               const [rows, fields] = await connection.query(
                 'SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes WHERE Data_da_Venda >= ? AND Data_da_Venda <= ? GROUP BY Produto ORDER BY quantidade_vendida DESC',
@@ -266,18 +262,28 @@ async function exportar() {
           app.get('/dados_itens_user', async (req, res) => {
             try {
                 const { vendedor, startDate, endDate } = req.query;
-                if (!vendedor || !startDate || !endDate) {
+                
+                if (!vendedor, !startDate, !endDate) {
                     return res.status(400).send('Parâmetros incompletos');
                 }
+                
         
-                const query = 'SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes WHERE CPF_Vendedor = ? AND Data_da_Venda >= ? AND Data_da_Venda <= ? GROUP BY Produto ORDER BY quantidade_vendida DESC';
-                const [rows, fields] = await connection.query(query, [vendedor, startDate, endDate]);
+                const query = `
+                    SELECT Produto, COUNT(*) AS quantidade_vendida 
+                    FROM informacoes 
+                    WHERE CPF_Vendedor = ? AND Data_da_Venda >= ? AND Data_da_Venda <= ? 
+                    GROUP BY Produto 
+                    ORDER BY quantidade_vendida DESC
+                `;
+                
+                const [rows] = await connection.query(query, [vendedor, startDate, endDate]);
                 res.json(rows);
             } catch (error) {
                 console.error('Erro ao buscar os itens mais vendidos:', error);
                 res.status(500).send('Erro ao buscar os itens mais vendidos');
             }
-        });        
+        });
+        
 
         app.get('/dados_vendas_mes', async (req, res) => {
             try {

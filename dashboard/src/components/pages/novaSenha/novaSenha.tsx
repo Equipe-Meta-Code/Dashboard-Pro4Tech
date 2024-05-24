@@ -16,6 +16,54 @@ const NovaSenha = () => {
     const [mostrarNova, setMostrarNova] = useState(false);
     const [mostrarConfirma, setMostrarConfirma] = useState(false);
 
+    const isCPF = (strCPF) => {
+        var Soma;
+        var Resto;
+        Soma = 0;
+        if (strCPF === "00000000000") return false;
+
+        for (let i = 1; i <= 9; i++) Soma += parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+        Resto = (Soma * 10) % 11;
+
+        if (Resto === 10 || Resto === 11) Resto = 0;
+        if (Resto !== parseInt(strCPF.substring(9, 10))) return false;
+
+        Soma = 0;
+        for (let i = 1; i <= 10; i++) Soma += parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+        Resto = (Soma * 10) % 11;
+
+        if (Resto === 10 || Resto === 11) Resto = 0;
+        if (Resto !== parseInt(strCPF.substring(10, 11))) return false;
+        return true;
+    };
+
+    const handleLoginChange = (e) => {
+        const valor = e.target.value;
+        const isNumeric = /^\d+$/.test(valor);
+        if (isNumeric && valor.length <= 11) {
+            const cpf = formatarCPF(valor);
+            setLogin(cpf);
+        } else {
+            setLogin(valor);
+        }
+    };
+
+    const formatarCPF = (valor) => {
+        const cpf = valor.replace(/\D/g, '').slice(0, 11);
+        return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    };
+
+    const handleSenhaAntigaChange = (e) => {
+        const valor = e.target.value;
+        const isNumeric = /^\d+$/.test(valor);
+        if (isNumeric && valor.length <= 11) {
+            const cpf = formatarCPF(valor);
+            setSenhaAntiga(cpf);
+        } else {
+            setSenhaAntiga(valor);
+        }
+    };
+
     const handleSubmit = async () => {
         try {
             // Validar se todos os campos estão preenchidos
@@ -67,11 +115,11 @@ const NovaSenha = () => {
                 <div className="inputs">
                     <div className="input">
                         <img src={user_icon} alt="" />
-                        <input type="text" placeholder="Insira seu login" value={login} onChange={(e) => setLogin(e.target.value)} />
+                        <input type="text" placeholder="Insira seu login" value={login} onChange={handleLoginChange} />
                     </div>
                     <div className="input">
                         <img src={password_icon} alt="" />
-                        <input type={mostrarAntiga ? "text" : "password"} placeholder="Insira sua senha atual" value={senhaAntiga} onChange={(e) => setSenhaAntiga(e.target.value)} />
+                        <input type={mostrarAntiga ? "text" : "password"} placeholder="Insira sua senha atual" value={senhaAntiga} onChange={handleSenhaAntigaChange} />
                         <button className="eye-icon" onClick={() => setMostrarAntiga(!mostrarAntiga)}>
                             {mostrarAntiga ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
                         </button>

@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-
 import "./perfilVendedores.scss";
-import AreaBarChart from "../dashboard/areaCharts/areaBarChart";
+import AreaBarChartPerfil from "../dashboard/areaCharts/areaBarChartPerfil";
 import AreaProgressChartPerfil from "../dashboard/areaCharts/areaProgressChartPerfil";
 import { DateProvider } from "../../context/DateContext";
 import AreaCards from "../dashboard/areaCards/areaCards";
@@ -181,7 +179,7 @@ const Perfil = () => {
             </div>
           </div>
           <div className="right">
-            <AreaBarChart />
+            <AreaBarChartPerfil vendedorSelecionado={id} />
           </div>
         </div>
         <div className="body">

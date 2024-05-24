@@ -191,7 +191,7 @@ const Perfil = () => {
           </div>
         </div>
         <div className="bottom">
-          <VendasVendedor vendedorId="vendedorId" />
+          <VendasVendedor vendedorSelecionado={id} />
         </div>
       </div>
     </div>

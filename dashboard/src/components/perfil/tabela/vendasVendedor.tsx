@@ -24,11 +24,16 @@ import numeral from "numeral";
 //tabela no perfil do vendedor - últimas vendas dele
 
 interface VendasVendedorProps {
-  vendedorId: string;
+  vendedorSelecionado?: number;
 }
 
+const responseVendedores = await axios.get(
+  "http://localhost:8080/vendedores"
+);
+const dataVendedores = responseVendedores.data;
+
 // componente para a tabela de vendas
-const VendasVendedor: React.FC<VendasVendedorProps> = ({ vendedorId }) => {
+const VendasVendedor = ( props ) => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
   const [chartVendedores, setChartVendedores] = useState([]);
@@ -40,7 +45,7 @@ const VendasVendedor: React.FC<VendasVendedorProps> = ({ vendedorId }) => {
     fetchData();
     fetchVendedores();
     fetchClientes();
-  }, [vendedorId]);
+  }, [props.vendedorSelecionado]);
 
   // atualiza as linhas da tabela quando chartData muda
   useEffect(() => {
@@ -48,14 +53,33 @@ const VendasVendedor: React.FC<VendasVendedorProps> = ({ vendedorId }) => {
     setInitialRows(chartData);
   }, [chartData]);
 
+  function buscarCPFPorId(idVendedor) {
+    const vendedor = dataVendedores.find(vendedor => vendedor.id === idVendedor);
+    if (vendedor) {
+      console.log('vendedor',vendedor)
+      console.log('vendedorCPF',vendedor.CPF_Vendedor)
+      return vendedor.CPF_Vendedor;
+
+    } else {
+      return null; // ou lançar um erro, dependendo do seu caso de uso
+    }
+  }
   // função para buscar dados gerais
   const fetchData = async () => {
     try {
+      console.log('Vendedor Selecionado',props.vendedorSelecionado)
+      // Exemplo de uso
+      const idDoVendedores = parseFloat(props.vendedorSelecionado);
+      console.log('Vendedor Selecionado_ID',props.vendedorSelecionado)
+      
+      const cpfVendedor = buscarCPFPorId(idDoVendedores);
+      console.log('cpf', cpfVendedor)
+
       const response = await axios.get("http://localhost:8080/geral");
       const data = response.data;
       
       // filtrar dados para pegar apenas as vendas do vendedor atual
-      const filteredData = data.filter((item) => item.CPF_Vendedor === vendedorId);
+      const filteredData = data.filter((item) => item.CPF_Vendedor === cpfVendedor);
 
 
       // pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor

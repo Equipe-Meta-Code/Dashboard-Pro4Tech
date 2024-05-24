@@ -12,8 +12,10 @@
       .left {
         flex: 1;
         -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+        box-shadow: var(--light-shadow1);
+        background-color: var(--chart-secondary-color);
         padding: 20px;
+        border-radius: 6px;
         position: relative;
 
         .editButton {
@@ -24,9 +26,9 @@
           width: 50px;
           font-size: 16px;
           color: var(--chart-primary-color);
-          background-color: var(--background-color);
+          background-color: var(--chart-secondary-color);
           cursor: pointer;
-          border-radius: 0px 0px 0px 5px;
+          border-radius: 6px;
         }
 
         .item {
@@ -80,6 +82,18 @@
         padding: 20px;
         position: relative;
       }
+      .left-Cards{
+        flex: 1;
+        height: 337px;
+        position: relative;
+        background-color: var(--chart-secondary-color);
+        border-radius: 6px;
+        padding: 0px 20px 0px 20px;
+        box-shadow: var(--light-shadow1);
+      }
+      .left-Cards .area-card{
+        box-shadow: red;
+      }
 
       .right {
         flex: 2;
@@ -89,9 +103,11 @@
 
     .bottom {
       -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      background-color: var(--chart-secondary-color);
+      box-shadow: var(--light-shadow1);
       padding: 20px;
       margin: 10px 20px;
+      border-radius: 6px;
     }
 
     .title {
@@ -99,5 +115,30 @@
       color: var(--side-text-color4);
       margin-bottom: 22px;
     }
+  }
+  .sx-box .MuiDataGrid-footerContainer {
+    background-color: var(--chart-secondary-color);
+  }
+  .sx-box .sx-data-grid {
+    background-color: var(--chart-secondary-color);
+    border-radius: 1%;
+    border-color: var(--chart-secondary-color);
+    color: var(--side-text-color3);
+  }
+  .css-n3fyjk-MuiDataGrid-root .MuiDataGrid-main>*:first-of-type {
+    border-top-left-radius: var(--chart-secondary-color);
+    border-top-right-radius: var(--chart-secondary-color);
+  }
+  .content-area-cards .area-card {
+    height: 337px;
+    background-color: var(--chart-secondary-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    padding: 16px 16px 16px 16px;
+    justify-content: space-between;
+    box-shadow: var(--chart-secondary-color);
+    width: 100%;
   }
 }

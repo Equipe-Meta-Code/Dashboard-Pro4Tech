@@ -183,7 +183,7 @@ const Perfil = () => {
           </div>
         </div>
         <div className="body">
-          <div className="left">
+          <div className="left-Cards">
            <AreaCards />
           </div>
           <div className="right">

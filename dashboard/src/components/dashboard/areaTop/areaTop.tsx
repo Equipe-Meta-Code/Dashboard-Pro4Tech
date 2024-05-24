@@ -5,6 +5,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
 import ptBR from 'date-fns/locale/pt-BR';
 import { DateContext } from "../../../context/DateContext";
+import { startOfMonth, endOfMonth } from 'date-fns';
 
 
 const AreaTop: React.FC = () => {
@@ -15,14 +16,15 @@ const AreaTop: React.FC = () => {
   }
 
   const { dates, setDates } = dateContext;
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const currentDate = new Date();
+  const initialStartDate = startOfMonth(currentDate);
+  const initialEndDate = endOfMonth(currentDate);
 
   const [state, setState] = useState([
     {
-      startDate: startDate,
-      endDate: endDate,
-      key: "selection",
+      startDate: initialStartDate,
+      endDate: initialEndDate,
+      key: 'selection',
     },
   ]);
 

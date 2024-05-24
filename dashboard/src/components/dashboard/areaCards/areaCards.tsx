@@ -12,7 +12,7 @@ const AreaCards = () => {
     const setMeta = async () => {
       if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
         setMetaVendas(50000);
-      } else if (await PermissionComponent.hasPermission("User_Role")) {
+      } else {
         setMetaVendas(10000);
       }
     };

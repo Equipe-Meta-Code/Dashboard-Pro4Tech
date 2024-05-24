@@ -283,7 +283,22 @@ async function exportar() {
                 res.status(500).send('Erro ao buscar os itens mais vendidos');
             }
         });
-        
+
+        app.get('/dados_itens_vendedor', async (req, res) => {
+          try {
+              const { vendedor} = req.query;
+              if (!vendedor) {
+                  return res.status(400).send('Parâmetros incompletos');
+              }
+      
+              const query = 'SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes WHERE CPF_Vendedor =? GROUP BY Produto ORDER BY quantidade_vendida DESC';
+              const [rows, fields] = await connection.query(query, [vendedor]);
+              res.json(rows);
+          } catch (error) {
+              console.error('Erro ao buscar os itens mais vendidos:', error);
+              res.status(500).send('Erro ao buscar os itens mais vendidos');
+          }
+        });           
 
         app.get('/dados_vendas_mes', async (req, res) => {
             try {

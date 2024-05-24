@@ -335,6 +335,22 @@ async function exportar() {
             }
         });
 
+        app.get('/dados_vendas_mes_vendedores', async (req, res) => {
+          try {
+              const { vendedor} = req.query;
+              if (!vendedor) {
+                  return res.status(400).send('Parâmetros incompletos');
+              }
+              
+              const query = 'SELECT MONTH(STR_TO_DATE(Data_da_Venda, "%Y-%m-%d")) AS mes, SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE CPF_Vendedor = ? GROUP BY mes';
+              const [rows, fields] = await connection.query(query, [vendedor]);
+              res.json(rows);
+          } catch (error) {
+              console.error('Erro ao buscar as vendas por mês:', error);
+              res.status(500).send('Erro ao buscar as vendas por mês');
+          }
+      });
+
         app.get('/dados_vendas_total', async (req, res) => {
             try {                
               const { startDate, endDate } = req.query;

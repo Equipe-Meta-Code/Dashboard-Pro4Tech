@@ -10,6 +10,7 @@ import { TfiEraser } from "react-icons/tfi";
 import { IoSearchSharp } from "react-icons/io5";
 import { RxCheck, RxCross2 } from "react-icons/rx";
 import { MdDeleteOutline, MdAdd} from "react-icons/md";
+import perfilsemfoto from "../../perfil/perfilsemfoto.jpg";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -85,7 +86,7 @@ const Vendedores = () => {
             valor: ultimaVenda.Valor_de_Venda,
             ultimaVenda: ultimaVenda.Data_da_Venda,
             tipoVenda: ultimaVenda.tipoVendaProduto,
-            // Adicione outras propriedades de /vendedores, se necessário
+            foto: itemVendedor.Foto,
           };
         } else {
           // Se não houver vendas para o vendedor atual, defina o Valor_de_Venda como vazio
@@ -96,7 +97,7 @@ const Vendedores = () => {
             valor: "", // Valor_de_Venda vazio
             ultimaVenda: "",
             tipoVenda: "",
-            // Adicione outras propriedades de /vendedores, se necessário
+            foto: itemVendedor.Foto,
           };
         }
       });
@@ -287,6 +288,22 @@ const Vendedores = () => {
       align: "center",
       headerAlign: "center",
       editable: false,
+    },
+    {
+      field: "fotoPerfil",
+      headerName: "Foto",
+      headerClassName: "super-app-theme--header",
+      width: 70,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => (
+          <img 
+              src={params.value || perfilsemfoto} 
+              style={{ width: 40, height: 40, borderRadius: '50%' }} 
+          />
+      ),
+      sortable: false,
+      filterable: false,
     },
     {
       field: "vendedor",

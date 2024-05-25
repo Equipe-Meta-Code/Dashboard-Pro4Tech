@@ -64,16 +64,25 @@ const Perfil = () => {
 
   const [Vendedor, setVendedor] = useState('');
   const [CPF_Vendedor, setCPF_Vendedor] = useState('');
+  const [Email, setEmail] = useState('');
+  const [Telefone, setTelefone] = useState('');
+  const [Endereco, setEndereco] = useState('');
+  const [Pais, setPais] = useState('');
   const [data_Nascimento, setData_Nascimento] = useState('');
-  
-  const handleAdicionar = async (Vendedor, CPF_Vendedor) => {
+  const [foto, setFoto] = useState('');
+
+  const handleAdicionar = async (Vendedor, CPF_Vendedor,Email,Telefone, Endereco, Pais) => {
     try {
      
       console.log("handleAdicionar", CPF_Vendedor)
       const newData = {
-        Data_Nascimento: data_Nascimento, // Convertendo a data para o tipo DATE
         Vendedor: Vendedor,
         CPF_Vendedor: CPF_Vendedor,
+        Email: Email,
+        Telefone: Telefone,
+        Endereco: Endereco,
+        Pais: Pais,
+        data_Nascimento: data_Nascimento,
       };
       console.log("Adicionando Venda")
       console.table(newData);
@@ -89,6 +98,12 @@ const Perfil = () => {
   const abrirModal = async () => {
     setOpenModal(true)
     setVendedor(vendedoresDetails.Vendedor)
+    setEmail(vendedoresDetails.Email)
+    setTelefone(vendedoresDetails.Telefone)
+    setEndereco(vendedoresDetails.Endereco)
+    setPais(vendedoresDetails.Pais)
+    //setData_Nascimento(vendedoresDetails.Data_Nascimento)
+
   };
 
   return (
@@ -116,10 +131,10 @@ const Perfil = () => {
                         <span className="itemKey">CPF:</span>
                         <span className="itemValue">{vendedoresDetails.CPF_Vendedor}</span>
                       </div>
-                      <div className="detailItem">
+{/*                       <div className="detailItem">
                         <span className="itemKey">Data de Nascimento:</span>
                         <span className="itemValue">{vendedoresDetails.Data_Nascimento}</span>
-                      </div>
+                      </div> */}
                       <div className="detailItem">
                         <span className="itemKey">Email:</span>
                         <span className="itemValue">{vendedoresDetails.Email}</span>
@@ -158,7 +173,8 @@ const Perfil = () => {
               <div className="title-modalVendas">Adicionar Vendas</div>
               <div className="content-modalVendas"> 
                   <div className="inputs-modalVendas">
-                    <div className="input-modalVendas"> 
+
+{/*                     <div className="input-modalVendas"> 
                         <img src={calendario} alt="" />
                         <InputMask
                           mask="99/99/9999"
@@ -166,15 +182,27 @@ const Perfil = () => {
                           onChange={event => setData_Nascimento(event.target.value)}
                           placeholder="DD/MM/AAAA"
                         />
-                      </div>
+                      </div> */}
 
                     <div className="input-modalVendas">
                       <input type="text" placeholder="Vendedor" value={Vendedor}onChange={event => setVendedor(event.target.value)}/>
                     </div>
+                    <div className="input-modalVendas">
+                      <input type="text" placeholder="E-mail" value={Email}onChange={event => setEmail(event.target.value)}/>
+                    </div>
+                    <div className="input-modalVendas">
+                      <input type="text" placeholder="Telefone" value={Telefone}onChange={event => setTelefone(event.target.value)}/>
+                    </div>
+                    <div className="input-modalVendas">
+                      <input type="text" placeholder="Endereço" value={Endereco}onChange={event => setEndereco(event.target.value)}/>
+                    </div>
+                    <div className="input-modalVendas">
+                      <input type="text" placeholder="País" value={Pais}onChange={event => setPais(event.target.value)}/>
+                    </div>
                     
                   </div>
                   <div className="submit-container-modalVendas">
-                    <div className="submit-modalVendas" onClick={() => handleAdicionar(Vendedor,CPF_Vendedor)}>Adicionar</div>
+                    <div className="submit-modalVendas" onClick={() => handleAdicionar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais)}>Adicionar</div>
                   </div>
 
               </div>

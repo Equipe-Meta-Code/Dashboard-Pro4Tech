@@ -35,7 +35,7 @@ const Perfil = () => {
       const dataVendedores = response.data[0];
       setVendedoresDetails(dataVendedores);
       console.log("v",vendedoresDetails.CPF_Vendedor)
-      setCPF_Vendedor(vendedoresDetails.CPF_Vendedor)
+      await setCPF_Vendedor(vendedoresDetails.CPF_Vendedor)
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
     }
@@ -45,7 +45,7 @@ const Perfil = () => {
     fetchData();
   }, [id]);
 
-  const handlePhotoChange = (e) => {
+/*   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -60,7 +60,7 @@ const Perfil = () => {
       };
       reader.readAsDataURL(file);
     }
-  };
+  }; */
 
   const [Vendedor, setVendedor] = useState('');
   const [CPF_Vendedor, setCPF_Vendedor] = useState('');
@@ -73,7 +73,7 @@ const Perfil = () => {
 
   const handleAdicionar = async (Vendedor, CPF_Vendedor,Email,Telefone, Endereco, Pais) => {
     try {
-     
+      await fetchData()
       console.log("handleAdicionar", CPF_Vendedor)
       const newData = {
         Vendedor: Vendedor,
@@ -82,7 +82,6 @@ const Perfil = () => {
         Telefone: Telefone,
         Endereco: Endereco,
         Pais: Pais,
-        data_Nascimento: data_Nascimento,
       };
       console.log("Adicionando Venda")
       console.table(newData);
@@ -90,12 +89,14 @@ const Perfil = () => {
       setOpenModal(false);
       await axios.put('http://localhost:8080/vendedores_editando', newData);
       await fetchData();
-      //window.location.reload();
+      //.location.reload();
     } catch (error) {
       console.error("Erro ao adicionar vendedor:", error);
     }
   };
+
   const abrirModal = async () => {
+    await fetchData()
     setOpenModal(true)
     setVendedor(vendedoresDetails.Vendedor)
     setEmail(vendedoresDetails.Email)
@@ -117,14 +118,14 @@ const Perfil = () => {
               </button>
               <h1 className="title">Informações</h1>
               <div className="item">
-                <img src={vendedoresDetails.foto} alt="" className="itemImg" />
+ {/*                <img src={vendedoresDetails.foto} alt="" className="itemImg" />
                 {isEditing && (
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handlePhotoChange}
                   />
-                )}
+                )} */}
                 <div className="details">
                       <h1 className="itemTitle">{vendedoresDetails.Vendedor}</h1>
                       <div className="detailItem">
@@ -170,7 +171,7 @@ const Perfil = () => {
       </div>
       <ModalPerfil isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}> 
             <div className="container-modalVendas">
-              <div className="title-modalVendas">Adicionar Vendas</div>
+              <div className="title-modalVendas">Editar Vendedor</div>
               <div className="content-modalVendas"> 
                   <div className="inputs-modalVendas">
 
@@ -202,7 +203,7 @@ const Perfil = () => {
                     
                   </div>
                   <div className="submit-container-modalVendas">
-                    <div className="submit-modalVendas" onClick={() => handleAdicionar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais)}>Adicionar</div>
+                    <div className="submit-modalVendas" onClick={() =>   handleAdicionar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais)}>Editar</div>
                   </div>
 
               </div>

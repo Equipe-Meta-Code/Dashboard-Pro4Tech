@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import "./perfilVendedores.scss";
-import AreaBarChartPerfil from "../dashboard/areaCharts/areaBarChartPerfil";
 import AreaProgressChartPerfil from "../dashboard/areaCharts/areaProgressChartPerfil";
-import { DateProvider } from "../../context/DateContext";
-import AreaCards from "../dashboard/areaCards/areaCards";
+//import AreaCardsPerfil from "../dashboard/areaCards/areaCardsPerfil";
+import AreaBarChartPerfil from "../dashboard/areaCharts/areaBarChartPerfil";
 import VendasVendedor from "./tabela/vendasVendedor";
+import { DateProvider } from "../../context/DateContext";
 
 const Perfil = () => {
   const { id } = useParams();
@@ -13,18 +14,19 @@ const Perfil = () => {
   const [vendedoresDetails, setVendedoresDetails] = useState({ // armazenar detalhes do vendedor
     name: "",
     cpf: "",
+    dataNasc: "",
     email: "",
     phone: "",
     address: "",
     country: "",
     photo: "",  
   });
-
+  
   useEffect(() => {
     const fetchVendedorDetails = async () => {
       try {
-        //const response = await axios.get(`http://localhost:8080/vendedores/${id}`);
-        //setVendedoresDetails(response.data);
+        const response = await axios.get(`http://localhost:8080/vendedores/${id}`);
+        setVendedoresDetails(response.data);
       } catch (error) {
         console.error("Erro ao buscar detalhes do vendedor:", error);
       }
@@ -62,6 +64,9 @@ const Perfil = () => {
 
   // alternar o modo de edição
   const toggleEditMode = () => {
+    if (isEditing==true){
+      
+    }
     setIsEditing(!isEditing);
   };
 
@@ -106,9 +111,18 @@ const Perfil = () => {
                       />
                     </div>
                     <div className="detailItem">
+                      <span className="itemKey">Data de Nascimento:</span>
+                      <input
+                        type="text"
+                        name="dataNasc"
+                        value={vendedoresDetails.dataNasc}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="detailItem">
                       <span className="itemKey">Email:</span>
                       <input
-                        type="email"
+                        type="text"
                         name="email"
                         value={vendedoresDetails.email}
                         onChange={handleInputChange}
@@ -150,6 +164,10 @@ const Perfil = () => {
                       <span className="itemValue">{vendedoresDetails.cpf}</span>
                     </div>
                     <div className="detailItem">
+                      <span className="itemKey">Data de Nascimento:</span>
+                      <span className="itemValue">{vendedoresDetails.dataNasc}</span>
+                    </div>
+                    <div className="detailItem">
                       <span className="itemKey">Email:</span>
                       <span className="itemValue">
                         {vendedoresDetails.email}
@@ -183,9 +201,9 @@ const Perfil = () => {
           </div>
         </div>
         <div className="body">
-          <div className="left-Cards">
-           <AreaCards />
-          </div>
+          {/* <div className="left-Cards">
+           <AreaCardsPerfil vendedorSelecionado={id} />
+          </div> */}
           <div className="right">
             <AreaProgressChartPerfil vendedorSelecionado={id} />
           </div>

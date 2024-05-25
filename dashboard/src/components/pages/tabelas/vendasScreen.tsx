@@ -36,11 +36,13 @@ const Vendas = () => {
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
   const [chartVendedores, setChartVendedores] = useState([]);
   const [chartClientes, setChartClientes] = useState([]);
+  const [chartProdutos, setChartProdutos] = useState([]);
   
   useEffect(() => {
     fetchData();
     fetchVendedores();
     fetchClientes(); // Adicionando busca por clientes
+    fetchProdutos();
   }, []);
 
   useEffect(() => {
@@ -113,6 +115,25 @@ const fetchClientes = async () => {
   }
 };
 
+const fetchProdutos = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/produtos');
+    const produtos = response.data;
+
+    const processedProdutos = produtos.map(item => ({
+      value: item.Produto,
+      valor: item.Valor_de_Venda,
+      ID_Produto: item.id,
+      label: `${item.Produto}`,
+    }));
+
+    // Atualizando o state com os produtos disponíveis
+    setChartProdutos(processedProdutos);
+  } catch (error) {
+    console.error('Erro ao buscar Produtos:', error);
+  }
+};
+
 const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
   try {
     console.log('Chamando função saveChangesToDatabase');
@@ -176,7 +197,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
       }));
     };
 
-    const handleAdicionar = async (Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento) => {
+    const handleAdicionar = async (Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento ) => {
       try {
        
         const dataVenda = moment(Data_da_Venda, 'DD/MM/YYYY');
@@ -318,6 +339,18 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                       </select>
                     </div>
 
+                    <div className="input-modalVendas">
+                      <select value={Produto} onChange={(event) => {
+                        setProduto(event.target.value); 
+                        setValor_de_Venda(event.target.selectedOptions[0].getAttribute("data-valor")); 
+                      }}>
+                        <option value="">Selecione um produto</option>
+                        {chartProdutos.map((produto) => (
+                          <option key={produto.value} value={produto.value} data-valor={produto.valor}>{produto.label} - {produto.valor}</option>
+                        ))}
+                      </select>
+                    </div>
+
 
                     <div className="input-modalVendas"> 
                         <img src={calendario} alt="" />
@@ -329,13 +362,13 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                         />
                       </div>
 
-                    <div className="input-modalVendas">
+                    {/* <div className="input-modalVendas">
                       <input type="text" placeholder="Produto" onChange={event => setProduto(event.target.value)}/>
                     </div>
 
                     <div className="input-modalVendas">
                       <input type="text" placeholder="Valor da Venda" onChange={event => setValor_de_Venda(event.target.value)}/>
-                    </div>
+                    </div> */}
 
                     <div className="input-modalVendas">
                       <select value={Forma_de_Pagamento} onChange={event => setForma_de_Pagamento(event.target.value)}>

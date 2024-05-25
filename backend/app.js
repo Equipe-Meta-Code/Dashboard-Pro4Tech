@@ -296,7 +296,24 @@ async function exportar() {
               console.error('Erro ao buscar os itens mais vendidos:', error);
               res.status(500).send('Erro ao buscar os itens mais vendidos');
           }
-        });           
+        });   
+
+        app.get('/vendedor', async (req, res) => {
+          try {
+            const { vendedor} = req.query;
+            if (!vendedor) {
+                return res.status(400).send('Parâmetros incompletos');
+            }
+
+              const query = 'SELECT Vendedor, CPF_Vendedor, Email, Telefone, Endereco, Pais, Data_Nascimento,foto FROM vendedor WHERE id =?';
+              const [rows, fields] = await connection.query(query, [vendedor]);
+       
+              res.json(rows);
+          } catch (error) {
+              console.error('Erro ao buscar dados de vendas:', error);
+              res.status(500).send('Erro ao buscar dados de vendas');
+          }
+      });       
 
         app.get('/dados_vendas_mes', async (req, res) => {
             try {
@@ -315,9 +332,7 @@ async function exportar() {
               res.status(500).send('Erro ao buscar dados de vendas');
             }
           });
-
-          
-        
+       
           app.get('/dados_vendas_mes_user', async (req, res) => {
             try {
                 const { vendedor, startDate, endDate } = req.query;
@@ -348,7 +363,7 @@ async function exportar() {
               console.error('Erro ao buscar as vendas por mês:', error);
               res.status(500).send('Erro ao buscar as vendas por mês');
           }
-      });
+        });
 
         app.get('/dados_vendas_total', async (req, res) => {
             try {                
@@ -360,7 +375,7 @@ async function exportar() {
               console.error('Erro ao buscar dados de vendas:', error);
               res.status(500).send('Erro ao buscar dados de vendas');
             }
-          });
+        });
           
           app.get('/dados_vendas_total_user', async (req, res) => {
             try {
@@ -430,6 +445,26 @@ async function exportar() {
               res.status(500).send('Erro ao atualizar os dados');
             }
           });
+
+        app.put('/vendedores_editando', async (req, res) => {
+          const updatedData = req.body; // Os dados atualizados são enviados no corpo da requisição
+          
+          try {
+            // Verificação dos dados recebidos
+            if (!updatedData.Vendedor || !updatedData.CPF_Vendedor) {
+              return res.status(400).send('Dados inválidos');
+            }
+        
+            // Atualização no banco de dados
+            await connection.query('UPDATE vendedor SET Vendedor = ? WHERE CPF_Vendedor = ?', [updatedData.Vendedor, updatedData.CPF_Vendedor]);
+        
+            // Se os dados foram atualizados com sucesso, você pode enviar uma resposta de sucesso
+            res.status(200).send('Dados atualizados com sucesso');
+          } catch (error) {
+            console.error('Erro ao atualizar os dados:', error);
+            res.status(500).send('Erro ao atualizar os dados');
+          }
+        });
 
         app.delete('/vendedores/:id', async (req, res) => {
             const vendedorId = req.params.id;

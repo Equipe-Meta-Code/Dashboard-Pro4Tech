@@ -16,13 +16,16 @@ module.exports = (sequelize, DataTypes) => {
   Vendedor.init({
     Vendedor: DataTypes.STRING,
     CPF_Vendedor: DataTypes.STRING,
-    Data_da_Venda: DataTypes.DATEONLY,
-    Valor_da_Venda: DataTypes.DECIMAL(10, 2),
-    Tipo_de_Venda: DataTypes.STRING
+    Email: DataTypes.STRING,
+    Telefone: DataTypes.STRING,
+    Endereco: DataTypes.STRING,
+    Pais: DataTypes.STRING,
+    Data_Nascimento: DataTypes.DATEONLY,
+    foto: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Vendedor',
-    tableName: 'Vendedor' // Adicionando o nome correto da tabela
+    tableName: 'Vendedor',
   });
   return Vendedor;
 };

@@ -15,13 +15,22 @@ module.exports = {
       CPF_Vendedor: {
         type: Sequelize.STRING
       },
-      Data_da_Venda: {
+      Email: {
+        type: Sequelize.STRING
+      },
+      Telefone: {
+        type: Sequelize.STRING
+      },
+      Endereco: {
+        type: Sequelize.STRING
+      },
+      Pais: {
+        type: Sequelize.STRING
+      },
+      Data_Nascimento: {
         type: Sequelize.DATEONLY
       },
-      Valor_da_Venda: {
-        type: Sequelize.DECIMAL(10, 2)
-      },
-      Tipo_de_Venda: {
+      foto: {
         type: Sequelize.STRING
       },
       createdAt: {

@@ -98,8 +98,6 @@ app.post("/", upload.single('arquivo'), async (req, res) => {
                     await db.Vendedor.create({
                         Vendedor: row.Vendedor,
                         CPF_Vendedor: row.CPF_Vendedor,
-                        Data_da_Venda: row.Data_da_Venda, // Certifique-se de que a propriedade correta está sendo acessada aqui
-                        Valor_de_Venda: row.Valor_de_Venda
                     });
                 }
                 if (!existingCliente) {
@@ -317,6 +315,7 @@ async function exportar() {
               res.status(500).send('Erro ao buscar dados de vendas');
             }
           });
+
           
         
           app.get('/dados_vendas_mes_user', async (req, res) => {
@@ -383,7 +382,7 @@ async function exportar() {
 
         app.get('/vendedores', async (req, res) => {
             try {
-                const [rows, fields] = await connection.query('SELECT id,Vendedor, CPF_Vendedor, Data_da_Venda, Valor_da_Venda, Tipo_de_Venda FROM vendedor');
+                const [rows, fields] = await connection.query('SELECT id,Vendedor, CPF_Vendedor, Email, Telefone, Endereco, Pais, Data_Nascimento,foto FROM vendedor');
                 const rowsWithTipoVenda = adicionarTipoVenda(rows);
                 res.json(rowsWithTipoVenda);
             } catch (error) {

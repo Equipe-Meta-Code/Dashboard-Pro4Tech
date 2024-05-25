@@ -63,7 +63,7 @@ const Clientes = () => {
    
           return {
             id: itemCliente.id,
-            cliente: itemCliente.Cliente.split(' ').slice(0, 2).join(' '),
+            cliente: itemCliente.Cliente,
             cpf: itemCliente.CNPJ_CPF_Cliente,
             segmento: itemCliente.Segmento_do_Cliente,
             // Valor_de_Venda da última compra de /geral

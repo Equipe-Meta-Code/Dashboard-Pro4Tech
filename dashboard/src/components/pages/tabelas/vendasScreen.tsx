@@ -197,7 +197,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
       }));
     };
 
-    const handleAdicionar = async (Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento ) => {
+    const handleAdicionar = async (Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento,Segmento_do_Cliente ) => {
       try {
        
         const dataVenda = moment(Data_da_Venda, 'DD/MM/YYYY');
@@ -216,7 +216,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
           ID_Produto: "ID_Produto",
           Cliente: Cliente,
           CNPJ_CPF_Cliente: CNPJ_CPF_Cliente,
-          Segmento_do_Cliente: "Segmento_do_Cliente",
+          Segmento_do_Cliente: Segmento_do_Cliente,
           Valor_de_Venda: Valor_de_Venda,
           Forma_de_Pagamento: Forma_de_Pagamento,
         };
@@ -254,7 +254,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
     //const [ID_Produto, setID_Produto] = useState('');
     const [Cliente, setCliente] = useState('');
     const [CNPJ_CPF_Cliente, setCNPJ_CPF_Cliente] = useState('');
-    //const [Segmento_do_Cliente, setSegmento_do_Cliente] = useState('');
+    const [Segmento_do_Cliente, setSegmento_do_Cliente] = useState('');
     const [Valor_de_Venda, setValor_de_Venda] = useState('');
     const [Forma_de_Pagamento, setForma_de_Pagamento] = useState('');
    /*  const [selectedVendedor, setSelectedVendedor] = useState(''); */
@@ -330,11 +330,14 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                     <div className="input-modalVendas">
                       <select value={Cliente} onChange={(event) => {
                         setCliente(event.target.value); // Define o valor do cliente
-                        setCNPJ_CPF_Cliente(event.target.selectedOptions[0].getAttribute("data-cpf")); // Define o CPF do cliente
+                        const selectedOption = event.target.selectedOptions[0];
+                        setCNPJ_CPF_Cliente(selectedOption.getAttribute("data-cpf")); // Define o CPF do cliente
+                        setSegmento_do_Cliente(selectedOption.getAttribute("data-segmento")); // Define o segmento do cliente
                       }}>
+                        
                         <option value="">Selecione um cliente</option>
                         {chartClientes.map((cliente) => (
-                          <option key={cliente.value} value={cliente.value} data-cpf={cliente.cpf}>{cliente.label} - {cliente.cpf}</option>
+                          <option key={cliente.value} value={cliente.value} data-cpf={cliente.cpf} data-segmento={cliente.segmento}>{cliente.label} - {cliente.cpf}</option>
                         ))}
                       </select>
                     </div>
@@ -381,7 +384,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                   </div>
 
                   <div className="submit-container-modalVendas">
-                    <div className="submit-modalVendas" onClick={() => handleAdicionar(Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento)}>Adicionar</div>
+                    <div className="submit-modalVendas" onClick={() => handleAdicionar(Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento, Segmento_do_Cliente)}>Adicionar</div>
                   </div>
 
               </div>

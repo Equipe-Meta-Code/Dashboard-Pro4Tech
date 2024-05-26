@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
+import numeral from 'numeral';
 import Button from "@mui/material/Button";
 import { FaRegEdit, FaSearch } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
@@ -344,8 +345,12 @@ const Clientes = () => {
       field: "valor",
       headerName: "Valor",
       headerClassName: "super-app-theme--header",
-      width: 80,
+      width: 110,
       editable: false,
+      valueFormatter: (value: number) => {
+        const formattedValue = numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ',');
+        return `R$ ${formattedValue}`;
+      },
     },
     {
       field: "tipoVenda",

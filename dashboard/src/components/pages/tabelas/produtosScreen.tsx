@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import { FaRegEdit, FaSearch } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
 import { MdDeleteOutline, MdAdd, MdOutlineCleaningServices } from "react-icons/md";
+import numeral from 'numeral';
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -74,7 +75,7 @@ const Produtos = () => {
       const updatedData = updatedRows.map((row) => ({
         id: row.id,
         Produto: row.produto,
-        Valor_de_venda: row.valor,
+        Valor_de_Venda: row.valor,
       }));
       // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
       console.log("Updated Data OBJ: ");
@@ -341,6 +342,10 @@ const Produtos = () => {
       headerAlign: "left",
       editable: true,
       valueGetter: (value) => `R$${value}`,
+      valueFormatter: (value: number) => {
+        const formattedValue = numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ',');
+        return `R$ ${formattedValue}`;
+      },
     },
     {
       field: "actions",

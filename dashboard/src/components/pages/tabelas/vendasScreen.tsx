@@ -64,6 +64,8 @@ const Vendas = () => {
         cliente: item.Cliente.split(' ').slice(0, 2).join(' '),
         cpfCliente: item.CNPJ_CPF_Cliente,
         segmento: item.Segmento_do_Cliente,
+        produto: item.Produto,
+        idProduto: item.ID_Produto,
         data: item.Data_da_Venda,
         valor: item.Valor_de_Venda,
         pagamento: item.Forma_de_Pagamento
@@ -123,7 +125,7 @@ const fetchProdutos = async () => {
     const processedProdutos = produtos.map(item => ({
       value: item.Produto,
       valor: item.Valor_de_Venda,
-      ID_Produto: item.id,
+      idProduto: item.id,
       label: `${item.Produto}`,
     }));
 
@@ -147,6 +149,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
       // Busca o cliente correspondente pelo CPF
       const cliente = clientes.find(c => c.CNPJ_CPF_Cliente === row.cpfCliente);
       const segmentoDoCliente = cliente ? cliente.Segmento_do_Cliente : 'Não encontrado';
+      
 
       // Cria o objeto rowData com os dados necessários
       return {
@@ -157,7 +160,9 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
         CNPJ_CPF_Cliente: row.cpfCliente,
         Valor_de_Venda: row.valor,
         Forma_de_Pagamento: row.pagamento,
-        Segmento_do_Cliente: segmentoDoCliente
+        Segmento_do_Cliente: segmentoDoCliente,
+        Produto: row.produto,
+        ID_Produto: row.idProduto,//Colocar no app.js o Produto,ID_Produto
       };
     });
 
@@ -197,7 +202,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
       }));
     };
 
-    const handleAdicionar = async (Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento,Segmento_do_Cliente ) => {
+    const handleAdicionar = async (Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento,Segmento_do_Cliente,ID_Produto ) => {
       try {
        
         const dataVenda = moment(Data_da_Venda, 'DD/MM/YYYY');
@@ -213,7 +218,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
           Vendedor: Vendedor,
           CPF_Vendedor: CPF_Vendedor,
           Produto: Produto,
-          ID_Produto: "ID_Produto",
+          ID_Produto: ID_Produto,
           Cliente: Cliente,
           CNPJ_CPF_Cliente: CNPJ_CPF_Cliente,
           Segmento_do_Cliente: Segmento_do_Cliente,
@@ -251,7 +256,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
     const [Vendedor, setVendedor] = useState('');
     const [CPF_Vendedor, setCPF_Vendedor] = useState('');
     const [Produto, setProduto] = useState('');
-    //const [ID_Produto, setID_Produto] = useState('');
+    const [ID_Produto, setID_Produto] = useState('');
     const [Cliente, setCliente] = useState('');
     const [CNPJ_CPF_Cliente, setCNPJ_CPF_Cliente] = useState('');
     const [Segmento_do_Cliente, setSegmento_do_Cliente] = useState('');
@@ -345,12 +350,14 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                     <div className="input-modalVendas">
                       <select value={Produto} onChange={(event) => {
                         setProduto(event.target.value); 
-                        setValor_de_Venda(event.target.selectedOptions[0].getAttribute("data-valor")); 
-                      }}>
+                        const selectedOption = event.target.selectedOptions[0];
+                        setValor_de_Venda(selectedOption.getAttribute("data-valor")); 
+                        setID_Produto(selectedOption.getAttribute("data-idProduto"));
+                     }}>
                         <option value="">Selecione um produto</option>
                         {chartProdutos.map((produto) => (
-                          <option key={produto.value} value={produto.value} data-valor={produto.valor}>{produto.label} - {produto.valor}</option>
-                        ))}
+                          <option key={produto.value} value={produto.value} data-valor={produto.valor} data-idProduto={produto.idProduto}>{produto.label} - {produto.valor}</option>
+                        ))}f
                       </select>
                     </div>
 
@@ -384,7 +391,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                   </div>
 
                   <div className="submit-container-modalVendas">
-                    <div className="submit-modalVendas" onClick={() => handleAdicionar(Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento, Segmento_do_Cliente)}>Adicionar</div>
+                    <div className="submit-modalVendas" onClick={() => handleAdicionar(Data_da_Venda, Vendedor, CPF_Vendedor, Produto, Cliente, CNPJ_CPF_Cliente, Valor_de_Venda, Forma_de_Pagamento, Segmento_do_Cliente,ID_Produto)}>Adicionar</div>
                   </div>
 
               </div>
@@ -522,10 +529,10 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
   //atualizar quando a linha nova for salva
   const processRowUpdate = async (newRow: GridRowModel) => {
 
-    const { id, vendedor, cpf,cliente, cpfCliente, valor, pagamento, data } = newRow;
+    const { id, vendedor, cpf,cliente, cpfCliente, valor, pagamento, data, produto, idProduto } = newRow;
     const updatedRow = { ...newRow, isNew: false };
     // Chama a função para salvar as mudanças no banco de dados, passando o CPF selecionado
-    await saveChangesToDatabase([{ id, vendedor, cpf, cliente, cpfCliente, valor, pagamento, data }]);
+    await saveChangesToDatabase([{ id, vendedor, cpf, cliente, cpfCliente, valor, pagamento, data, produto, idProduto }]);
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
@@ -594,12 +601,6 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
           );
         } else {
           return <div>{params.value} - {params.row.cpf}</div>;
-        /*return (
-            <div>
-              {params.value} - {params.row.cpfCliente}
-            </div>
-          );
-        */
         }
       },
     },  
@@ -655,12 +656,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
           );
         } else {
           return <div>{params.value} - {params.row.cpfCliente}</div>;
-        /*return (
-            <div>
-              {params.value} - {params.row.cpfCliente}
-            </div>
-          );
-        */
+
         }
       },
     },
@@ -677,6 +673,65 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
       headerName: "Segmento do Cliente",
       headerClassName: "super-app-theme--header",
       width: 170,
+      editable: false,
+      
+    }, 
+    {
+      field: "produto",
+      headerName: "Produto",
+      headerClassName: "super-app-theme--header",
+      width: 300,
+      renderCell: (params) => {
+        const isInEditMode = rowModesModel[params.row.id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return (
+            <select
+              className="editar-venda"
+              style={{
+                width: "100%",
+                height: "100%",
+                //padding: "8px",
+                borderRadius: "5px",
+                backgroundColor: "var(--chart-secondary-color)",
+                color: "var(--side-text-color3)",
+                fontSize: "15px"
+              }}
+              value={params.value}
+              onChange={(e) => {
+                const newValue = e.target.value;             
+                const id = params.row.id;
+                
+                const selectedOption = e.target.selectedOptions[0];
+                const valorProduto = selectedOption.getAttribute("data-valor"); 
+                const idProduto =  selectedOption.getAttribute("data-idProduto");
+                
+                const updatedRows = rows.map((row) => {
+                  if (row.id === id) {
+                    return { ...row, produto: newValue, idProduto: idProduto, valor: valorProduto };
+                  }
+                  return row;
+                });
+                setRows(updatedRows);
+              }}
+            >
+              {chartProdutos.map((option) => (
+                <option key={option.id} value={option.value} data-idProduto={option.idProduto} data-valor={option.valor}>
+                  {option.label} - {option.valor}
+                </option>
+              ))}
+            </select>
+          );
+        } else {
+          return <div>{params.value} - {params.row.idProduto}</div>;
+        }
+      },
+    },
+    {
+      field: "idProduto",
+      headerName: "ID_Produto",
+      headerClassName: "super-app-theme--header",
+      width: 100,
       editable: false,
       
     }, 
@@ -699,7 +754,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
       width: 130,
       align: "left",
       headerAlign: "left",
-      editable: true,
+      editable: false,
       valueFormatter: (value: number) => {
         const formattedValue = numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ',');
         return `R$ ${formattedValue}`;

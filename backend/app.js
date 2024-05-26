@@ -208,7 +208,8 @@ async function exportar() {
               // Aqui você executa a lógica para atualizar os dados no banco de dados
               // Por exemplo, você pode iterar sobre os dados atualizados e executar uma query SQL de UPDATE para cada registro
               for (const data of updatedData) {
-                await connection.query('UPDATE informacoes SET Vendedor = ?, CPF_Vendedor = ?, Cliente = ?, CNPJ_CPF_Cliente = ?, Segmento_do_Cliente = ?, Valor_de_Venda = ?, Forma_de_Pagamento = ? WHERE id = ?', [data.Vendedor, data.CPF_Vendedor, data.Cliente, data.CNPJ_CPF_Cliente, data.Segmento_do_Cliente, data.Valor_de_Venda, data.Forma_de_Pagamento, data.id]);
+                await connection.query('UPDATE informacoes SET Vendedor = ?, CPF_Vendedor = ?, Cliente = ?, CNPJ_CPF_Cliente = ?, Segmento_do_Cliente = ?, Valor_de_Venda = ?, Forma_de_Pagamento = ?, Produto = ?, ID_Produto = ? WHERE id = ?',
+                 [data.Vendedor, data.CPF_Vendedor, data.Cliente, data.CNPJ_CPF_Cliente, data.Segmento_do_Cliente, data.Valor_de_Venda, data.Forma_de_Pagamento,data.Produto,data.ID_Produto, data.id]);
               }
           
               // Se os dados foram atualizados com sucesso, você pode enviar uma resposta de sucesso
@@ -541,8 +542,25 @@ async function exportar() {
               newData.createdAt = now;
               newData.updatedAt = now;
           
-              // Insere os dados na tabela vendedor
+              // Insere os dados na tabela cliente
               await connection.query('INSERT INTO cliente SET ?', newData);
+          
+              res.status(200).send('Dados atualizados com sucesso');
+            } catch (error) {
+              console.error('Erro ao atualizar os dados:', error);
+              res.status(500).send('Erro ao atualizar os dados');
+            }
+          });
+
+          app.post('/produto_adicionar', async (req, res) => {
+            const newData = req.body; 
+            try {
+              const now = moment().format('YYYY-MM-DD HH:mm:ss'); 
+
+              newData.createdAt = now;
+              newData.updatedAt = now;
+
+              await connection.query('INSERT INTO produtos SET ?', newData);
           
               res.status(200).send('Dados atualizados com sucesso');
             } catch (error) {
@@ -632,7 +650,7 @@ async function exportar() {
             try {
 
               for (const data of updatedData) {
-                await connection.query('UPDATE informacoes SET Produto = ?, Valor_de_Venda = ? WHERE id = ?', [data.Produto, data.Valor_de_Venda, data.id]);
+                await connection.query('UPDATE informacoes SET Produto = ?, Valor_de_Venda = ? WHERE ID_Produto = ?', [data.Produto, data.Valor_de_Venda, data.id]);
                 await connection.query('UPDATE produtos SET Produto = ?, Valor_de_Venda = ? WHERE id = ?', [data.Produto, data.Valor_de_Venda, data.id]);
             }
               res.status(200).send('Dados atualizados com sucesso');

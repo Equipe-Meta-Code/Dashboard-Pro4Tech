@@ -628,6 +628,20 @@ async function exportar() {
             }
         });
 
+        app.delete('/produtos/:id', async (req, res) => {
+          const produtosId = req.params.id;
+          try {
+            // Aqui você executa a query SQL para deletar o produtos do banco de dados
+            await connection.query('DELETE FROM produtos WHERE id = ?', [produtosId]);
+            
+            // Se o produtos foi deletado com sucesso, você pode enviar uma resposta de sucesso
+            res.status(200).send('produtos deletado com sucesso');
+          } catch (error) {
+            console.error('Erro ao deletar produtos:', error);
+            res.status(500).send('Erro ao deletar produtos');
+          }
+        });
+
         app.put('/vendas_update_produto', async (req, res) => {
             const updatedData = req.body; // Os dados atualizados são enviados no corpo da requisição
           

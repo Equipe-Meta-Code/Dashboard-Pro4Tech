@@ -274,8 +274,8 @@ const Produtos = () => {
   const handleDeleteClick = (id: GridRowId) => async () => {
     try {
       // Faz uma requisição DELETE para o backend para deletar o produto com o ID especificado
-      await axios.delete(`http://localhost:8080/produto/${id}`);
-
+      await axios.delete(`http://localhost:8080/produtos/${id}`);
+      console.log("ID",id)
       // Atualiza o estado das linhas, removendo a linha deletada
       setRows(rows.filter((row) => row.id !== id));
       window.location.reload();
@@ -341,7 +341,6 @@ const Produtos = () => {
       align: "left",
       headerAlign: "left",
       editable: true,
-      valueGetter: (value) => `R$${value}`,
       valueFormatter: (value: number) => {
         const formattedValue = numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ',');
         return `R$ ${formattedValue}`;

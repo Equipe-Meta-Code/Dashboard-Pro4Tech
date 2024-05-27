@@ -71,7 +71,7 @@ const Perfil = () => {
   const [data_Nascimento, setData_Nascimento] = useState('');
   const [foto, setFoto] = useState('');
 
-  const handleAdicionar = async (Vendedor, CPF_Vendedor,Email,Telefone, Endereco, Pais) => {
+  const handleEditar = async (Vendedor, CPF_Vendedor,Email,Telefone, Endereco, Pais) => {
     try {
       await fetchData()
       console.log("handleAdicionar", CPF_Vendedor)
@@ -203,7 +203,7 @@ const Perfil = () => {
                     
                   </div>
                   <div className="submit-container-modalVendas">
-                    <div className="submit-modalVendas" onClick={() =>   handleAdicionar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais)}>Editar</div>
+                    <div className="submit-modalVendas" onClick={() =>   handleEditar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais)}>Editar</div>
                   </div>
 
               </div>

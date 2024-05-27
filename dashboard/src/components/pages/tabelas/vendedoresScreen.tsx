@@ -11,6 +11,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { RxCheck, RxCross2 } from "react-icons/rx";
 import { MdDeleteOutline, MdAdd} from "react-icons/md";
 import perfilsemfoto from "../../perfil/perfilsemfoto.jpg";
+import api from "../../../services/api";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -227,10 +228,10 @@ const Vendedores = () => {
   };
 
   //alterar para modo edição da linha quando o botão for clicado
-  const handleEditClick = (id: GridRowId) => () => {
+/*   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
-
+ */
   //alterar para modo visualização da linha quando o botão de salvar for clicado
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
@@ -241,6 +242,14 @@ const Vendedores = () => {
     try {
       // Faz uma requisição DELETE para o backend para deletar o vendedor com o ID especificado
       await axios.delete(`http://localhost:8080/vendedores/${id}`);
+
+      /* const response = await api.post("/users", {
+        id
+      }); */
+
+      /* const response = await axios.post('http://localhost:3333/users/delete', { id }, {
+         
+        }); */
 
       // Atualiza o estado das linhas, removendo a linha deletada
       setRows(rows.filter((row) => row.id !== id));
@@ -391,12 +400,12 @@ const Vendedores = () => {
 
         //botões de editar e deletar
         return [
-          <GridActionsCellItem
+        /*   <GridActionsCellItem
             icon={<FaRegEdit size={22} className="edit-button" />}
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
-          />,
+          />, */
           <GridActionsCellItem
             icon={<MdDeleteOutline size={25} className="edit-button" />}
             label="Delete"

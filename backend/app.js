@@ -459,7 +459,9 @@ async function exportar() {
             // Atualização no banco de dados
             await connection.query('UPDATE vendedor SET Vendedor = ?, Email = ?, Telefone = ?, Endereco = ?, Pais = ? WHERE CPF_Vendedor = ?', 
             [updatedData.Vendedor,updatedData.Email, updatedData.Telefone,updatedData.Endereco,updatedData.Pais, updatedData.CPF_Vendedor]);
-        
+            
+            await connection.query('UPDATE informacoes SET Vendedor = ? WHERE CPF_Vendedor = ?', [updatedData.Vendedor, updatedData.CPF_Vendedor]);
+
             // Se os dados foram atualizados com sucesso, você pode enviar uma resposta de sucesso
             res.status(200).send('Dados atualizados com sucesso');
           } catch (error) {

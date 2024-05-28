@@ -26,29 +26,30 @@ import {
   GridSlots,
 } from "@mui/x-data-grid";
 import axios from "axios";
-
+ 
 const Comissao = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
-  const [cardData, setCardData] = useState({ venda1: 10, venda2: 15, venda3: 20, venda4: 25 });
+  const [cardData, setCardData] = useState({ venda1: 10.0, venda2: 15.0, venda3: 20.0, venda4: 25.0 });
 
+ 
   useEffect(() => {
     fetchData();
   }, []);
-  
+ 
   useEffect(() => {
     setInitialRows(chartData);
   }, [chartData]);
-  
+ 
   useEffect(() => {
     setRows(chartData);
   }, [chartData]);
-
+ 
   const fetchData = async () => {
     try {
       const response = await axios.get('http://localhost:8080/geral');
       const data = response.data;
-
+ 
       // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
       const processedData = data.map(item => ({
         id: item.id,
@@ -67,9 +68,9 @@ const Comissao = () => {
     }
   };
   const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
-    
+   
   }
-
+ 
   const updatePercentages = (key, value) => {
     let tipoVenda;
     switch (key) {
@@ -88,15 +89,15 @@ const Comissao = () => {
       default:
         return;
     }
-  
-    setRows(prevRows => 
-      prevRows.map(row => 
+ 
+    setRows(prevRows =>
+      prevRows.map(row =>
         row.tipoVenda === tipoVenda ? { ...row, porcentagem: value } : row
       )
     );
   };
-  
-
+ 
+ 
   //adicionar na tabela
   interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -104,10 +105,10 @@ const Comissao = () => {
       newModel: (oldModel: GridRowModesModel) => GridRowModesModel
     ) => void;
   }
-
+ 
   function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel } = props;
-
+ 
     const handleClick = () => {
       //quando o botão é acionado
       const id = "id";
@@ -120,7 +121,7 @@ const Comissao = () => {
         [id]: { mode: GridRowModes.Edit, fieldToFocus: "vendedores" },
       }));
     };
-
+ 
     //botão de adicionar vendedor
     return (
       <GridToolbarContainer>
@@ -133,12 +134,12 @@ const Comissao = () => {
       </GridToolbarContainer>
     );
   }
-
+ 
   const [rows, setRows] = React.useState(chartData);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );
-
+ 
   //função que interrompe a edição da linha quando o foco sai dela
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
@@ -148,36 +149,36 @@ const Comissao = () => {
       event.defaultMuiPrevented = true;
     }
   };
-
+ 
   //alterar para modo edição da linha quando o botão for clicado
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
-
+ 
   //alterar para modo visualização da linha quando o botão de salvar for clicado
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
-
+ 
   //remover linha quando o botão deletar for clicado
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row) => row.id !== id));
   };
-
+ 
   //ignorar modificações feitas na linha e voltar para modo visualização quando botão cancelar for clicado
   const handleCancelClick = (id: GridRowId) => () => {
     setRowModesModel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
-
+ 
     //remover linha se ela for nova e o botão cancelar edição for clicado
     const editedRow = rows.find((row) => row.id === id);
     if (editedRow!.isNew) {
       setRows(rows.filter((row) => row.id !== id));
     }
   };
-
+ 
   //atualizar quando a linha nova for salva
   const processRowUpdate = async (newRow: GridRowModel) => {
     const { vendedor, cpf, produto,id_produto, valor_da_venda, tipoVenda, porcentagem} = newRow;
@@ -186,18 +187,24 @@ const Comissao = () => {
     return updatedRow;
     await saveChangesToDatabase([{vendedor, cpf, produto,id_produto, valor_da_venda, tipoVenda, porcentagem }]);
   };
-
+ 
   //manipulador de eventos chamado quando o modo da linha muda
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
 
-  const handleCardChange = (key: string, value: number) => {
-    setCardData(prev => ({ ...prev, [key]: value }));
-    updatePercentages(key, value);
-  };
-  
+  const handleCardChange = (key: string, value: string) => {
+  // Converta o valor de string para número float
+  const parsedValue = parseFloat(value);
+  if (!isNaN(parsedValue)) {
+    // Se o valor for válido, atualize o estado
+    setCardData(prev => ({ ...prev, [key]: parsedValue }));
+    updatePercentages(key, parsedValue);
+  }
+};
 
+ 
+ 
   const columns: GridColDef[] = [
     {
       field: "vendedor",
@@ -273,7 +280,7 @@ const Comissao = () => {
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
+ 
         //modo edição
         if (isInEditMode) {
           return [
@@ -289,7 +296,7 @@ const Comissao = () => {
             />,
           ];
         }
-
+ 
         //botões de editar e deletar
         return [
           <GridActionsCellItem
@@ -307,7 +314,7 @@ const Comissao = () => {
       },
     },
   ];
-
+ 
   return (
     <Box className="sx-box">
       <h2 className="area-top-title">Comissões</h2>
@@ -344,21 +351,23 @@ const Comissao = () => {
             { key: "venda4", label: "Produto Antigo e Cliente Novo" },
           ].map((item, index) => (
             <Grid item xs={12} sm={6} key={index}>
-              <Card sx={{ minWidth: 275 }}>
+              <Card sx={{ minWidth: 275, backgroundColor: 'var(--chart-secondary-color)' }} className="cardComissao">
                 <CardContent>
-                  <Typography variant="h5" component="div">
+                <Typography variant="h5" component="div" style={{ color: 'var(--light-color)' }}>
                     {item.label}
                   </Typography>
                   <TextField
                     variant="outlined"
                     label="Porcentagem"
                     value={cardData[item.key]}
-                    onChange={(e) => handleCardChange(item.key, Number(e.target.value))}
+                    onChange={(e) => handleCardChange(item.key, e.target.value)}
                     InputProps={{
                       endAdornment: <Typography>%</Typography>
                     }}
                     sx={{ marginTop: 2 }}
-                  />
+                    type="number" // Defina o tipo de entrada como "number"
+                    inputProps={{ step: "0.1" }} // Defina o passo para permitir números decimais
+                    />
                 </CardContent>
               </Card>
             </Grid>
@@ -368,5 +377,5 @@ const Comissao = () => {
     </Box>
   );
 };
-
+ 
 export default Comissao;

@@ -268,6 +268,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
    const [data, setData] = useState("");
    const [selectedOption, setSelectedOption] = useState('');
    const [selectedOptionModal, setSelectedOptionModal] = useState(''); 
+   const [mask, setMask] = useState('');
 
    const applyFilter = () => {
 
@@ -277,11 +278,27 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
       );
       setRows(filteredRows);
     }
+
     if(selectedOption === 'cliente'){
-      const filteredRows = chartData.filter(row =>
-        row.cliente.toLowerCase().startsWith(filter.toLowerCase())
-      );
-      setRows(filteredRows);
+      const inputValue = filter;
+      console.log(filter)
+      const numericValue = inputValue.replace(/\D/g, ''); // Remove caracteres não numéricos
+      const hasReachedCNPJLength = numericValue.length === 14;
+
+      if (hasReachedCNPJLength) {
+        // Se o usuário digitou 11 dígitos, aplica a máscara de CPF
+        const filteredRows = chartData.filter((row) =>
+          row.cpfCliente.startsWith(filter)
+        );
+        setRows(filteredRows);
+      } else {
+        // Se ainda não digitou 11 dígitos, não aplica a máscara
+        const filteredRows = chartData.filter((row) =>
+          row.cliente.toLowerCase().startsWith(filter.toLowerCase())
+        );
+        
+        setRows(filteredRows);
+      }
     }
     if (selectedOption === 'data') {
       const filteredRows = chartData.filter(row => {
@@ -445,11 +462,27 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
             <div className="inputs-filtros" >
               <div className="input-filtro">
                 <img src={user_icon} alt="" />
-                <input
+                <InputMask
+                  mask={mask}
                   type="text"
-                  placeholder="Buscar por nome do Cliente"
+                  placeholder="Busque por nome ou cnpj do Cliente"
                   value={filter}
-                  onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+                  onChange={event => {
+                    const inputValue = event.target.value;
+                    const firstChar = inputValue.charAt(0);
+                    const isNumeric = !isNaN(firstChar); // Verifica se o primeiro caractere é um número
+                    const numericValue = inputValue.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+                    if (isNumeric) {
+                      // Se o primeiro caractere for um número e o usuário digitou 11 dígitos, aplica a máscara de CPF
+                      setMask('99.999.999/9999-99');
+                    } else if(!isNumeric) {
+                      // Se não for um número ou não digitou 11 dígitos, não aplica a máscara
+                      setMask('');
+                    }
+                    
+                    setFilter(inputValue); // Atualiza o filtro conforme o usuário digita
+                  }}
                 />
               </div>
 

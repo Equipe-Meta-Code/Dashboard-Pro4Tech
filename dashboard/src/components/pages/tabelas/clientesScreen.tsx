@@ -169,17 +169,35 @@ const Clientes = () => {
     const [Cliente, setVendedor] = useState('');
     const [CNPJ_CPF_Cliente, setCPF_Vendedor] = useState('');
     const [Segmento_do_Cliente, setSegmento_do_Cliente] = useState('');
+    const [mask, setMask] = useState('');
 
-    const handleFiltrar = async (Filtro) => {}
+
     const applyFilter = () => {
-      const filteredRows = chartData.filter(row =>
-        row.cliente.toLowerCase().startsWith(filter.toLowerCase())
-      );
-      setRows(filteredRows);
+      const inputValue = filter;
+      console.log(filter)
+      const numericValue = inputValue.replace(/\D/g, ''); // Remove caracteres não numéricos
+      const hasReachedCNPJLength = numericValue.length === 14;
+
+      if (hasReachedCNPJLength) {
+        // Se o usuário digitou 11 dígitos, aplica a máscara de CPF
+        const filteredRows = chartData.filter((row) =>
+          row.cpf.startsWith(filter)
+        );
+        setRows(filteredRows);
+      } else {
+        // Se ainda não digitou 11 dígitos, não aplica a máscara
+        const filteredRows = chartData.filter((row) =>
+          row.cliente.toLowerCase().startsWith(filter.toLowerCase())
+        );
+        
+        setRows(filteredRows);
+      }
     };
 
     const limparFiltro = async () => {
       setRows(chartData)
+      setFilter('')
+      setMask('')
      }
 
 
@@ -200,11 +218,28 @@ const Clientes = () => {
           <div className="inputs-modal" style={{ display: 'flex', flexDirection: 'row', alignItems: 'start', justifyContent: 'flex-start'}}>
             <div className="input-filtro">
               <img src={user_icon} alt="" />
-              <input
+              <InputMask
+                mask={mask}
                 type="text"
-                placeholder="Nome do Cliente"
+                placeholder="Busque por nome ou cnpj do Cliente"
                 value={filter}
-                onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+                onChange={event => {
+                  const inputValue = event.target.value;
+                  const firstChar = inputValue.charAt(0);
+                  const isNumeric = !isNaN(firstChar); // Verifica se o primeiro caractere é um número
+                  const numericValue = inputValue.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+                  if (isNumeric) {
+                    // Se o primeiro caractere for um número e o usuário digitou 11 dígitos, aplica a máscara de CPF
+                    setMask('99.999.999/9999-99');
+                    console.log('É um número e tem 11 dígitos');
+                  } else if(!isNumeric) {
+                    // Se não for um número ou não digitou 11 dígitos, não aplica a máscara
+                    setMask('');
+                  }
+                  
+                  setFilter(inputValue); // Atualiza o filtro conforme o usuário digita
+                }}
               />
             </div>
             <button onClick={applyFilter}><IoSearchSharp size={22} className="filtro-button"/></button>

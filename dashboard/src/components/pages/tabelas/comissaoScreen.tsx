@@ -123,7 +123,7 @@ const Comissao = () => {
     };
  
     //botão de adicionar vendedor
-    return (
+   /*  return (
       <GridToolbarContainer>
         <Button className="add-vendedor"
           startIcon={<MdAdd size={20} className="edit-button"/>}
@@ -132,7 +132,7 @@ const Comissao = () => {
           Adicionar
         </Button>
       </GridToolbarContainer>
-    );
+    ); */
   }
  
   const [rows, setRows] = React.useState(chartData);
@@ -271,48 +271,7 @@ const Comissao = () => {
         editable: true,
         valueGetter: (value) => `%${value}`
       },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "",
-      headerClassName: "super-app-theme--header",
-      width: 100,
-      cellClassName: "actions",
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
- 
-        //modo edição
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<RxCheck size={32} className="edit-button" />}
-              label="Save"
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<RxCross2 size={27} className="edit-button" />}
-              label="Cancel"
-              onClick={handleCancelClick(id)}
-            />,
-          ];
-        }
- 
-        //botões de editar e deletar
-        return [
-          <GridActionsCellItem
-            icon={<FaRegEdit size={22} className="edit-button" />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-          />,
-          <GridActionsCellItem
-            icon={<MdDeleteOutline size={25} className="edit-button" />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-          />,
-        ];
-      },
-    },
+    
   ];
  
   return (

@@ -8,6 +8,8 @@ import Button from "@mui/material/Button";
 import { FaRegEdit, FaSearch } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
 import { MdDeleteOutline, MdAdd, MdOutlineCleaningServices } from "react-icons/md";
+import { TfiEraser } from "react-icons/tfi";
+import { IoSearchSharp } from "react-icons/io5";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -205,8 +207,8 @@ const Clientes = () => {
                 onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
               />
             </div>
-            <button onClick={applyFilter}><FaSearch size={22} className="filtro-button"/></button>
-            <button onClick={limparFiltro}><MdOutlineCleaningServices size={22} className="filtro-button" /></button>
+            <button onClick={applyFilter}><IoSearchSharp size={22} className="filtro-button"/></button>
+            <button onClick={limparFiltro}><TfiEraser size={22} className="filtro-button" /></button>
           </div>
 
           <Button className="text-button"

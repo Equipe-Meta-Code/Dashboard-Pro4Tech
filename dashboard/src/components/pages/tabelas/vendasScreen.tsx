@@ -244,7 +244,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
         setOpenModal(false);
         await axios.post('http://localhost:8080/vendas_adicionar', newData);
         
-        //window.location.reload();
+        window.location.reload();
       } catch (error) {
         console.error("Erro ao adicionar vendedor:", error);
       }
@@ -545,15 +545,15 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
 
   const columns: GridColDef<(typeof rows)[number]>[] = [
     { field: "id",
-      headerName: "ID_Venda",
+      headerName: "ID",
       headerClassName: "super-app-theme--header",
-      width: 100,
+      width: 20,
     },
     {
       field: "venda",
       headerName: "Venda",
       headerClassName: "super-app-theme--header",
-      width: 240,
+      width: 220,
       editable: true,
     },
     {
@@ -739,7 +739,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
       field: "data",
       headerName: "Data",
       headerClassName: "super-app-theme--header",
-      width: 115,
+      width: 95,
       align: "left",
       headerAlign: "left",
       type: "date",
@@ -808,7 +808,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
     },
   ];
   // Filtrar as colunas para remover as colunas de cpf
-const filteredColumns = columns.filter((col) => col.field !== "cpf" && col.field !== "cpfCliente" && col.field !== "segmento");
+const filteredColumns = columns.filter((col) => col.field !== "cpf" && col.field !== "cpfCliente" && col.field !== "segmento" && col.field !== "idProduto");
 
   return (
     //tabela
@@ -842,7 +842,7 @@ const filteredColumns = columns.filter((col) => col.field !== "cpf" && col.field
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 20,
+              pageSize: 12,
             },
           },
         }}

@@ -192,7 +192,13 @@ const Perfil = () => {
                       <input type="text" placeholder="E-mail" value={Email}onChange={event => setEmail(event.target.value)}/>
                     </div>
                     <div className="input-modalVendas">
-                      <input type="text" placeholder="Telefone" value={Telefone}onChange={event => setTelefone(event.target.value)}/>
+                      <InputMask
+                        mask="(99) 99999-9999"
+                        value={Telefone}
+                        onChange={event => setTelefone(event.target.value)}
+                      >
+                        {() => <input type="text" placeholder="Telefone" />}
+                      </InputMask>
                     </div>
                     <div className="input-modalVendas">
                       <input type="text" placeholder="Endereço" value={Endereco}onChange={event => setEndereco(event.target.value)}/>

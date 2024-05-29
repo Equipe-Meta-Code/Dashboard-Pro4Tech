@@ -29,10 +29,15 @@ import axios from "axios";
 import ModalVendas from "../modal/modalVendas";
 import calendario from '../../../assets/icons/calendario.svg';
 import DatePicker from "react-datepicker";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import pt from "date-fns/locale/pt";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
 import numeral from 'numeral';
 import user_icon from '../../../assets/person.png'
+
+registerLocale("pt", pt);
+setDefaultLocale("pt");
 
 const Vendas = () => {
 
@@ -536,6 +541,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                   endDate={endDate}
                   placeholderText="Data de início"
                   dateFormat="dd/MM/yyyy"
+                  locale="pt"
                 />
               </div>
               <div className="input-filtro-data">
@@ -549,6 +555,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                   placeholderText="Data final"
                   dateFormat="dd/MM/yyyy"
                   minDate={startDate}
+                  locale="pt"
                 />
               </div>
 
@@ -595,6 +602,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                   endDate={endDate}
                   placeholderText="Data de início"
                   dateFormat="dd/MM/yyyy"
+                  locale="pt"
                 />
               </div>
               <div className="input-filtro-data">
@@ -608,6 +616,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                   placeholderText="Data final"
                   dateFormat="dd/MM/yyyy"
                   minDate={startDate}
+                  locale="pt"
                 />
               </div>
 

@@ -273,11 +273,26 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
    const applyFilter = () => {
 
     if(selectedOption === 'vendedor'){
-      const filteredRows = chartData.filter(row =>
-        row.vendedor.toLowerCase().startsWith(filter.toLowerCase())
-      );
-      setRows(filteredRows);
-    }
+      const inputValue = filter;
+      const numericValue = inputValue.replace(/\D/g, ''); // Remove caracteres não numéricos
+      const hasReachedCPFLength = numericValue.length === 11;
+
+      if (hasReachedCPFLength) {
+        // Se o usuário digitou 11 dígitos, aplica a máscara de CPF
+        const filteredRows = chartData.filter((row) =>
+          row.cpf.startsWith(filter)
+        );
+        setRows(filteredRows);
+      } else {
+        // Se ainda não digitou 11 dígitos, não aplica a máscara
+        const filteredRows = chartData.filter((row) =>
+          row.vendedor.toLowerCase().startsWith(filter.toLowerCase())
+        );
+        
+        setRows(filteredRows);
+      }
+    };
+    
 
     if(selectedOption === 'cliente'){
       const inputValue = filter;
@@ -443,11 +458,29 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
             <div className="inputs-filtros">
               <div className="input-filtro">
                   <img src={user_icon} alt="" />
-                  <input
+                  <InputMask
+                    mask={mask}
                     type="text"
-                    placeholder="Buscar por nome do Vendedor"
+                    placeholder="Busque por nome ou cpf do Vendedor"
                     value={filter}
-                    onChange={event => setFilter(event.target.value)} // Atualiza o filtro conforme o usuário digita
+                    onChange={event => {
+                      const inputValue = event.target.value;
+                      const firstChar = inputValue.charAt(0);
+                      const isNumeric = !isNaN(firstChar); // Verifica se o primeiro caractere é um número
+                      const numericValue = inputValue.replace(/\D/g, ''); // Remove caracteres não numéricos
+                      const hasReachedCPFLength = numericValue.length === 11;
+                      
+                      if (isNumeric) {
+                        // Se o primeiro caractere for um número e o usuário digitou 11 dígitos, aplica a máscara de CPF
+                        setMask('999.999.999-99');
+                        console.log('É um número e tem 11 dígitos');
+                      }else if(!isNumeric) {
+                        // Se não for um número ou não digitou 11 dígitos, não aplica a máscara
+                        setMask('');
+                      }
+                      
+                      setFilter(inputValue); // Atualiza o filtro conforme o usuário digita
+                    }}
                   />
                 </div>
 

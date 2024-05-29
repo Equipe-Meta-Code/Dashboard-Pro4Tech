@@ -28,10 +28,14 @@ import axios from "axios";
 
 import ModalVendas from "../modal/modalVendas";
 import calendario from '../../../assets/icons/calendario.svg';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
 import numeral from 'numeral';
 import user_icon from '../../../assets/person.png'
+
 const Vendas = () => {
+
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
   const [chartVendedores, setChartVendedores] = useState([]);
@@ -269,6 +273,8 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
    const [selectedOption, setSelectedOption] = useState('');
    const [selectedOptionModal, setSelectedOptionModal] = useState(''); 
    const [mask, setMask] = useState('');
+   const [startDate, setStartDate] = useState(null);
+   const [endDate, setEndDate] = useState(null);
 
    const applyFilter = () => {
 
@@ -279,15 +285,36 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
 
       if (hasReachedCPFLength) {
         // Se o usuário digitou 11 dígitos, aplica a máscara de CPF
-        const filteredRows = chartData.filter((row) =>
-          row.cpf.startsWith(filter)
-        );
+        const filteredRows = chartData.filter((row) => {
+          // Verifica se o CPF começa com o filtro
+          const cpfMatchesFilter = row.cpf.startsWith(filter);
+        
+          // Se startDate e endDate estiverem definidos, verifica se a data da venda está dentro do período selecionado
+          if (startDate && endDate) {
+            const saleDate = new Date(row.data); // Supondo que 'data' seja o nome da coluna que contém a data da venda
+            return cpfMatchesFilter && saleDate >= startDate && saleDate <= endDate;
+          }
+        
+          // Se startDate e endDate não estiverem definidos, retorna apenas se o CPF coincide com o filtro
+          return cpfMatchesFilter;
+        });
         setRows(filteredRows);
       } else {
         // Se ainda não digitou 11 dígitos, não aplica a máscara
-        const filteredRows = chartData.filter((row) =>
-          row.vendedor.toLowerCase().startsWith(filter.toLowerCase())
-        );
+        const filteredRows = chartData.filter((row) => {
+          // Verifica se o nome do vendedor começa com o filtro (insensível a maiúsculas e minúsculas)
+          const vendedorMatchesFilter = row.vendedor.toLowerCase().startsWith(filter.toLowerCase());
+        
+          // Se startDate e endDate estiverem definidos, verifica se a data da venda está dentro do período selecionado
+          if (startDate && endDate) {
+            const saleDate = new Date(row.data); // Supondo que 'data' seja o nome da coluna que contém a data da venda
+            return vendedorMatchesFilter && saleDate >= startDate && saleDate <= endDate;
+          }
+        
+          // Se startDate e endDate não estiverem definidos, retorna apenas se o nome do vendedor coincide com o filtro
+          return vendedorMatchesFilter;
+        });
+        
         
         setRows(filteredRows);
       }
@@ -301,16 +328,28 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
       const hasReachedCNPJLength = numericValue.length === 14;
 
       if (hasReachedCNPJLength) {
-        // Se o usuário digitou 11 dígitos, aplica a máscara de CPF
-        const filteredRows = chartData.filter((row) =>
-          row.cpfCliente.startsWith(filter)
-        );
+        // Se o usuário digitou 14 dígitos, aplica a máscara de CNPJ 
+        const filteredRows = chartData.filter((row) => {
+          const cpfMatchesFilter = row.cpfCliente.startsWith(filter);
+          
+          if (startDate && endDate) {
+            const saleDate = new Date(row.data); // Supondo que 'data' seja o nome da coluna que contém a data da venda
+            return cpfMatchesFilter && saleDate >= startDate && saleDate <= endDate;
+          }
+          return cpfMatchesFilter;
+        });
         setRows(filteredRows);
       } else {
         // Se ainda não digitou 11 dígitos, não aplica a máscara
-        const filteredRows = chartData.filter((row) =>
-          row.cliente.toLowerCase().startsWith(filter.toLowerCase())
-        );
+        const filteredRows = chartData.filter((row) => {
+          const clienteMatchesFilter = row.cliente.toLowerCase().startsWith(filter.toLowerCase());
+
+          if (startDate && endDate) {
+            const saleDate = new Date(row.data); // Supondo que 'data' seja o nome da coluna que contém a data da venda
+            return clienteMatchesFilter && saleDate >= startDate && saleDate <= endDate;
+          }
+          return clienteMatchesFilter;
+        });
         
         setRows(filteredRows);
       }
@@ -336,6 +375,10 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
   };
   const limparFiltro = async () => {
     setRows(chartData)
+    setFilter('')
+    setMask('')
+    setStartDate('')
+    setEndDate('')
    }
    //botão de adicionar vendas - arrumar com chat gpt ainda
    return (
@@ -454,41 +497,65 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
           </div>
           
           {selectedOption === 'vendedor' && (
-    
             <div className="inputs-filtros">
               <div className="input-filtro">
-                  <img src={user_icon} alt="" />
-                  <InputMask
-                    mask={mask}
-                    type="text"
-                    placeholder="Busque por nome ou cpf do Vendedor"
-                    value={filter}
-                    onChange={event => {
-                      const inputValue = event.target.value;
-                      const firstChar = inputValue.charAt(0);
-                      const isNumeric = !isNaN(firstChar); // Verifica se o primeiro caractere é um número
-                      const numericValue = inputValue.replace(/\D/g, ''); // Remove caracteres não numéricos
-                      const hasReachedCPFLength = numericValue.length === 11;
-                      
-                      if (isNumeric) {
-                        // Se o primeiro caractere for um número e o usuário digitou 11 dígitos, aplica a máscara de CPF
-                        setMask('999.999.999-99');
-                        console.log('É um número e tem 11 dígitos');
-                      }else if(!isNumeric) {
-                        // Se não for um número ou não digitou 11 dígitos, não aplica a máscara
-                        setMask('');
-                      }
-                      
-                      setFilter(inputValue); // Atualiza o filtro conforme o usuário digita
-                    }}
-                  />
-                </div>
+                <img src={user_icon} alt="" />
+                <InputMask
+                  mask={mask}
+                  type="text"
+                  placeholder="Busque por nome ou cpf do Vendedor"
+                  value={filter}
+                  onChange={event => {
+                    const inputValue = event.target.value;
+                    const firstChar = inputValue.charAt(0);
+                    const isNumeric = !isNaN(firstChar); // Verifica se o primeiro caractere é um número
+                    const numericValue = inputValue.replace(/\D/g, ''); // Remove caracteres não numéricos
+                    const hasReachedCPFLength = numericValue.length === 11;
+                                
+                    if (isNumeric) {
+                      // Se o primeiro caractere for um número e o usuário digitou 11 dígitos, aplica a máscara de CPF
+                      setMask('999.999.999-99');
+                      console.log('É um número e tem 11 dígitos');
+                    } else if(!isNumeric) {
+                      // Se não for um número ou não digitou 11 dígitos, não aplica a máscara
+                      setMask('');
+                    }
+                                
+                    setFilter(inputValue); // Atualiza o filtro conforme o usuário digita
+                  }}
+                />
+              </div>
 
-                <button onClick={applyFilter}>
-                  <IoSearchSharp size={26} className="filtro-button" title="Buscar"/>
-                </button>
+              <div className="input-filtro-data">
+                <img src={calendario} alt="" />
+                <DatePicker
+                  selected={startDate}
+                  onChange={date => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Data de início"
+                  dateFormat="dd/MM/yyyy"
+                />
+              </div>
+              <div className="input-filtro-data">
+                <img src={calendario} alt="" />
+                <DatePicker
+                  selected={endDate}
+                  onChange={date => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Data final"
+                  dateFormat="dd/MM/yyyy"
+                  minDate={startDate}
+                />
+              </div>
+
+              <button onClick={applyFilter}>
+                <IoSearchSharp size={26} className="filtro-button" title="Buscar"/>
+              </button>
             </div>
-        
           )}
 
           {selectedOption === 'cliente' && (
@@ -516,6 +583,31 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                     
                     setFilter(inputValue); // Atualiza o filtro conforme o usuário digita
                   }}
+                />
+              </div>
+              <div className="input-filtro-data">
+                <img src={calendario} alt="" />
+                <DatePicker
+                  selected={startDate}
+                  onChange={date => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Data de início"
+                  dateFormat="dd/MM/yyyy"
+                />
+              </div>
+              <div className="input-filtro-data">
+                <img src={calendario} alt="" />
+                <DatePicker
+                  selected={endDate}
+                  onChange={date => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Data final"
+                  dateFormat="dd/MM/yyyy"
+                  minDate={startDate}
                 />
               </div>
 

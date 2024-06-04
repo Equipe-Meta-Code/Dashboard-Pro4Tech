@@ -9,6 +9,7 @@ import AreaProgressChartPerfil from "../dashboard/areaCharts/areaProgressChartPe
 import { DateProvider } from "../../context/DateContext";
 import VendasVendedor from "./tabela/vendasVendedor";
 import AreaBarChartPerfil from "../dashboard/areaCharts/areaBarChartPerfil";
+import { AreaTop } from "../index";
 
 const Perfil = () => {
   const { id } = useParams();
@@ -154,6 +155,9 @@ const Perfil = () => {
                       </div>
                 </div>
               </div>
+            </div>
+            <div className="center">
+              <AreaTop />
             </div>
             <div className="right">
               <AreaBarChartPerfil vendedorSelecionado={id} />

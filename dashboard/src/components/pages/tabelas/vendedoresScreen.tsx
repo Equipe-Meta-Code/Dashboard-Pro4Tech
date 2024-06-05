@@ -5,11 +5,9 @@ import InputMask from "react-input-mask";
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FaRegEdit } from "react-icons/fa";
 import { TfiEraser } from "react-icons/tfi";
 import { IoSearchSharp } from "react-icons/io5";
-import { RxCheck, RxCross2 } from "react-icons/rx";
-import { MdDeleteOutline, MdAdd} from "react-icons/md";
+import { AiOutlineUserDelete } from "react-icons/ai";
 import perfilsemfoto from "../../perfil/perfilsemfoto.jpg";
 import api from "../../../services/api";
 import {
@@ -333,16 +331,15 @@ const Vendedores = () => {
       editable: false,
     },
     {
-      field: "fotoPerfil",
-      headerName: "Foto",
+      field: "foto",
+      headerName: "",
       headerClassName: "super-app-theme--header",
-      width: 70,
-      align: "center",
-      headerAlign: "center",
+      width: 60,
+      align: "right",
       renderCell: (params) => (
           <img 
               src={params.value || perfilsemfoto} 
-              style={{ width: 40, height: 40, borderRadius: '50%' }} 
+              style={{ width: 36, height: 36, borderRadius: '50%', marginTop: 7 }} 
           />
       ),
       sortable: false,
@@ -407,48 +404,6 @@ const Vendedores = () => {
       valueOptions: ["Produto Novo", "Cliente Novo", "Produto Antigo"],
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "",
-      headerClassName: "super-app-theme--header",
-      width: 100,
-      cellClassName: "actions",
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        //modo edição
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<RxCheck size={32} className="edit-button" />}
-              label="Save"
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<RxCross2 size={27} className="edit-button" />}
-              label="Cancel"
-              onClick={handleCancelClick(id)}
-            />,
-          ];
-        }
-
-        //botões de editar e deletar
-        return [
-        /*   <GridActionsCellItem
-            icon={<FaRegEdit size={22} className="edit-button" />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-          />, */
-          <GridActionsCellItem
-            icon={<MdDeleteOutline size={25} className="edit-button" />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-          />,
-        ];
-      },
-    },
-    {
       field: "view",
       headerName: "",
       headerClassName: "super-app-theme--header",
@@ -465,6 +420,25 @@ const Vendedores = () => {
             ABRIR
           </div>
         );
+      },
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "",
+      headerClassName: "super-app-theme--header",
+      width: 10,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+
+        //botões de editar e deletar
+        return [
+          <GridActionsCellItem
+            icon={<AiOutlineUserDelete size={25} className="edit-button" />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+          />,
+        ];
       },
     },
   ];

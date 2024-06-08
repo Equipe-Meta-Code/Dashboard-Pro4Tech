@@ -103,7 +103,7 @@ const Login = () => {
                             maxLength={14} // Limitar o campo para 14 caracteres (com pontos e traços)
                         />
                         <button className="eye-icon" onClick={() => setMostrarSenha(!mostrarSenha)}>
-                            {mostrarSenha ? <img src={eyeClose} alt="Mostrar senha" /> : <img src={eyeOpen} alt="Esconder senha" />}
+                            {mostrarSenha ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
                         </button>
                     </div>
                 </div>

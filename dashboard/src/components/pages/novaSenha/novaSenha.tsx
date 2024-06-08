@@ -121,21 +121,21 @@ const NovaSenha = () => {
                         <img src={password_icon} alt="" />
                         <input type={mostrarAntiga ? "text" : "password"} placeholder="Insira sua senha atual" value={senhaAntiga} onChange={handleSenhaAntigaChange} />
                         <button className="eye-icon" onClick={() => setMostrarAntiga(!mostrarAntiga)}>
-                            {mostrarAntiga ? <img src={eyeClose} alt="Mostrar senha" /> : <img src={eyeOpen} alt="Esconder senha" />}
+                            {mostrarAntiga ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
                         </button>
                     </div>
                     <div className="input">
                         <img src={password_icon} alt="" />
                         <input type={mostrarNova ? "text" : "password"} placeholder="Insira sua nova senha" value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} />
                         <button className="eye-icon" onClick={() => setMostrarNova(!mostrarNova)}>
-                            {mostrarNova ? <img src={eyeClose} alt="Mostrar senha" /> : <img src={eyeOpen} alt="Esconder senha" />}
+                            {mostrarNova ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
                         </button>
                     </div>
                     <div className="input">
                         <img src={password_icon} alt="" />
                         <input type={mostrarConfirma ? "text" : "password"} placeholder="Confirme sua nova senha" value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} />
                         <button className="eye-icon" onClick={() => setMostrarConfirma(!mostrarConfirma)}>
-                            {mostrarConfirma ? <img src={eyeClose} alt="Mostrar senha" /> : <img src={eyeOpen} alt="Esconder senha" />}
+                            {mostrarConfirma ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
                         </button>
                     </div>
                 </div>

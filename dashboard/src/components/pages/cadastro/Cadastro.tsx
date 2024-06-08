@@ -118,14 +118,14 @@ const Cadastro = () => {
             <img src={password_icon} alt="" />
             <input type={mostrarSenha ? "text" : "password"} placeholder="Senha" value={senha} onChange={(event) => setSenha(event.target.value)} onKeyPress={handleKeyPress} />
             <button className="eye-icon" onClick={() => setMostrarSenha(!mostrarSenha)}>
-              {mostrarSenha ? <img src={eyeClose} alt="Mostrar senha" /> : <img src={eyeOpen} alt="Esconder senha" />}
+              {mostrarSenha ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
             </button>
           </div>
           <div className="input">
             <img src={password_icon} alt="" />
             <input type={mostrarConfirmarSenha ? "text" : "password"} placeholder="Confirmar senha" onChange={(event) => setConfirmarSenha(event.target.value)} onKeyPress={handleKeyPress}/>
             <button className="eye-icon" onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}>
-              {mostrarConfirmarSenha ? <img src={eyeClose} alt="Mostrar senha" /> : <img src={eyeOpen} alt="Esconder senha" />}
+              {mostrarConfirmarSenha ? <img src={eyeOpen} alt="Mostrar senha" /> : <img src={eyeClose} alt="Esconder senha" />}
             </button>
           </div>
           <div className="input">

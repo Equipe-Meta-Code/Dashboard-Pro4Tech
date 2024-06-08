@@ -271,11 +271,12 @@ const Vendedores = () => {
 
   //remover linha quando o botão deletar for clicado
   const handleDeleteClick = (id: GridRowId) => async () => {
-    try {
-      // Faz uma requisição DELETE para o backend para deletar o vendedor com o ID especificado
-      await axios.delete(`http://localhost:8080/vendedores/${id}`);
-
-      /* const response = await api.post("/users", {
+    const confirm = window.confirm("Você tem certeza de que deseja excluir este vendedor?");
+    if (confirm) {
+      try {
+        // Faz uma requisição DELETE para o backend para deletar o vendedor com o ID especificado
+        await axios.delete(`http://localhost:8080/vendedores/${id}`);
+        /* const response = await api.post("/users", {
         id
       }); */
 
@@ -284,10 +285,11 @@ const Vendedores = () => {
         }); */
 
       // Atualiza o estado das linhas, removendo a linha deletada
-      setRows(rows.filter((row) => row.id !== id));
-      window.location.reload();
-    } catch (error) {
-      console.error("Erro ao deletar vendedor:", error);
+        setRows(rows.filter((row) => row.id !== id));
+        window.location.reload();
+      } catch (error) {
+        console.error("Erro ao deletar vendedor:", error);
+      }
     }
   };
 

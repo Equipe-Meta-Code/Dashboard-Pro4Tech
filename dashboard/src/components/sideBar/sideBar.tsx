@@ -190,7 +190,7 @@ const Sidebar = () => {
                     <span className="menu-link-icon">
                       <FaCircleUser size={17} />
                     </span>
-                    <span className="menu-link-text">Cadastrar</span>
+                    <span className="menu-link-text">Novo usuário</span>
                   </Link>
               </li>
             </PermissionComponent>

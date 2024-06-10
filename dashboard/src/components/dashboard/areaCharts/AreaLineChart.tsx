@@ -70,7 +70,7 @@ const AreaLineChart = () => {
           >
             <XAxis dataKey="name" />
             <YAxis domain={yDomain} tickCount={6} tickFormatter={(value) => `R$` + `${value.toLocaleString('pt-BR')}`}/>
-            <Tooltip formatter={(value, name) => ['R$ ' + numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ','), name]}/>
+            <Tooltip formatter={(value, name) => ['R$ ' + numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace(',', '.').replace('_', ','), name]}/>
             {chartData.length === 0 && (
               <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="white">Não há dados para exibir no gráfico.</text>
             )}

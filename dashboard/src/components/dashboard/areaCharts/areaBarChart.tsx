@@ -111,7 +111,7 @@ const AreaBarChart = () => {
                 {/* forma que eu achei pra arrumar, ver se consigo voltar ao jeito antigo */}
                 <YAxis domain={yDomain} tickCount={6} tickFormatter={(value) => `R$${value.toFixed().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`}/>
                 {/* Usando o formatter personalizado para incluir "R$" no tooltip */}
-                <Tooltip formatter={(value, name) => ['R$ ' + numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace('_', ','), name]}/>
+                <Tooltip formatter={(value, name) => ['R$ ' + numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace(',', '.').replace('_', ','), name]}/>
                 <Area
                   type="monotone"
                   dataKey="total_vendas"

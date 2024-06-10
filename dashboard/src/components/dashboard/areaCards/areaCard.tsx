@@ -46,7 +46,7 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
 
   // Formatando o valor monetário
   const formatCurrency = (value) => {
-    return 'R$ ' + numeral(value).format('0,0.00').replace(',', '_').replace('.', ',').replace('_', '.');
+    return 'R$ ' + numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace(',', '.').replace('_', ',');
   };
 
   // Calculando o valor restante necessário para atingir a meta

@@ -386,11 +386,7 @@ const Vendedores = () => {
       headerAlign: "left",
       editable: false,
       valueFormatter: (value: number) => {
-        const formattedValue = numeral(value)
-          .format("0,0.00")
-          .replace(".", "_")
-          .replace(",", ".")
-          .replace("_", ",");
+        const formattedValue = numeral(value).format('0,0.00').replace('.', '_').replace(',', '.').replace(',', '.').replace('_', ',')
         return `R$ ${formattedValue}`;
       },
     },

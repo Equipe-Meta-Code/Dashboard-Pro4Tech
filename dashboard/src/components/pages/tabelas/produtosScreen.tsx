@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import "./Tabelas.scss";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FaRegEdit, FaSearch } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
 import { RxCheck, RxCross2 } from "react-icons/rx";
-import { MdDeleteOutline, MdAdd, MdOutlineCleaningServices } from "react-icons/md";
+import { MdDeleteOutline, MdAdd } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
 import numeral from 'numeral';
 import {
@@ -20,9 +20,7 @@ import {
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
-  GridSlots,
 } from "@mui/x-data-grid";
-import App from "../../../App";
 import axios from "axios";
 import { TfiEraser } from "react-icons/tfi";
 import Modal from "../modal/modal";
@@ -83,26 +81,6 @@ const Produtos = () => {
       console.log(updatedData);
       await axios.put("http://localhost:8080/produtos_update", updatedData);
 
-      // Agora, para cada produto atualizado, também atualizamos as vendas associadas a ele
-      /* updatedRows.forEach(async (row) => {
-        const response = await axios.get(
-          `http://localhost:8080/vendas?ID_Produto=${row.id}`
-        );
-        const vendas = response.data;
-        // Atualize as vendas associadas a esse produto
-        const updatedVendas = vendas.map((venda) => ({
-          ...venda,
-          id: row.id,
-          Produto: row.produto, // Atualize o nome do produto, se necessário
-          Valor_de_Venda: row.valor,
-          // Atualize outras propriedades da venda, se necessário
-        }));
-        await axios.put(
-          "http://localhost:8080/vendas_update_produto",
-          updatedVendas
-        );
-      }); */
-
       console.log("Dados atualizados com sucesso!");
     } catch (error) {
       console.error("Erro ao salvar os dados:", error);
@@ -140,16 +118,21 @@ const Produtos = () => {
 
     const handleAdicionar = async (Produto, Valor_de_Venda) => {
       try {
+        // Remove qualquer caractere não numérico do valor
+        const cleanedValue = Valor_de_Venda.replace(/[^\d,]/g, '');
+        // Transforma o valor em um número
+        const valorNumerico = parseFloat(cleanedValue.replace(',', '.'));
+        // Cria um novo objeto com os dados a serem enviados
         const newData = {
           Produto: Produto,
-          Valor_de_Venda: Valor_de_Venda,
+          Valor_de_Venda: valorNumerico,
         };
-
+    
         console.log("Adicionando produto", newData);
-
+    
         // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
         await axios.post("http://localhost:8080/produto_adicionar", newData);
-
+    
         setOpenModal(false);
         console.log("Produto adicionado com sucesso!");
         window.location.reload();
@@ -158,7 +141,6 @@ const Produtos = () => {
       }
     };
 
-    const handleFiltrar = async (Filtro) => {}
     const applyFilter = () => {
       const filteredRows = chartData.filter(row =>
         row.produto.toLowerCase().startsWith(filter.toLowerCase())
@@ -167,12 +149,23 @@ const Produtos = () => {
     };
 
     const limparFiltro = async () => {
-      setRows(chartData)
-     }
+      setRows(chartData);
+    }
 
     const [openModal, setOpenModal] = useState(false);
     const [Produto, setProduto] = useState("");
     const [Valor_de_Venda, setValor_de_Venda] = useState("");
+
+    const handleValorChange = (event) => {
+      const rawValue = event.target.value;
+      const cleanedValue = rawValue.replace(/\D/g, '');
+      const numberValue = parseFloat(cleanedValue) / 100;
+      const formattedValue = numberValue.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+      setValor_de_Venda(formattedValue);
+    };
 
     //botão de adicionar
     return (
@@ -200,14 +193,14 @@ const Produtos = () => {
             <button onClick={limparFiltro}><TfiEraser size={22} className="filtro-button" /></button>
           </div>
 
-        <Button
-          className="text-button"
-          startIcon={<MdAdd size={20} className="edit-button" />}
-          onClick={() => setOpenModal(true)}
-        >
-          Adicionar
-        </Button>
-      </div>
+          <Button
+            className="text-button"
+            startIcon={<MdAdd size={20} className="edit-button" />}
+            onClick={() => setOpenModal(true)}
+          >
+            Adicionar
+          </Button>
+        </div>
         <Modal isOpen={openModal} setModalOpen={() => setOpenModal(!openModal)}>
           <div className="container-modal">
             <div className="title-modal">Adicionar Produto</div>
@@ -226,7 +219,8 @@ const Produtos = () => {
                   <input
                     type="text"
                     placeholder="Valor do Produto"
-                    onChange={(event) => setValor_de_Venda(event.target.value)}
+                    value={Valor_de_Venda}
+                    onChange={handleValorChange}
                   />
                 </div>
               </div>
@@ -247,9 +241,7 @@ const Produtos = () => {
   }
 
   const [rows, setRows] = React.useState(chartData);
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
-    {}
-  );
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
 
   //função que interrompe a edição da linha quando o foco sai dela
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
@@ -278,14 +270,14 @@ const Produtos = () => {
       try {
         // Faz uma requisição DELETE para o backend para deletar o produto com o ID especificado
         await axios.delete(`http://localhost:8080/produtos/${id}`);
-        console.log("ID",id)
+        console.log("ID", id);
         // Atualiza o estado das linhas, removendo a linha deletada
         setRows(rows.filter((row) => row.id !== id));
         window.location.reload();
       } catch (error) {
         console.error("Erro ao deletar produto:", error);
       }
-    } 
+    }
   };
 
   //ignorar modificações feitas na linha e voltar para modo visualização quando botão cancelar for clicado
@@ -305,8 +297,8 @@ const Produtos = () => {
   //atualizar quando a linha nova for salva
   const processRowUpdate = async (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false };
-    const {id, produto, valor} = newRow;
-    await saveChangesToDatabase([{id, produto, valor}])
+    const { id, produto, valor } = newRow;
+    await saveChangesToDatabase([{ id, produto, valor }])
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
     return updatedRow;

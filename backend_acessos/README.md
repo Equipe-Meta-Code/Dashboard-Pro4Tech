@@ -18,7 +18,7 @@ Vá no arquivo banco em backend_acessos e execute aqueles inserts no banco de da
 
 ```
 npm run dev:server
-```
+```5t
 
 
 SEQUÊNCIA PARA CRIAR O PROJETO

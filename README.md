@@ -106,3 +106,70 @@ https://github.com/Equipe-Meta-Code/Dashboard-Pro4Tech/assets/126246097/357c0e63
   </a>
 </p>
 
+# Guia de Instalação
+
+Este guia oferece instruções detalhadas sobre como baixar, configurar e executar este projeto em sua máquina local.
+
+## Pré-requisitos
+
+Antes de começar, certifique-se de ter os seguintes requisitos instalados em sua máquina:
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Node.js](https://nodejs.org/)
+- [MySQL](https://www.mysql.com/)
+
+## Instalação
+
+1. **Baixando o projeto**
+
+   - Baixe o arquivo zip do projeto no GitHub e extraia-o para uma pasta local em seu computador.
+   - Abra a pasta do projeto no Visual Studio Code.
+
+2. **Configurando o Banco de Dados**
+
+   - Utilize o MySQL para criar um banco de dados chamado `upload`.
+   - No arquivo `.env` localizado no diretório do projeto, preencha as informações de conexão com o banco de dados, incluindo o nome de usuário e senha.
+
+3. **Instalando as dependências**
+
+   Abra três terminais no Visual Studio Code:
+
+   - Terminal 1: Frontend (Dashboard)
+     ```bash
+     cd dashboard
+     npm install
+     ```
+
+   - Terminal 2: Backend
+     ```bash
+     cd backend
+     npm install
+     npx sequelize-cli db:migrate
+     ```
+
+   - Terminal 3: Backend de Acessos
+     ```bash
+     cd backend_acessos
+     npm install
+     npm run typeorm -- -d ./src/database/data-source.ts migration:run
+     ```
+
+## Executando o Projeto
+
+Após completar as etapas de instalação, você pode iniciar o projeto executando os seguintes comandos em seus respectivos terminais:
+
+- Terminal 1: Frontend (Dashboard)
+  ```bash
+  npm run dev
+  ```
+
+
+- Terminal 2: Backend
+  ```bash
+  nodemon app.js
+  ```
+  
+ - Terminal 3: Backend_acessos
+  ```bash
+  nodemon app.js
+  ```

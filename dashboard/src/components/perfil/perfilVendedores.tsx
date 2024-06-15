@@ -10,11 +10,12 @@ import { DateProvider } from "../../context/DateContext";
 import VendasVendedor from "./tabela/vendasVendedor";
 import AreaBarChartPerfil from "../dashboard/areaCharts/areaBarChartPerfil";
 import { AreaTop } from "../index";
+import perfilsemfoto from "./perfilsemfoto.jpg"
 
 const Perfil = () => {
   const { id } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
   const [vendedoresDetails, setVendedoresDetails] = useState({
     Vendedor: "",
     CPF_Vendedor: "",
@@ -24,7 +25,7 @@ const Perfil = () => {
     Endereco: "",
     Pais: "",
     foto: "",
-    id: "", // Certifique-se de incluir o ID do vendedor
+    id: "",
   });
 
   const fetchData = async () => {
@@ -46,7 +47,7 @@ const Perfil = () => {
     fetchData();
   }, [id]);
 
-/*   const handlePhotoChange = (e) => {
+  /* const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -72,17 +73,18 @@ const Perfil = () => {
   const [data_Nascimento, setData_Nascimento] = useState('');
   const [foto, setFoto] = useState('');
 
-  const handleEditar = async (Vendedor, CPF_Vendedor,Email,Telefone, Endereco, Pais) => {
+  const handleEditar = async (Vendedor, CPF_Vendedor,Email,Telefone, Endereco, Pais, foto) => {
     try {
       await fetchData()
       console.log("handleAdicionar", CPF_Vendedor)
       const newData = {
-        Vendedor: Vendedor,
-        CPF_Vendedor: CPF_Vendedor,
-        Email: Email,
-        Telefone: Telefone,
-        Endereco: Endereco,
-        Pais: Pais,
+      Vendedor: Vendedor,
+      CPF_Vendedor: CPF_Vendedor,
+      Email: Email,
+      Telefone: Telefone,
+      Endereco: Endereco,
+      Pais: Pais,
+      foto: foto,
       };
       console.log("Adicionando Venda")
       console.table(newData);
@@ -119,14 +121,13 @@ const Perfil = () => {
               </button>
               <h1 className="title">Informações</h1>
               <div className="item">
- {/*                <img src={vendedoresDetails.foto} alt="" className="itemImg" />
+                <img src={vendedoresDetails.foto || perfilsemfoto} alt="Foto de Perfil" className="itemImg" />
                 {isEditing && (
-                  <input
+                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handlePhotoChange}
                   />
-                )} */}
+                )}
                 <div className="details">
                       <h1 className="itemTitle">{vendedoresDetails.Vendedor}</h1>
                       <div className="detailItem">
@@ -213,7 +214,7 @@ const Perfil = () => {
                     
                   </div>
                   <div className="submit-container-modalVendas">
-                    <div className="submit-modalVendas" onClick={() =>   handleEditar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais)}>Editar</div>
+                    <div className="submit-modalVendas" onClick={() => handleEditar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais, foto)}>Editar</div>
                   </div>
 
               </div>

@@ -73,6 +73,8 @@
     --modal-botao-enviar-hover-text:#292929 ;
     --modal-botao-enviar-hover-border:#3c65d6 ;
     --input-filtro:#eaeaea;
+    --tooltip-text-color: #000000; /* Cor do texto do tooltip no modo claro */
+    --tooltip-background-color: #ffffff; /* Cor de fundo do tooltip no modo claro */
   }
   
   @mixin darkMode {
@@ -128,7 +130,7 @@
     --modal-background:#21222d ;
     --modal-shadow: rgba(0, 0, 0, 0.2) 0px 6px 16px;//LIGHT shadow
     --modal-botao-fechar: #F3F5F7;//calendar-day
-    --modal-botao-fechar-hover: #3c65d6;;
+    --modal-botao-fechar-hover: #3c65d6;
     --modal-titulo:#f3f5f7 ;
     --modal-campo-digitar: #eaeaea;
     --modal-botao-enviar: #22458b;
@@ -136,6 +138,8 @@
     --modal-botao-enviar-hover-text:#292929 ;
     --modal-botao-enviar-hover-border:#3c65d6 ;
     --input-filtro: #dbdbdb;
+    --tooltip-text-color: #ffffff;
+    --tooltip-background-color: #333333;
   }
 
 * {
@@ -271,6 +275,39 @@ ul li{
   @media (max-width: 1440px) {
     width: 100%;
   }
+}
+.vendas-gerais-mensais,.vendas-por-vendedor{
+  width: 100%;
+  fill: var(--chart-secondary-color) !important;
+  background-color: var(--chart-secondary-color) !important;
+  box-shadow: var(--light-shadow1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.vendas-gerais-mensais text{
+  fill: var(--calendar-day-color) !important;
+}
+.vendas-gerais-mensais,.vendas-por-vendedor, .top-produtos{
+  @media (max-width: 1440px) {
+    width: 100%;
+  }
+}
+/* Adicione este CSS ao seu arquivo CSS global ou ao CSS do componente */
+.google-visualization-tooltip {
+  margin-top: 20px;
+  background-color: var(--chart-secondary-color) !important;
+  color: var(--calendar-day-color) !important;
+  border: 1px solid var(--calendar-day-color) !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+  padding: 5px !important;
+  display: flex;
+  flex-direction: row;
+  min-width: 220px;
+  max-width: 780px;
+  width: auto;
+  height: 80px;
+  align-items: center;
 }
 .content-area li  {
   margin-bottom: 16px;

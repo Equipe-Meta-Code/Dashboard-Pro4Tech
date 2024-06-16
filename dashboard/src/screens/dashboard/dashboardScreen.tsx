@@ -4,7 +4,7 @@ import AreaBarChart from "../../components/dashboard/areaCharts/areaBarChart";
 import AreaProgressChart from "../../components/dashboard/areaCharts/areaProgressChart";
 import PermissionComponent from "../../components/PermissionComponent";
 import { DateProvider } from "../../context/DateContext";
-
+import { VendasMensaisMeta } from "../../components/dashboard/areaCharts/vendasMensaisMeta";
 
 const Dashboard: React.FC = () => {
   const [pageTitle, setPageTitle] = useState('Dashboard');
@@ -21,6 +21,8 @@ const Dashboard: React.FC = () => {
         <li className="ganhos-mensais"><AreaCards /></li>
         <div className="linhaQuebrada"></div>
         <li className="vendas-gerais"><AreaBarChart /></li>
+        <div className="linhaQuebrada"></div>
+        <li className="vendas-gerais-mensais"><VendasMensaisMeta/></li>
         <div className="linhaQuebrada"></div>
         <PermissionComponent role="Admin_Role,Admin">
           <li className="vendas-por-vendedor"><AreaLineChart /></li>

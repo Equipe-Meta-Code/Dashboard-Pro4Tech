@@ -32,6 +32,7 @@ import DatePicker from "react-datepicker";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import pt from "date-fns/locale/pt";
 import "react-datepicker/dist/react-datepicker.css";
+import "./DatePickerCustomStyles.scss";
 import moment from 'moment';
 import numeral from 'numeral';
 import user_icon from '../../../assets/person.png'
@@ -361,11 +362,12 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
     }
     if (selectedOption === 'data') {
       const filteredRows = chartData.filter(row => {
-        const rowDate = new Date(row.data); // Supondo que row.data seja uma string de data ou um objeto Date
-        // Formatar a data em 'DD/MM/AAAA' para comparação
-        const formattedRowDate = formatDate(rowDate);
-        // Verificar se a data formatada começa com o filtro
-        return formattedRowDate.startsWith(data);
+        
+
+        if (startDate && endDate) {
+          const saleDate = new Date(row.data); 
+          return saleDate >= startDate && saleDate <= endDate;
+        }
         
       });
       setRows(filteredRows);
@@ -542,6 +544,8 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                   placeholderText="Data de início"
                   dateFormat="dd/MM/yyyy"
                   locale="pt"
+                  className="custom-datepicker"
+                  calendarClassName="custom-calendar"
                 />
               </div>
               <div className="input-filtro-data">
@@ -556,6 +560,8 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                   dateFormat="dd/MM/yyyy"
                   minDate={startDate}
                   locale="pt"
+                  className="custom-datepicker"
+                  calendarClassName="custom-calendar"
                 />
               </div>
 
@@ -603,6 +609,8 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                   placeholderText="Data de início"
                   dateFormat="dd/MM/yyyy"
                   locale="pt"
+                  className="custom-datepicker"
+                  calendarClassName="custom-calendar"
                 />
               </div>
               <div className="input-filtro-data">
@@ -617,6 +625,8 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
                   dateFormat="dd/MM/yyyy"
                   minDate={startDate}
                   locale="pt"
+                  className="custom-datepicker"
+                  calendarClassName="custom-calendar"
                 />
               </div>
 
@@ -627,14 +637,36 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
           )}
           {selectedOption === 'data' && (
             <div className="inputs-filtros">
-              <div className="input-filtro" style={{width: '240px'}}>
-                <img src={user_icon} alt="" />
-                <InputMask style={{width: '170'}}
-                  mask="99/99/9999"
-                  value={data}
-                  onChange={event => setData(event.target.value)}
-                  placeholder="Data (DD/MM/AAAA)"
-                  />
+              <div className="input-filtro-data">
+                <img src={calendario} alt="" />
+                <DatePicker
+                  selected={startDate}
+                  onChange={date => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Data de início"
+                  dateFormat="dd/MM/yyyy"
+                  locale="pt"
+                  className="custom-datepicker"
+                  calendarClassName="custom-calendar"
+                />
+              </div>
+              <div className="input-filtro-data">
+                <img src={calendario} alt="" />
+                <DatePicker
+                  selected={endDate}
+                  onChange={date => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Data final"
+                  dateFormat="dd/MM/yyyy"
+                  minDate={startDate}
+                  locale="pt"
+                  className="custom-datepicker"
+                  calendarClassName="custom-calendar"
+                />
               </div>
 
               <button onClick={applyFilter}>

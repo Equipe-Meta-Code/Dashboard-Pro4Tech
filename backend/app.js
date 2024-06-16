@@ -315,6 +315,53 @@ async function exportar() {
               res.status(500).send('Erro ao buscar dados de vendas');
           }
       });       
+      app.get('/dados_vendas_mensais', async (req, res) => {
+        try {
+            const startDate = req.query.startDate;
+            const endDate = req.query.endDate;
+    
+            if (!startDate || !endDate) {
+                return res.status(400).send('Os parâmetros startDate e endDate são obrigatórios');
+            }
+    
+            const query = `
+                SELECT 
+                    MONTH(STR_TO_DATE(Data_da_Venda, "%Y-%m-%d")) AS mes,
+                    Produto,
+                    COUNT(ID_Produto) AS quantidade_vendida,
+                    SUM(Valor_de_Venda) AS total_vendas
+                FROM 
+                    informacoes
+                WHERE 
+                    Data_da_Venda BETWEEN ? AND ?
+                GROUP BY 
+                    mes, Produto
+            `;
+    
+            const [rows, fields] = await connection.query(query, [startDate, endDate]);
+    
+            // Reformatando os dados para o frontend
+            const data = rows.reduce((acc, row) => {
+                const month = row.mes;
+                const product = row.Produto;
+                const sales = row.total_vendas;
+    
+                if (!acc[month]) {
+                    acc[month] = { mes: month, produtos: {} };
+                }
+    
+                acc[month].produtos[product] = sales;
+                return acc;
+            }, {});
+    
+            res.json(Object.values(data));
+        } catch (error) {
+            console.error('Erro ao buscar dados de vendas:', error);
+            res.status(500).send('Erro ao buscar dados de vendas');
+        }
+    });
+    
+    
 
         app.get('/dados_vendas_mes', async (req, res) => {
             try {
@@ -662,6 +709,11 @@ async function exportar() {
         
         app.put('/produtos_update', async (req, res) => {
             const updatedData = req.body; // Os dados atualizados são enviados no corpo da requisição
+
+            if (!Array.isArray(updatedData)) {
+              console.error('Erro ao atualizar os dados: updatedData não é um array');
+              return res.status(400).send('Dados inválidos');
+          }
 
             try {
 

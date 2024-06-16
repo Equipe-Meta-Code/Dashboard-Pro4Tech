@@ -32,6 +32,36 @@ import user_icon from '../../../assets/person.png'
 const Clientes = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
+
+  const [openModalEditar, setOpenModalEditar] = useState(false)
+
+  const [clienteEditando, setClienteEditando] = useState({
+    CNPJ_CPF_Cliente: '',
+    Cliente: '',
+    Segmento_do_Cliente: ''
+  });
+
+  async function buscarCliente(id) {
+    try {
+      const clientes = await axios.get('http://localhost:8080/clientes');
+      const dataClientes = clientes.data;
+  
+      const cliente = dataClientes.find(cliente => cliente.id === id);
+  
+      if (cliente) {
+        setClienteEditando({
+          CNPJ_CPF_Cliente: cliente.CNPJ_CPF_Cliente,
+          Cliente: cliente.Cliente,
+          Segmento_do_Cliente: cliente.Segmento_do_Cliente
+        });
+        setOpenModalEditar(true);
+      } else {
+        throw new Error(`Produto com id ${id} não encontrado`);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar o produto:', error);
+    }
+  }
   
   
   useEffect(() => {
@@ -98,25 +128,19 @@ const Clientes = () => {
     }
   };
   
-  const savarEdicaoNoBanco = async (updatedRows: GridRowModel[]) => {
+  const saveChangesToDatabase = async (clienteEditando) => {
     try {
-      console.log('Chamando função saveChangesToDatabase');
-      // Mapeia os dados atualizados para o formato esperado pelo backend
-      const updatedData = updatedRows.map(row => ({
-        Cliente: row.cliente,
-        CNPJ_CPF_Cliente: row.cpf,
-        Segmento_do_Cliente: row.segmento,
-      }));
-      // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
-      console.log("Updated Data OBJ: ")
-      console.log(updatedData)
-  
-      await axios.put('http://localhost:8080/vendas_clientes_update', updatedData);
-      console.log("Dados atualizados com sucesso!");
+        console.log("Chamando função saveChangesToDatabase");
+        const updatedData = [clienteEditando];
+        console.log("Updated Data OBJ: ", updatedData);
+        await axios.put('http://localhost:8080/vendas_clientes_update', updatedData);
+        console.log("Dados atualizados com sucesso!");
+        setOpenModalEditar(!openModalEditar)
+        fetchData()
     } catch (error) {
-      console.error('Erro ao salvar os dados:', error);
+        console.error("Erro ao salvar os dados:", error);
     }
-  };
+};
 
   interface EditToolbarProps {
     setRows: (newRows: GridRowModel[]) => void;
@@ -333,7 +357,7 @@ const Clientes = () => {
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
   
     // Chama a função para salvar as mudanças no banco de dados
-    await savarEdicaoNoBanco([updatedRow]);
+    /* await savarEdicaoNoBanco([updatedRow]); */
     
     return updatedRow;
   };
@@ -428,7 +452,7 @@ const Clientes = () => {
             icon={<FaRegEdit size={22} className="edit-button" />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={()=> buscarCliente(id)}
           />,
         ];
       },
@@ -436,44 +460,94 @@ const Clientes = () => {
   ];
 
   return (
-    //tabela
-    <Box className="sx-box">
-      <h2 className="area-top-title">Clientes</h2>
-      <DataGrid
-        className="sx-data-grid"
-        rows={rows}
-        columns={columns}
-        //botões de ação
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
+    <>
+      {/* tabela */}
+      <Box className="sx-box">
+        <h2 className="area-top-title">Clientes</h2>
+        <DataGrid
+          className="sx-data-grid"
+          rows={rows}
+          columns={columns}
+          //botões de ação
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
 
-        slots={{
-          toolbar: (props) => (
-            <EditToolbar
-            setRowModesModel={function (newModel: (oldModel: GridRowModesModel) => GridRowModesModel): void {
-              throw new Error("Function not implemented.");
-            } } {...props}
-            setRows={setRows}
-            rows={rows}            />
-          ),
-        }}
-        slotProps={{
-          toolbar: { setRowModesModel },
-        }}
-        //a tabela divide - mostra 10 vendedores por página
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 20,
+          slots={{
+            toolbar: (props) => (
+              <EditToolbar
+              setRowModesModel={function (newModel: (oldModel: GridRowModesModel) => GridRowModesModel): void {
+                throw new Error("Function not implemented.");
+              } } {...props}
+              setRows={setRows}
+              rows={rows}            />
+            ),
+          }}
+          slotProps={{
+            toolbar: { setRowModesModel },
+          }}
+          //a tabela divide - mostra 10 vendedores por página
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 20,
+              },
             },
-          },
+          }}
+          pageSizeOptions={[20]}
+        />
+      </Box>
+      <Modal 
+        isOpen={openModalEditar} 
+        setModalOpen={() => {
+          setOpenModalEditar(!openModalEditar);
         }}
-        pageSizeOptions={[20]}
-      />
-    </Box>
+      >
+        <div className="container-modal">
+          <div className="title-modal">Editar Cliente</div>
+          <div className="content-modal">
+            <div className="inputs-modal">
+              <div className="input-modal">
+                <img src={user_icon} alt="" />
+                <input
+                  type="text"
+                  placeholder="Nome do Produto"
+                  value={clienteEditando.Cliente}
+                  onChange={(event) => setClienteEditando({
+                    ...clienteEditando,
+                    Cliente: event.target.value
+                  })}
+                />
+              </div>
+              <div className="input-modal">
+                <img src={user_icon} alt="" />
+                <input
+                  type="text"
+                  placeholder="Valor do Produto"
+                  value={clienteEditando.Segmento_do_Cliente}
+                  onChange={(event) => setClienteEditando({
+                    ...clienteEditando,
+                    Segmento_do_Cliente: event.target.value
+                  })}
+                />
+              </div>
+            </div>
+
+            <div className="submit-container-modal">
+              <div
+                className="submit-modal"
+                onClick={() => saveChangesToDatabase(clienteEditando)}
+              >
+                Editar
+              </div>
+            </div>
+          </div>
+        </div>
+        </Modal>
+
+    </>
   );
 };
 

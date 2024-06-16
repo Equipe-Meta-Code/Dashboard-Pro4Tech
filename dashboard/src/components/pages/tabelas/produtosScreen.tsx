@@ -30,6 +30,36 @@ const Produtos = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
 
+  const [openModalEditar, setOpenModalEditar] = useState(false)
+
+  const [produtoEditando, setProdutoEditando] = useState({
+    id: '',
+    Produto: '',
+    Valor_de_Venda: ''
+  });
+
+  async function buscarProduto(id) {
+    try {
+      const responseProdutos = await axios.get('http://localhost:8080/produtos');
+      const dataProdutos = responseProdutos.data;
+  
+      const produto = dataProdutos.find(produto => produto.id === id);
+  
+      if (produto) {
+        setProdutoEditando({
+          id: produto.id,
+          Produto: produto.Produto,
+          Valor_de_Venda: produto.Valor_de_Venda
+        });
+        setOpenModalEditar(true);
+      } else {
+        throw new Error(`Produto com id ${id} não encontrado`);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar o produto:', error);
+    }
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -66,26 +96,23 @@ const Produtos = () => {
   };
 
   //editar no banco
-  const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
+  const saveChangesToDatabase = async (produtoEditando) => {
     try {
-      console.log("Chamando função saveChangesToDatabase");
-
-      // Mapeia os dados atualizados para o formato esperado pelo backend
-      const updatedData = updatedRows.map((row) => ({
-        id: row.id,
-        Produto: row.produto,
-        Valor_de_Venda: row.valor,
-      }));
-      // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
-      console.log("Updated Data OBJ: ");
-      console.log(updatedData);
-      await axios.put("http://localhost:8080/produtos_update", updatedData);
-
-      console.log("Dados atualizados com sucesso!");
+        console.log("Chamando função saveChangesToDatabase");
+  
+        const updatedData = [produtoEditando];
+        console.log("Updated Data OBJ: ", updatedData);
+  
+        await axios.put("http://localhost:8080/produtos_update", updatedData);
+        setOpenModalEditar(!openModalEditar)
+        fetchData()
+        console.log("Dados atualizados com sucesso!");
     } catch (error) {
-      console.error("Erro ao salvar os dados:", error);
+        console.error("Erro ao salvar os dados:", error);
     }
-  };
+};
+
+
 
   //adicionar na tabela
   interface EditToolbarProps {
@@ -165,6 +192,20 @@ const Produtos = () => {
         currency: 'BRL'
       });
       setValor_de_Venda(formattedValue);
+    };
+
+    const handleValorEditado = (event) => {
+      const rawValue = event.target.value;
+      const cleanedValue = rawValue.replace(/\D/g, '');
+      const numberValue = parseFloat(cleanedValue) / 100;
+      const formattedValue = numberValue.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+      setProdutoEditando({
+        ...produtoEditando,
+        Valor_de_Venda: formattedValue
+      })
     };
 
     //botão de adicionar
@@ -374,7 +415,7 @@ const Produtos = () => {
             icon={<FaRegEdit size={22} className="edit-button" />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={()=> buscarProduto(id)}
           />,
           <GridActionsCellItem
             icon={<MdDeleteOutline size={25} className="edit-button" />}
@@ -387,47 +428,99 @@ const Produtos = () => {
   ];
 
   return (
-    //tabela
-    <Box className="sx-box">
-      <h2 className="area-top-title">Produtos</h2>
-      <DataGrid
-        className="sx-data-grid"
-        rows={rows}
-        columns={columns}
-        //botões de ação
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: (props) => (
-            <EditToolbar
-              setRowModesModel={function (
-                newModel: (oldModel: GridRowModesModel) => GridRowModesModel
-              ): void {
-                throw new Error("Function not implemented.");
-              }}
-              {...props}
-              setRows={setRows}
-              rows={rows}
-            />
-          ),
-        }}
-        slotProps={{
-          toolbar: { setRowModesModel },
-        }}
-        //a tabela divide - mostra 20 vendedores por página
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 20,
-            },
-          },
-        }}
-        pageSizeOptions={[20]}
-      />
-    </Box>
+    
+    <>  
+        {/* tabela */}
+        <Box className="sx-box">
+          <h2 className="area-top-title">Produtos</h2>
+          <DataGrid
+            className="sx-data-grid"
+            rows={rows}
+            columns={columns}
+            //botões de ação
+            editMode="row"
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={processRowUpdate}
+            slots={{
+              toolbar: (props) => (
+                <EditToolbar
+                  setRowModesModel={function (
+                    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+                  ): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  {...props}
+                  setRows={setRows}
+                  rows={rows}
+                />
+              ),
+            }}
+            slotProps={{
+              toolbar: { setRowModesModel },
+            }}
+            //a tabela divide - mostra 20 vendedores por página
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 20,
+                },
+              },
+            }}
+            pageSizeOptions={[20]}
+          />
+        </Box>
+
+        <Modal 
+          isOpen={openModalEditar} 
+          setModalOpen={() => {
+            setOpenModalEditar(!openModalEditar);
+          }}
+        >
+        <div className="container-modal">
+          <div className="title-modal">Editar Produto</div>
+          <div className="content-modal">
+            <div className="inputs-modal">
+              <div className="input-modal">
+                <img src={user_icon} alt="" />
+                <input
+                  type="text"
+                  placeholder="Nome do Produto"
+                  value={produtoEditando.Produto}
+                  onChange={(event) => setProdutoEditando({
+                    ...produtoEditando,
+                    Produto: event.target.value
+                  })}
+                />
+              </div>
+              <div className="input-modal">
+                <img src={user_icon} alt="" />
+                <input
+                  type="text"
+                  placeholder="Valor do Produto"
+                  value={produtoEditando.Valor_de_Venda}
+                  onChange={(event) => setProdutoEditando({
+                    ...produtoEditando,
+                    Valor_de_Venda: event.target.value
+                  })}
+                />
+              </div>
+            </div>
+
+            <div className="submit-container-modal">
+              <div
+                className="submit-modal"
+                onClick={() => saveChangesToDatabase(produtoEditando)}
+              >
+                Editar
+              </div>
+            </div>
+          </div>
+        </div>
+        </Modal>
+     
+    </>
   );
 };
 

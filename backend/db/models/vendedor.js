@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     Endereco: DataTypes.STRING,
     Pais: DataTypes.STRING,
     Data_Nascimento: DataTypes.DATEONLY,
-    foto: DataTypes.STRING
+    foto: DataTypes.BLOB('long'),
   }, {
     sequelize,
     modelName: 'Vendedor',

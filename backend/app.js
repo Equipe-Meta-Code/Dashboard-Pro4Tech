@@ -504,8 +504,8 @@ async function exportar() {
             }
         
             // Atualização no banco de dados
-            await connection.query('UPDATE vendedor SET Vendedor = ?, Email = ?, Telefone = ?, Endereco = ?, Pais = ? WHERE CPF_Vendedor = ?', 
-            [updatedData.Vendedor,updatedData.Email, updatedData.Telefone,updatedData.Endereco,updatedData.Pais, updatedData.CPF_Vendedor]);
+            await connection.query('UPDATE vendedor SET Vendedor = ?, Email = ?, Telefone = ?, Endereco = ?, Pais = ?, foto = ? WHERE CPF_Vendedor = ?', 
+            [updatedData.Vendedor,updatedData.Email, updatedData.Telefone,updatedData.Endereco,updatedData.Pais, updatedData.foto, updatedData.CPF_Vendedor]);
             
             await connection.query('UPDATE informacoes SET Vendedor = ? WHERE CPF_Vendedor = ?', [updatedData.Vendedor, updatedData.CPF_Vendedor]);
 
@@ -515,6 +515,55 @@ async function exportar() {
             console.error('Erro ao atualizar os dados:', error);
             res.status(500).send('Erro ao atualizar os dados');
           }
+        });
+
+        // Incluir o middleware de upload
+        const uploadImgUser = require('./services/uploadImage.js');
+
+        // Criar a rota upload
+        app.put("/upload-image", uploadImgUser.single('image'), async (req, res) => {
+          const updatedData = req.body;
+
+          console.log('Recebido pedido de upload de imagem');
+          // Retornar erro quando não conseguir realizar upload
+          if (!req.file) {
+            console.error('Nenhum arquivo foi enviado');
+              return res.status(400).json({
+                  erro: true,
+                  message: "Erro: Selecione uma imagem válida JPEG ou PNG!"
+              });
+          }
+
+          await connection.query('UPDATE vendedor SET foto = ? WHERE CPF_Vendedor = ?', 
+            [req.file.filename, updatedData.CPF_Vendedor]);
+            
+          // Receber os dados enviados no corpo da requisição,
+          const { Vendedor, CPF_Vendedor } = req.body; 
+
+/*           try {
+            console.log('Salvando dados no banco de dados');
+            const dataFoto = await db.vendedor.create({
+              Vendedor,
+              CPF_Vendedor, 
+              foto: req.file.filename
+            });
+
+            console.log('Upload realizado com sucesso');
+              return res.json({
+                  erro: false,
+                  message: "Upload realizado com sucesso!",
+                  dataFoto
+              });
+
+          } catch(error) {
+              // Retornar erro quando não conseguir realizar upload
+              return res.status(400).json({
+                  erro: true,
+                  message: "Erro: Upload não realizado com sucesso!"
+              });
+          }; */
+          
+
         });
 
         app.delete('/vendedores/:id', async (req, res) => {

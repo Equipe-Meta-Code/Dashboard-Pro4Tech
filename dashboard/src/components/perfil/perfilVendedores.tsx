@@ -47,6 +47,51 @@ const Perfil = () => {
     fetchData();
   }, [id]);
 
+    const [image, setImage] = useState(null);
+    const [message, setMessage] = useState('');
+  
+    const handleImageChange = (e) => {
+      setImage(e.target.files[0]);
+    };
+  
+    const uploadImage = async (e) => {
+      e.preventDefault();
+  
+      const formData = new FormData();
+      formData.append('image', image);
+  
+      const headers = {
+        'headers': {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      if (image) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target.result;
+          if (typeof result === "string") {
+            setFotoEditando(result)
+          }
+        };
+        reader.readAsDataURL(image);
+      }
+  
+/*       try {
+        
+        const response = await axios.put('http://localhost:8080/upload-image', formData);
+        setMessage(response.data.message);
+      } catch (err) {
+        if (err.response) {
+          setMessage(err.response.data.message);
+        } else {
+          setMessage("Erro: Tente novamente mais tarde ou entre contato com ...!");
+        }
+      } */
+
+
+
+    };
+
   /* const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -62,7 +107,31 @@ const Perfil = () => {
       };
       reader.readAsDataURL(file);
     }
-  }; */
+  };
+
+  const handlePhotoSave = (e) => {
+    const foto = e.target.files[0];
+    if (foto) {
+      const formData = new FormData();
+        formData.append("foto", foto);
+
+        fetch("http://localhost:8080/upload-image", {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            setVendedoresDetails((prevState) => ({
+                ...prevState,
+                foto: data.filePath, // Salvar o caminho da imagem retornado pelo backend
+            }));
+        })
+        .catch(error => {
+            console.error("Erro ao fazer upload da imagem:", error);
+        });
+    }}
+ */
 
   const [Vendedor, setVendedor] = useState('');
   const [CPF_Vendedor, setCPF_Vendedor] = useState('');
@@ -72,11 +141,13 @@ const Perfil = () => {
   const [Pais, setPais] = useState('');
   const [data_Nascimento, setData_Nascimento] = useState('');
   const [foto, setFoto] = useState('');
+  const [fotoEditando, setFotoEditando] = useState('');
+  
 
-  const handleEditar = async (Vendedor, CPF_Vendedor,Email,Telefone, Endereco, Pais, foto) => {
+  const handleEditar = async (Vendedor, CPF_Vendedor,Email,Telefone, Endereco, Pais, fotoEditando) => {
     try {
       await fetchData()
-      console.log("handleAdicionar", CPF_Vendedor)
+      console.log("handleEditar", CPF_Vendedor)
       const newData = {
       Vendedor: Vendedor,
       CPF_Vendedor: CPF_Vendedor,
@@ -84,7 +155,7 @@ const Perfil = () => {
       Telefone: Telefone,
       Endereco: Endereco,
       Pais: Pais,
-      foto: foto,
+      foto: fotoEditando,
       };
       console.log("Adicionando Venda")
       console.table(newData);
@@ -106,6 +177,7 @@ const Perfil = () => {
     setTelefone(vendedoresDetails.Telefone)
     setEndereco(vendedoresDetails.Endereco)
     setPais(vendedoresDetails.Pais)
+    setFoto(vendedoresDetails.foto)
     //setData_Nascimento(vendedoresDetails.Data_Nascimento)
 
   };
@@ -134,10 +206,7 @@ const Perfil = () => {
                         <span className="itemKey">CPF:</span>
                         <span className="itemValue">{vendedoresDetails.CPF_Vendedor}</span>
                       </div>
-{/*                       <div className="detailItem">
-                        <span className="itemKey">Data de Nascimento:</span>
-                        <span className="itemValue">{vendedoresDetails.Data_Nascimento}</span>
-                      </div> */}
+
                       <div className="detailItem">
                         <span className="itemKey">Email:</span>
                         <span className="itemValue">{vendedoresDetails.Email}</span>
@@ -180,15 +249,13 @@ const Perfil = () => {
               <div className="content-modalVendas"> 
                   <div className="inputs-modalVendas">
 
-{/*                     <div className="input-modalVendas"> 
-                        <img src={calendario} alt="" />
-                        <InputMask
-                          mask="99/99/9999"
-                          value={data_Nascimento}
-                          onChange={event => setData_Nascimento(event.target.value)}
-                          placeholder="DD/MM/AAAA"
-                        />
-                      </div> */}
+                    <div className="input-modalVendas">
+                    <form onSubmit={uploadImage}>
+                      <input type="file" accept="image/*" onChange={handleImageChange} />
+                      <button type="submit">Upload</button>
+                    </form>
+                    {message && <p>{message}</p>}
+                    </div>
 
                     <div className="input-modalVendas">
                       <input type="text" placeholder="Vendedor" value={Vendedor}onChange={event => setVendedor(event.target.value)}/>
@@ -214,7 +281,7 @@ const Perfil = () => {
                     
                   </div>
                   <div className="submit-container-modalVendas">
-                    <div className="submit-modalVendas" onClick={() => handleEditar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais, foto)}>Editar</div>
+                    <div className="submit-modalVendas" onClick={() => handleEditar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais, fotoEditando)}>Salvar</div>
                   </div>
 
               </div>

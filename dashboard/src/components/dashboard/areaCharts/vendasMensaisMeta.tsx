@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Chart } from "react-google-charts";
+import { Chart } from "react-google-charts"; // Importe o Chart corretamente aqui
 import axios from 'axios';
 import { DateContext } from '../../../context/DateContext';
 import PermissionComponent from '../../PermissionComponent';
@@ -10,9 +10,17 @@ const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
 export function VendasMensaisMeta() {
   const { login } = useAuth();
   const dateContext = useContext(DateContext);
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [backgroundColor, setBackgroundColor] = useState("");
+
+  const formatCurrency = (value: number) => {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 });
+  };
+
+  const formatNumber = (value: number) => {
+    return value.toLocaleString('pt-BR').replace(/\./g, 'X').replace(/,/g, '.').replace(/X/g, ',');
+  };
 
   useEffect(() => {
     const fetchBackgroundColor = () => {
@@ -131,7 +139,24 @@ export function VendasMensaisMeta() {
 
   const options = {
     title: "Vendas Mensais por Produto",
-    vAxis: { title: "Valores em R$" },
+    vAxis: {
+      title: "Valores em R$",
+      format: (value: number) => value,
+      viewWindow: {
+        min: 0,
+        max: 50000,
+      },
+      ticks: [0, 10000, 20000, 30000, 40000, 50000].map(value => ({
+        v: value,
+        f: formatCurrency(value)
+      })) as any[], // Converter para any[] para evitar erros de tipo
+      textStyle: {
+        fontSize: 12
+      },
+      gridlines: {
+        count: 6
+      }
+    },
     hAxis: { title: "Mês" },
     seriesType: "bars",
     series: {
@@ -143,7 +168,11 @@ export function VendasMensaisMeta() {
       width: "80%",
       height: "60%"
     },
-    tooltip: { isHtml: true, textStyle: { color: '#757575'}}
+    tooltip: {
+      isHtml: true,
+      textStyle: { color: '#757575' },
+      trigger: 'selection'
+    }
   };
 
   if (loading) {
@@ -151,13 +180,33 @@ export function VendasMensaisMeta() {
   }
 
   return (
-    <div  style={{ boxShadow: "var(--light-shadow1)", borderRadius: "8px", overflow: "hidden" }}>
+    <div style={{ boxShadow: "var(--light-shadow1)", borderRadius: "8px", overflow: "hidden" }}>
       <Chart
         chartType="ComboChart"
         width="100%"
         height="337px"
         data={chartData}
         options={options}
+        chartEvents={[
+          {
+            eventName: 'ready', // Corrigido para 'ready'
+            callback: ({ chartWrapper }) => {
+              const chart = chartWrapper.getChart();
+              const container = document.getElementById(chartWrapper.getContainerId());
+              const elements = container?.getElementsByTagName('text');
+        
+              if (elements) {
+                for (let element of elements) {
+                  if (element.getAttribute('text-anchor') === 'end') {
+                    const value = element.textContent.replace(/[^0-9.,]+/g, '');
+                    const number = parseFloat(value);
+                    element.textContent = formatCurrency(number);
+                  }
+                }
+              }
+            }
+          }
+        ]}
       />
     </div>
   );

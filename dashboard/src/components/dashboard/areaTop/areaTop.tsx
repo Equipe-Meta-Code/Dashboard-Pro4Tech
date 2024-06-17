@@ -17,8 +17,8 @@ const AreaTop: React.FC = () => {
 
   const { dates, setDates } = dateContext;
   const currentDate = new Date();
-  const initialStartDate = startOfMonth(currentDate);
-  const initialEndDate = endOfMonth(currentDate);
+  const initialStartDate = new Date(2023, 0, 1);
+  const initialEndDate = currentDate;
 
   const [state, setState] = useState([
     {

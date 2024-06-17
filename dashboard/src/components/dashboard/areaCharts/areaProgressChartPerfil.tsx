@@ -1,12 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import "./AreaCharts.scss";
 import { v4 as uuidv4 } from 'uuid';
-import PermissionComponent from '../../PermissionComponent';
 import { useAuth } from '../../../context/AuthContext';
 import { DateContext } from '../../../context/DateContext';
-
-
 
 interface ChartData {
   Produto: string;
@@ -14,15 +11,10 @@ interface ChartData {
 }
 
 interface AreaProgressChartProps {
-  vendedorSelecionado?: number; // Indica que vendedorSelecionado é uma prop opcional de tipo string
+  vendedorSelecionado?: number;
 }
 
-const responseVendedores = await axios.get(
-  "http://localhost:8080/vendedores"
-);
-const dataVendedores = responseVendedores.data;
-
-const AreaProgressChartPerfil = ( props ) => {
+const AreaProgressChartPerfil: React.FC<AreaProgressChartProps> = ({ vendedorSelecionado }) => {
   const { login } = useAuth();
   const dateContext = useContext(DateContext);
 
@@ -34,43 +26,62 @@ const AreaProgressChartPerfil = ( props ) => {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
+  const [dataVendedores, setDataVendedores] = useState<any[]>([]);
 
   useEffect(() => {
-    fetchData();
-  }, [dates]);
+    // Fetch the vendedores data on component mount
+    const fetchVendedores = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/vendedores");
+        setDataVendedores(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar vendedores:', error);
+      }
+    };
 
+    fetchVendedores();
+  }, []);
 
-  function buscarCPFPorId(idVendedor) {
-    const vendedor = dataVendedores.find(vendedor => vendedor.id === idVendedor);
-    if (vendedor) {
-      console.log('vendedor',vendedor)
-      console.log('vendedorCPF',vendedor.CPF_Vendedor)
-      return vendedor.CPF_Vendedor;
-
-    } else {
-      return null; // ou lançar um erro, dependendo do seu caso de uso
+  useEffect(() => {
+    if (dates && vendedorSelecionado !== undefined) {
+      fetchData();
     }
-  }
+  }, [dates, vendedorSelecionado]);
+
+  const buscarCPFPorId = (idVendedor: number) => {
+    const vendedor = dataVendedores.find(v => v.id === idVendedor);
+    if (vendedor) {
+      console.log('vendedor', vendedor);
+      let cpf = vendedor.CPF_Vendedor 
+      console.log('vendedorCPF', cpf);
+      return cpf;
+    } else {
+      return null;
+    }
+  };
 
   const fetchData = async () => {
     try {
-      console.log('Vendedor Selecionado',props.vendedorSelecionado)
-      // Exemplo de uso
-      const idDoVendedores = parseFloat(props.vendedorSelecionado);
-      console.log('Vendedor Selecionado_ID',props.vendedorSelecionado)
-      
-      const cpfVendedor = buscarCPFPorId(idDoVendedores);
-      console.log('cpf', cpfVendedor)
-      let response;
+      let response: AxiosResponse<any, any>;
+      const vendedorId = +vendedorSelecionado!;
+      console.log("Tipo de vendedorSelecionado:", typeof vendedorId);
 
-        response = await axios.get('http://localhost:8080/dados_itens_vendedor', {
-          params: {
-            vendedor: cpfVendedor,
-            startDate: dates.startDate.toISOString(),
-            endDate: dates.endDate.toISOString()
-          }
-        });
-      
+      let cpfVendedor = buscarCPFPorId(vendedorId);
+
+      if (!cpfVendedor) {
+        console.error('Erro ao buscar CPF do vendedor');
+        return;
+      }
+
+      console.log("CPF USADO: ", cpfVendedor);
+
+      response = await axios.get('http://localhost:8080/dados_itens_vendedor', {
+        params: {
+          vendedor: cpfVendedor,
+          startDate: dates.startDate.toISOString(),
+          endDate: dates.endDate.toISOString()
+        }
+      });
 
       const data: ChartData[] = response.data;
       setChartData(data);

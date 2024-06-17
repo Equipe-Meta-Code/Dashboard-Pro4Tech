@@ -286,19 +286,28 @@ async function exportar() {
 
         app.get('/dados_itens_vendedor', async (req, res) => {
           try {
-              const { vendedor} = req.query;
-              if (!vendedor) {
+              const { vendedor, startDate, endDate } = req.query;
+              
+              if (!vendedor || !startDate || !endDate) {
                   return res.status(400).send('Parâmetros incompletos');
               }
       
-              const query = 'SELECT Produto, COUNT(*) AS quantidade_vendida FROM informacoes WHERE CPF_Vendedor =? GROUP BY Produto ORDER BY quantidade_vendida DESC';
-              const [rows, fields] = await connection.query(query, [vendedor]);
+              const query = `
+                  SELECT Produto, COUNT(*) AS quantidade_vendida 
+                  FROM informacoes 
+                  WHERE CPF_Vendedor = ? AND Data_da_Venda >= ? AND Data_da_Venda <= ? 
+                  GROUP BY Produto 
+                  ORDER BY quantidade_vendida DESC
+              `;
+              
+              const [rows, fields] = await connection.query(query, [vendedor, startDate, endDate]);
               res.json(rows);
           } catch (error) {
               console.error('Erro ao buscar os itens mais vendidos:', error);
               res.status(500).send('Erro ao buscar os itens mais vendidos');
           }
-        });   
+      });
+       
 
         app.get('/vendedor', async (req, res) => {
           try {
@@ -400,13 +409,13 @@ async function exportar() {
 
         app.get('/dados_vendas_mes_vendedores', async (req, res) => {
           try {
-              const { vendedor} = req.query;
-              if (!vendedor) {
-                  return res.status(400).send('Parâmetros incompletos');
-              }
+            const { vendedor, startDate, endDate } = req.query;
+            if (!vendedor || !startDate || !endDate) {
+                return res.status(400).send('Parâmetros incompletos');
+            }
               
-              const query = 'SELECT MONTH(STR_TO_DATE(Data_da_Venda, "%Y-%m-%d")) AS mes, SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE CPF_Vendedor = ? GROUP BY mes';
-              const [rows, fields] = await connection.query(query, [vendedor]);
+              const query = 'SELECT MONTH(STR_TO_DATE(Data_da_Venda, "%Y-%m-%d")) AS mes, SUM(Valor_de_Venda) AS total_vendas FROM informacoes WHERE CPF_Vendedor = ? AND Data_da_Venda >= ? AND Data_da_Venda <= ? GROUP BY mes';
+              const [rows, fields] = await connection.query(query, [vendedor, startDate, endDate]);
               res.json(rows);
           } catch (error) {
               console.error('Erro ao buscar as vendas por mês:', error);

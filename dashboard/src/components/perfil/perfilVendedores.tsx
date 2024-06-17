@@ -59,24 +59,29 @@ const Perfil = () => {
   
       const formData = new FormData();
       formData.append('image', image);
-  
+      formData.append('id', id);
       const headers = {
         'headers': {
           'Content-Type': 'multipart/form-data'
         }
       }
+
       if (image) {
         const reader = new FileReader();
         reader.onload = (e) => {
           const result = e.target.result;
           if (typeof result === "string") {
             setFotoEditando(result)
+            
           }
+          
+          console.log('id:', formData)
+          console.log('foto:', fotoEditando)
         };
         reader.readAsDataURL(image);
       }
-  
-/*       try {
+
+      try {
         
         const response = await axios.put('http://localhost:8080/upload-image', formData);
         setMessage(response.data.message);
@@ -86,7 +91,7 @@ const Perfil = () => {
         } else {
           setMessage("Erro: Tente novamente mais tarde ou entre contato com ...!");
         }
-      } */
+      }
 
 
 
@@ -130,8 +135,8 @@ const Perfil = () => {
         .catch(error => {
             console.error("Erro ao fazer upload da imagem:", error);
         });
-    }}
- */
+    }} */
+
 
   const [Vendedor, setVendedor] = useState('');
   const [CPF_Vendedor, setCPF_Vendedor] = useState('');
@@ -144,7 +149,7 @@ const Perfil = () => {
   const [fotoEditando, setFotoEditando] = useState('');
   
 
-  const handleEditar = async (Vendedor, CPF_Vendedor,Email,Telefone, Endereco, Pais, fotoEditando) => {
+  const handleEditar = async (Vendedor, CPF_Vendedor,Email,Telefone, Endereco, Pais) => {
     try {
       await fetchData()
       console.log("handleEditar", CPF_Vendedor)
@@ -155,7 +160,6 @@ const Perfil = () => {
       Telefone: Telefone,
       Endereco: Endereco,
       Pais: Pais,
-      foto: fotoEditando,
       };
       console.log("Adicionando Venda")
       console.table(newData);
@@ -177,11 +181,11 @@ const Perfil = () => {
     setTelefone(vendedoresDetails.Telefone)
     setEndereco(vendedoresDetails.Endereco)
     setPais(vendedoresDetails.Pais)
-    setFoto(vendedoresDetails.foto)
+    setFotoEditando(vendedoresDetails.foto)
     //setData_Nascimento(vendedoresDetails.Data_Nascimento)
 
   };
-
+  {console.log('Foto do banco',vendedoresDetails.foto)}
   return (
     <DateProvider>
       <div className="perfil">
@@ -193,7 +197,9 @@ const Perfil = () => {
               </button>
               <h1 className="title">Informações</h1>
               <div className="item">
-                <img src={vendedoresDetails.foto || perfilsemfoto} alt="Foto de Perfil" className="itemImg" />
+                
+
+                <img src={"http://localhost:8080/files/users/"+vendedoresDetails.foto || perfilsemfoto} alt="Foto de Perfil" className="itemImg" />
                 {isEditing && (
                    <input
                     type="file"
@@ -281,7 +287,7 @@ const Perfil = () => {
                     
                   </div>
                   <div className="submit-container-modalVendas">
-                    <div className="submit-modalVendas" onClick={() => handleEditar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais, fotoEditando)}>Salvar</div>
+                    <div className="submit-modalVendas" onClick={() => handleEditar(Vendedor,CPF_Vendedor, Email, Telefone, Endereco, Pais)}>Salvar</div>
                   </div>
 
               </div>

@@ -21,6 +21,7 @@ const mysql = require('mysql2/promise');
 // Criar o middleware para receber os dados no corpo da requisição
 app.use(express.json());
 
+app.use('/files', express.static(path.resolve(__dirname, 'public', 'upload')));
 //Criar o middleware para permitir requisição externa
 app.use((req, res, next) => {
 
@@ -29,7 +30,7 @@ app.use((req, res, next) => {
 
     //Tipos de métodos que a API aceita
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-
+    res.header("Access-Control-Allow-Headers", "X-PINGOTHER, Content-Type, Authorization");
     //Permitir o envio de dados para API
     res.header("Access-Control-Allow-Headers", "Content-Type");
 
@@ -504,8 +505,8 @@ async function exportar() {
             }
         
             // Atualização no banco de dados
-            await connection.query('UPDATE vendedor SET Vendedor = ?, Email = ?, Telefone = ?, Endereco = ?, Pais = ?, foto = ? WHERE CPF_Vendedor = ?', 
-            [updatedData.Vendedor,updatedData.Email, updatedData.Telefone,updatedData.Endereco,updatedData.Pais, updatedData.foto, updatedData.CPF_Vendedor]);
+            await connection.query('UPDATE vendedor SET Vendedor = ?, Email = ?, Telefone = ?, Endereco = ?, Pais = ? WHERE CPF_Vendedor = ?', 
+            [updatedData.Vendedor,updatedData.Email, updatedData.Telefone,updatedData.Endereco,updatedData.Pais, updatedData.CPF_Vendedor]);
             
             await connection.query('UPDATE informacoes SET Vendedor = ? WHERE CPF_Vendedor = ?', [updatedData.Vendedor, updatedData.CPF_Vendedor]);
 
@@ -533,12 +534,14 @@ async function exportar() {
                   message: "Erro: Selecione uma imagem válida JPEG ou PNG!"
               });
           }
-
-          await connection.query('UPDATE vendedor SET foto = ? WHERE CPF_Vendedor = ?', 
-            [req.file.filename, updatedData.CPF_Vendedor]);
+        
+          console.log('Nome:',req.file.filename)
+          console.log("id",updatedData.id)
+          await connection.query('UPDATE vendedor SET foto = ? WHERE id = ?', 
+            [req.file.filename, updatedData.id]);
             
           // Receber os dados enviados no corpo da requisição,
-          const { Vendedor, CPF_Vendedor } = req.body; 
+          
 
 /*           try {
             console.log('Salvando dados no banco de dados');
@@ -565,6 +568,9 @@ async function exportar() {
           
 
         });
+        app.get("/listar_foto", async (req,res)=>{
+          await Image.findAll({})
+        })
 
         app.delete('/vendedores/:id', async (req, res) => {
             const vendedorId = req.params.id;

@@ -31,7 +31,7 @@ module.exports = {
         type: Sequelize.DATEONLY
       },
       foto: {
-        type: Sequelize.BLOB('long')
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

@@ -87,7 +87,7 @@ export function VendasMensaisMeta() {
           return { month, values: totalValues };
         });
 
-        const generateRandomMeta = () => Math.floor(Math.random() * 15000) + 5000;
+        const generateMeta = () => 50000;
 
         const formattedData = [
           ["Month", ...productKeys.map(product => `${product} (R$)`), "Total (R$)", "Meta (R$)"]
@@ -99,7 +99,7 @@ export function VendasMensaisMeta() {
             month,
             ...values,
             total,
-            generateRandomMeta()
+            generateMeta()
           ]);
         });
 

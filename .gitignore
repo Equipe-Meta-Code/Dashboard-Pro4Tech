@@ -2,3 +2,5 @@
 backend/.env
 backend/.env
 backend/~$certa.xlsx
+backend_acessos/src/database/data-source.ts
+backend/.env

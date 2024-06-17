@@ -1,0 +1,65 @@
+.content-area-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 300px;
+  height: 300px;
+
+  /*.area-top-title {
+    color: var(--light-color);
+    background-color: var(--chart-secondary-color);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    margin: 0px;
+    color: var(--light-color);
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }*/
+
+  .rdrDateRangeWrapper{
+    height: 337px;
+  }
+
+  .area-top-l {
+    display: flex;
+    align-items: center;
+  }
+ 
+  .content-area-top,.area-top-r,.area-top-l,.custom-date-range,.rdrDateDisplayWrapper,.rdrDateRangeWrapper,.rdrMonth{
+    width: 100%;
+  }
+  
+  /*
+  @media (max-width: 576px) {
+    width: 100%;
+  }
+  */
+
+  @media (max-width: 845px) {
+    width: 100%;
+  }
+  .custom-date-range .rdrDateRangeWrapper {
+    background-color: var(--chart-secondary-color);
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    color: var(--fourth-color); //cor do texto do mês
+    box-shadow: var(--light-shadow1);
+  }
+
+  .rdrDateDisplayWrapper {
+    background-color: var(--chart-secondary-color);
+    border-color: var(--chart-secondary-color);
+    outline: var(--chart-secondary-color);
+    border-radius: 6px;
+
+    * {
+      background-color: var(--chart-secondary-color);
+      border-color: var(--chart-secondary-color);
+      outline: var(--chart-secondary-color);
+      box-shadow: none;
+      color: var(--fourth-color);
+    }
+  }
+}

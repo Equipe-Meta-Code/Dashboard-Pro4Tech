@@ -1,0 +1,55 @@
+/* Estilos personalizados para o DatePicker */
+.custom-datepicker {
+  border-radius: 15px;
+}
+
+/* Estilos personalizados para o calendário */
+.custom-calendar {
+  background-color: var(--chart-secondary-color);
+  color: #a12222;
+  border-radius: 5px; 
+}
+
+/* Estilos para os dias do calendário */
+.custom-calendar .react-datepicker__day {
+  /* Modifique as cores conforme necessário */
+  color: var(--light-color); /* Cor do texto dos dias */
+}
+
+/* Estilos para o hover dos dias do calendário */
+.custom-calendar .react-datepicker__day:hover {
+  background-color: lightblue; /* Cor de fundo quando o mouse está sobre um dia */
+  color: black; /* Cor do texto quando o mouse está sobre um dia */
+}
+
+/* Estilos para o dia atual */
+.custom-calendar .react-datepicker__day--today {
+  background-color: rgb(78, 124, 209); /* Cor de fundo do dia atual */
+  color: black; /* Cor do texto do dia atual */
+}
+
+.custom-calendar .react-datepicker__day--selected {
+  background-color: aqua; /* Cor de fundo dos dias selecionados */
+}
+
+/* Estilos para os dias selecionados */
+.custom-calendar .react-datepicker__day-name {
+  color: var(--light-color); /* Cor do texto dos dias */
+}
+
+.custom-calendar .react-datepicker__day-names {
+  background-color: var(--secondary-color); 
+}
+
+.custom-calendar .react-datepicker__header {
+  background-color: var(--secondary-color); 
+}
+
+/* Estilos para os dias entre os dias selecionados */
+.custom-calendar .react-datepicker__day--in-range {
+  background-color: var(--chart-secondary-color);
+}
+
+.custom-calendar .react-datepicker__current-month {
+  color: var(--light-color); /* Cor do texto dos meses */
+}

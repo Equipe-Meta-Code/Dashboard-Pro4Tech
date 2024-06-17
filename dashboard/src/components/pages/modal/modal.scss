@@ -1,0 +1,128 @@
+.background-modal{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  
+    backdrop-filter: blur(2px); /* Aplica o efeito de embaçamento */
+    z-index: 1000;
+  }
+  
+  .modal{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 430px;
+    height: 350px;
+    background-color: var(--modal-background);//mudar
+    box-shadow: var(--modal-shadow);
+    border-radius: 30px;
+  }
+
+  .botao-fechar{
+    display: flex;
+    margin-left:370px;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    border-radius: 30px;
+    width: 30px;
+    height: 30px;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--modal-botao-fechar);
+    margin-bottom: 100;
+  }
+
+  .botao-fechar:hover{
+    color: var(--modal-botao-fechar-hover);
+    font-weight: bold;
+    //border: solid;
+    //border-color: var(--modal-botao-hover);
+}
+
+.espaco{
+  height: 40px;
+}
+
+.title-modal {
+  text-align: center;
+  color: var(--modal-titulo);
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-family-manrope);
+}
+
+.modal-conteudo{
+  height: 300px;
+}
+
+.inputs-modal{
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 20px; 
+}
+
+.input-modal{
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 350px;
+  height: 45px;
+  background: var(--modal-campo-digitar);
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.input-modal img{
+  margin: 0px 10px;
+}
+
+.input-modal input{
+  height: 30px;
+  width: 310px;
+  background: transparent;
+  outline: none;
+  border: none;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.submit-container-modal{
+  display: flex;
+  justify-content: center;
+  margin: 10px auto;
+}
+
+.submit-modal{
+  align-items: center;
+  text-align: center;
+  border-radius: 50px;
+  width: 225px;
+  height: 50px;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 14px;
+  background-color: var(--modal-botao-enviar);
+  color: white;
+  margin-right: 10px;
+}
+
+.submit-modal:hover{
+  background: var(--modal-botao-enviar-hover);
+  color: var(--modal-botao-enviar-hover-text);
+  font-weight: bold;
+  padding: 11px;
+  border: solid;
+  border-color: var(--modal-botao-enviar-hover-border);
+}

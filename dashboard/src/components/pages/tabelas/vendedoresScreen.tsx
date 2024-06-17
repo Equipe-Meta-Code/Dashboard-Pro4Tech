@@ -33,6 +33,7 @@ import numeral from "numeral";
 const Vendedores = () => {
   const [chartData, setChartData] = useState([]);
   const [initialRows, setInitialRows] = useState<GridRowsProp>([]);
+  const [apagarVendedor, setApagarVendedor] = useState("");
 
   const navigate = useNavigate();
 
@@ -69,6 +70,7 @@ const Vendedores = () => {
         const vendasVendedor = dataGeral.filter(
           (itemGeral) => itemGeral.CPF_Vendedor === itemVendedor.CPF_Vendedor
         );
+      
         // Se houver vendas para o vendedor atual
         if (vendasVendedor.length > 0) {
           // Encontrar a última venda
@@ -76,6 +78,10 @@ const Vendedores = () => {
             prev.Data_da_Venda > current.Data_da_Venda ? prev : current
           );
 
+          let foto = "";
+          if (itemVendedor.foto && itemVendedor.foto.length > 0) {
+            foto = "http://localhost:8080/files/users/" + itemVendedor.foto;
+          }
           // Construir o objeto combinando as propriedades de /vendedores e a última venda de /geral
           return {
             id: itemVendedor.id,
@@ -85,9 +91,13 @@ const Vendedores = () => {
             valor: ultimaVenda.Valor_de_Venda,
             ultimaVenda: ultimaVenda.Data_da_Venda,
             tipoVenda: ultimaVenda.tipoVendaProduto,
-            foto: itemVendedor.Foto,
+            foto: foto,
           };
         } else {
+          let foto = ""
+          if (itemVendedor.foto && itemVendedor.foto.length > 0) {
+            foto = "http://localhost:8080/files/users/" + itemVendedor.foto;
+          }
           // Se não houver vendas para o vendedor atual, defina o Valor_de_Venda como vazio
           return {
             id: itemVendedor.id,
@@ -96,7 +106,7 @@ const Vendedores = () => {
             valor: "", // Valor_de_Venda vazio
             ultimaVenda: "",
             tipoVenda: "",
-            foto: itemVendedor.Foto,
+            foto: foto,
           };
         }
       });
@@ -271,6 +281,18 @@ const Vendedores = () => {
 
   //remover linha quando o botão deletar for clicado
   const handleDeleteClick = (id: GridRowId) => async () => {
+    const responseVendedores = await axios.get(
+      "http://localhost:8080/vendedores"
+    );
+    const dataVendedores = responseVendedores.data;
+    
+    const vendedor = dataVendedores.find(vendedor => vendedor.id === id);
+    if (vendedor) {
+      console.log('vendedor',vendedor)
+      console.log('vendedorCPF',vendedor.CPF_Vendedor)
+      setApagarVendedor(vendedor.CPF_Vendedor);
+    }
+
     const confirm = window.confirm("Você tem certeza de que deseja excluir este vendedor?");
     if (confirm) {
       try {
@@ -280,7 +302,7 @@ const Vendedores = () => {
         id
       }); */
 
-      /* const response = await axios.post('http://localhost:3333/users/delete', { id }, {
+ /*      const response = await axios.post('http://localhost:3333/users/delete', { apagarVendedor }, {
          
         }); */
 

@@ -97,7 +97,10 @@
 
 
 
-https://github.com/Equipe-Meta-Code/Dashboard-Pro4Tech/assets/126246097/8f5ca52b-6d12-4579-a69c-624aa4a1faa1
+https://github.com/Equipe-Meta-Code/Dashboard-Pro4Tech/assets/126246097/a8c0d079-54b7-4483-ae87-9e8cb136f4fe
+
+
+
 
 
 

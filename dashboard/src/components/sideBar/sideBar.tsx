@@ -10,7 +10,7 @@ import { useAuth } from "../../context/AuthContext";
 
 import api from "../../services/api";
 import axios from "axios";
-const responseVendedores = await axios.get('http://localhost:8080/vendedores');
+const responseVendedores = await api.get('/vendedores');
 const dataVendedores = responseVendedores.data;
 
 const Sidebar = () => {
@@ -40,12 +40,13 @@ const Sidebar = () => {
     formData.append("arquivo", fileInput);
 
     try {
-      const response = await fetch("http://localhost:8080", {
-        method: "POST",
-        body: formData,
+      const response = await api.post("/upload", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         setModalMessage("Arquivo enviado com sucesso!");
         setShowModal(true);
         setFileInput(null);
@@ -64,7 +65,7 @@ const Sidebar = () => {
   const saveVendedoresToUsers = async () => {
     try {
       // Busca todos os vendedores
-      const resVendedores = await axios.get('http://localhost:8080/vendedores');
+      const resVendedores = await api.get('/vendedores');
       const dataVendedores = resVendedores.data;
 
       // Processa os dados dos vendedores para o formato necessário
@@ -81,7 +82,7 @@ const Sidebar = () => {
       // Envia uma requisição POST para inserir cada vendedor individualmente
       for (const userData of processedData) {
         try {
-          const response = await axios.post('http://localhost:3333/users', userData);
+          const response = await api.post('/users', userData);
           console.log(`Usuário ${userData.nome} inserido com sucesso!`, response.data);
         } catch (error) {
           console.error(`Erro ao inserir usuário ${userData.nome}:`, error.response ? error.response.data : error.message);

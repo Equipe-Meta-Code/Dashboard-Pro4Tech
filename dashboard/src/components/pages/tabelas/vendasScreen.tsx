@@ -36,6 +36,7 @@ import "./DatePickerCustomStyles.scss";
 import moment from 'moment';
 import numeral from 'numeral';
 import user_icon from '../../../assets/person.png'
+import api from "../../../services/api";
 
 registerLocale("pt", pt);
 setDefaultLocale("pt");
@@ -62,7 +63,7 @@ const Vendas = () => {
  
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/geral');
+      const response = await api.get('/geral');
       const data = response.data;
       // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor
       
@@ -90,7 +91,7 @@ const Vendas = () => {
   // Função para buscar os vendedores disponíveis
   const fetchVendedores = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/vendedores');
+      const response = await api.get('/vendedores');
       const vendedores = response.data;
 
     const processedVendedores = vendedores.map(item => ({
@@ -110,7 +111,7 @@ const Vendas = () => {
   // Função para buscar os clientes disponíveis
 const fetchClientes = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/clientes');
+    const response = await api.get('/clientes');
     const clientes = response.data;
 
     const processedClientes = clientes.map(item => ({
@@ -129,7 +130,7 @@ const fetchClientes = async () => {
 
 const fetchProdutos = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/produtos');
+    const response = await api.get('/produtos');
     const produtos = response.data;
 
     const processedProdutos = produtos.map(item => ({
@@ -151,7 +152,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
     console.log('Chamando função saveChangesToDatabase');
 
     // Busca todos os clientes e armazena os dados localmente
-    const resClientes = await axios.get('http://localhost:8080/clientes');
+    const resClientes = await api.get('/clientes');
     const clientes = resClientes.data;
 
     // Mapeia os dados atualizados para o formato esperado pelo backend
@@ -178,7 +179,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
 
     // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
     console.log("Updated Data OBJ: ", updatedData);
-    await axios.put('http://localhost:8080/vendas_update', updatedData);
+    await api.put('/vendas_update', updatedData);
     console.log("Dados atualizados com sucesso!");
   } catch (error) {
     console.error('Erro ao salvar os dados:', error);
@@ -252,7 +253,7 @@ const saveChangesToDatabase = async (updatedRows: GridRowModel[]) => {
     
         // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
         setOpenModal(false);
-        await axios.post('http://localhost:8080/vendas_adicionar', newData);
+        await api.post('/vendas_adicionar', newData);
         
         window.location.reload();
       } catch (error) {

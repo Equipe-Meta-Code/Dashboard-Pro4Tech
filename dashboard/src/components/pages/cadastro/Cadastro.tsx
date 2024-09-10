@@ -73,7 +73,7 @@ const Cadastro = () => {
       });
       console.log(response.data);
       if (roles == '1' || roles == '3'){
-          const respons = await axios.post('http://localhost:8080/vendedores_adicionar', {
+          const respons = await api.post('/vendedores_adicionar', {
           Vendedor: nome,
           CPF_Vendedor: cpf,
           });

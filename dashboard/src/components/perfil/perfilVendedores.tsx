@@ -11,6 +11,7 @@ import VendasVendedor from "./tabela/vendasVendedor";
 import AreaBarChartPerfil from "../dashboard/areaCharts/areaBarChartPerfil";
 import { AreaTop } from "../index";
 import perfilsemfoto from "./perfilsemfoto.jpg"
+import api from "../../services/api";
 
 const Perfil = () => {
   const { id } = useParams();
@@ -30,7 +31,7 @@ const Perfil = () => {
 
   const fetchData = async () => {
     try {
-      let response = await axios.get('http://localhost:8080/vendedor', {
+      let response = await api.get('/vendedor', {
         params: { vendedor: id }
       });
 
@@ -83,7 +84,7 @@ const Perfil = () => {
 
       try {
         
-        const response = await axios.put('http://localhost:8080/upload-image', formData);
+        const response = await api.put('/upload-image', formData);
         setMessage(response.data.message);
       } catch (err) {
         if (err.response) {
@@ -96,47 +97,6 @@ const Perfil = () => {
 
 
     };
-
-  /* const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target.result;
-        if (typeof result === "string") {
-          setVendedoresDetails((prevState) => ({
-            ...prevState,
-            foto: result,
-          }));
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handlePhotoSave = (e) => {
-    const foto = e.target.files[0];
-    if (foto) {
-      const formData = new FormData();
-        formData.append("foto", foto);
-
-        fetch("http://localhost:8080/upload-image", {
-            method: "POST",
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            setVendedoresDetails((prevState) => ({
-                ...prevState,
-                foto: data.filePath, // Salvar o caminho da imagem retornado pelo backend
-            }));
-        })
-        .catch(error => {
-            console.error("Erro ao fazer upload da imagem:", error);
-        });
-    }} */
-
 
   const [Vendedor, setVendedor] = useState('');
   const [CPF_Vendedor, setCPF_Vendedor] = useState('');
@@ -165,7 +125,7 @@ const Perfil = () => {
       console.table(newData);
       // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
       setOpenModal(false);
-      await axios.put('http://localhost:8080/vendedores_editando', newData);
+      await api.put('/vendedores_editando', newData);
       await fetchData();
       //.location.reload();
     } catch (error) {

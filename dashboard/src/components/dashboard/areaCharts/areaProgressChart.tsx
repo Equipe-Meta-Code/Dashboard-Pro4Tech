@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import PermissionComponent from '../../PermissionComponent';
 import { useAuth } from '../../../context/AuthContext';
 import { DateContext } from '../../../context/DateContext';
-
+import api from '../../../services/api';
 
 
 interface ChartData {
@@ -34,14 +34,14 @@ const AreaProgressChart: React.FC = () => {
     try {
       let response;
       if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-        response = await axios.get('http://localhost:8080/dados_itens', {
+        response = await api.get('/dados_itens', {
           params: {
             startDate: dates.startDate.toISOString(),
             endDate: dates.endDate.toISOString()
           }
         });
       } else {
-        response = await axios.get('http://localhost:8080/dados_itens_user', {
+        response = await api.get('/dados_itens_vendedor', {
           params: { 
             vendedor: login,
             startDate: dates.startDate.toISOString(),

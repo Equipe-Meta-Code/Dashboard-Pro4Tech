@@ -6,6 +6,7 @@ import PermissionComponent from "../../PermissionComponent";
 import { useAuth } from '../../../context/AuthContext';
 import numeral from 'numeral';
 import { DateContext } from "../../../context/DateContext";
+import api from "../../../services/api";
 
 const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
   const { login } = useAuth();
@@ -16,14 +17,14 @@ const AreaCard = ({ colors, percentFillValue, metaVendas }) => {
     try {
       let response;
       if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-        response = await axios.get('http://localhost:8080/dados_vendas_total', {
+        response = await api.get('/dados_vendas_total', {
           params: {
             startDate: dates.startDate.toISOString(),
             endDate: dates.endDate.toISOString()
           }
         });
       } else {
-        response = await axios.get('http://localhost:8080/dados_vendas_total_user', {
+        response = await api.get('/dados_vendas_total_user', {
           params: { 
             vendedor: login,
             startDate: dates.startDate.toISOString(),

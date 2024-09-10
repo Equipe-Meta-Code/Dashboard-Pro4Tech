@@ -22,11 +22,8 @@ import {
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
-  GridSlots,
 } from "@mui/x-data-grid";
-import App from "../../../App";
 import axios from "axios";
-import Modal from "../modal/modal";
 import user_icon from "../../../assets/person.png";
 import numeral from "numeral";
 
@@ -56,12 +53,12 @@ const Vendedores = () => {
   }
   const fetchData = async () => {
     try {
-      const responseVendedores = await axios.get(
-        "http://localhost:8080/vendedores"
+      const responseVendedores = await api.get(
+        "/vendedores"
       );
       const dataVendedores = responseVendedores.data;
 
-      const responseGeral = await axios.get("http://localhost:8080/geral");
+      const responseGeral = await api.get("/geral");
       const dataGeral = responseGeral.data;
 
       // Mapear os dados de /vendedores
@@ -131,7 +128,7 @@ const Vendedores = () => {
       // Envia uma requisição PUT para o endpoint adequado no backend para realizar o update
       console.log("Updated Data OBJ: ");
       console.log(updatedData);
-      await axios.put("http://localhost:8080/vendedores_update", updatedData);
+      await api.put("/vendedores_update", updatedData);
 
       // Agora, para cada vendedor atualizado, também atualizamos as vendas associadas a ele
       updatedRows.forEach(async (row) => {
@@ -145,7 +142,7 @@ const Vendedores = () => {
           Vendedor: row.vendedor, // Atualize o nome do vendedor, se necessário
           // Atualize outras propriedades da venda, se necessário
         }));
-        await axios.put("http://localhost:8080/vendas_update", updatedVendas);
+        await api.put("/vendas_update", updatedVendas);
       });
 
       console.log("Dados atualizados com sucesso!");
@@ -281,8 +278,8 @@ const Vendedores = () => {
 
   //remover linha quando o botão deletar for clicado
   const handleDeleteClick = (id: GridRowId) => async () => {
-    const responseVendedores = await axios.get(
-      "http://localhost:8080/vendedores"
+    const responseVendedores = await api.get(
+      "/vendedores"
     );
     const dataVendedores = responseVendedores.data;
     
@@ -297,14 +294,7 @@ const Vendedores = () => {
     if (confirm) {
       try {
         // Faz uma requisição DELETE para o backend para deletar o vendedor com o ID especificado
-        await axios.delete(`http://localhost:8080/vendedores/${id}`);
-        /* const response = await api.post("/users", {
-        id
-      }); */
-
- /*      const response = await axios.post('http://localhost:3333/users/delete', { apagarVendedor }, {
-         
-        }); */
+        await api.delete(`/vendedores/${id}`);
 
       // Atualiza o estado das linhas, removendo a linha deletada
         setRows(rows.filter((row) => row.id !== id));

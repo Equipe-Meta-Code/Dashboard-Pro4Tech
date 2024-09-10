@@ -21,14 +21,15 @@ import ModalVendas from "../../pages/modal/modalVendas";
 import calendario from "../../../assets/icons/calendario.svg";
 import moment from "moment";
 import numeral from "numeral";
+import api from "../../../services/api";
 //tabela no perfil do vendedor - últimas vendas dele
 
 interface VendasVendedorProps {
   vendedorSelecionado?: number;
 }
 
-const responseVendedores = await axios.get(
-  "http://localhost:8080/vendedores"
+const responseVendedores = await api.get(
+  "/vendedores"
 );
 const dataVendedores = responseVendedores.data;
 
@@ -75,7 +76,7 @@ const VendasVendedor = ( props ) => {
       const cpfVendedor = buscarCPFPorId(idDoVendedores);
       console.log('cpf', cpfVendedor)
 
-      const response = await axios.get("http://localhost:8080/geral");
+      const response = await api.get("/geral");
       const data = response.data;
       
       // filtrar dados para pegar apenas as vendas do vendedor atual
@@ -105,7 +106,7 @@ const VendasVendedor = ( props ) => {
   // função para buscar os vendedores disponíveis
   const fetchVendedores = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/vendedores");
+      const response = await api.get("/vendedores");
       const vendedores = response.data;
 
       const processedVendedores = vendedores.map((item) => ({
@@ -124,7 +125,7 @@ const VendasVendedor = ( props ) => {
   // função para buscar os clientes disponíveis
   const fetchClientes = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/clientes");
+      const response = await api.get("/clientes");
       const clientes = response.data;
 
       const processedClientes = clientes.map((item) => ({
@@ -147,7 +148,7 @@ const VendasVendedor = ( props ) => {
       console.log("Chamando função saveChangesToDatabase");
 
       // busca todos os clientes e armazena os dados localmente
-      const resClientes = await axios.get("http://localhost:8080/clientes");
+      const resClientes = await api.get("/clientes");
       const clientes = resClientes.data;
 
       // mapeia os dados atualizados para o formato esperado pelo backend
@@ -175,7 +176,7 @@ const VendasVendedor = ( props ) => {
 
       // envia requisição PUT para o endpoint adequado no backend para realizar o update
       console.log("Updated Data OBJ: ", updatedData);
-      await axios.put("http://localhost:8080/vendas_update", updatedData);
+      await api.put("/vendas_update", updatedData);
       console.log("Dados atualizados com sucesso!");
     } catch (error) {
       console.error("Erro ao salvar os dados:", error);
@@ -260,7 +261,7 @@ const VendasVendedor = ( props ) => {
 
         // envia requisição POST para o endpoint adequado no backend para adicionar os dados
         setOpenModal(false);
-        await axios.post("http://localhost:8080/vendas_adicionar", newData);
+        await api.post("/vendas_adicionar", newData);
 
         window.location.reload();
       } catch (error) {

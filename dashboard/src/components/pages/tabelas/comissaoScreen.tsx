@@ -33,6 +33,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import api from "../../../services/api";
 
 const Comissao = () => {
   const [chartData, setChartData] = useState([]);
@@ -68,7 +69,7 @@ const Comissao = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/geral');
+      const response = await api.get('/geral');
       const data = response.data;
 
       // Pré-processamento para pegar apenas os dois primeiros nomes de cada vendedor

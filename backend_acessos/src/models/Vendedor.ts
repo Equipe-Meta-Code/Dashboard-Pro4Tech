@@ -35,6 +35,12 @@ class Vendedor {
 
     @UpdateDateColumn({ type: 'timestamp' })
     updatedAt: Date;
+
+    Produto: string;
+    Cliente: string;
+    tipoVendaProduto?: string;
+    tipoVendaCliente?: string;
+    tipoVendaGeral?: string;
 }
 
 export default Vendedor;

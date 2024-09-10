@@ -4,6 +4,7 @@ import axios from 'axios';
 import { DateContext } from '../../../context/DateContext';
 import PermissionComponent from '../../PermissionComponent';
 import { useAuth } from '../../../context/AuthContext';
+import api from '../../../services/api';
 
 const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
@@ -53,14 +54,14 @@ export function VendasMensaisMeta() {
 
         let response;
         if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-          response = await axios.get('http://localhost:8080/dados_vendas_mensais', {
+          response = await api.get('/dados_vendas_mensais', {
             params: {
               startDate: startDate.toISOString(),
               endDate: endDate.toISOString()
             }
           });
         } else {
-          response = await axios.get('http://localhost:8080/dados_vendas_mes_user', {
+          response = await api.get('/dados_vendas_mes_vendedor', {
             params: {
               vendedor: login,
               startDate: startDate.toISOString(),

@@ -25,6 +25,7 @@ import axios from "axios";
 import { TfiEraser } from "react-icons/tfi";
 import Modal from "../modal/modal";
 import user_icon from "../../../assets/person.png";
+import api from "../../../services/api";
 
 const Produtos = () => {
   const [chartData, setChartData] = useState([]);
@@ -40,7 +41,7 @@ const Produtos = () => {
 
   async function buscarProduto(id) {
     try {
-      const responseProdutos = await axios.get('http://localhost:8080/produtos');
+      const responseProdutos = await api.get('/produtos');
       const dataProdutos = responseProdutos.data;
   
       const produto = dataProdutos.find(produto => produto.id === id);
@@ -74,8 +75,8 @@ const Produtos = () => {
 
   const fetchData = async () => {
     try {
-      const responseProduto = await axios.get(
-        "http://localhost:8080/produtos"
+      const responseProduto = await api.get(
+        "/produtos"
       );
       const dataProduto = responseProduto.data;
 
@@ -103,7 +104,7 @@ const Produtos = () => {
         const updatedData = [produtoEditando];
         console.log("Updated Data OBJ: ", updatedData);
   
-        await axios.put("http://localhost:8080/produtos_update", updatedData);
+        await api.put("/produtos_update", updatedData);
         setOpenModalEditar(!openModalEditar)
         fetchData()
         console.log("Dados atualizados com sucesso!");
@@ -158,7 +159,7 @@ const Produtos = () => {
         console.log("Adicionando produto", newData);
     
         // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
-        await axios.post("http://localhost:8080/produto_adicionar", newData);
+        await api.post("/produto_adicionar", newData);
     
         setOpenModal(false);
         console.log("Produto adicionado com sucesso!");
@@ -310,7 +311,7 @@ const Produtos = () => {
     if (confirm) {
       try {
         // Faz uma requisição DELETE para o backend para deletar o produto com o ID especificado
-        await axios.delete(`http://localhost:8080/produtos/${id}`);
+        await api.delete(`/produtos/${id}`);
         console.log("ID", id);
         // Atualiza o estado das linhas, removendo a linha deletada
         setRows(rows.filter((row) => row.id !== id));

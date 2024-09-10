@@ -4,6 +4,7 @@ import "./AreaCharts.scss";
 import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '../../../context/AuthContext';
 import { DateContext } from '../../../context/DateContext';
+import api from '../../../services/api';
 
 interface ChartData {
   Produto: string;
@@ -32,7 +33,7 @@ const AreaProgressChartPerfil: React.FC<AreaProgressChartProps> = ({ vendedorSel
     // Fetch the vendedores data on component mount
     const fetchVendedores = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/vendedores");
+        const response = await api.get("/vendedores");
         setDataVendedores(response.data);
       } catch (error) {
         console.error('Erro ao buscar vendedores:', error);
@@ -75,7 +76,7 @@ const AreaProgressChartPerfil: React.FC<AreaProgressChartProps> = ({ vendedorSel
 
       console.log("CPF USADO: ", cpfVendedor);
 
-      response = await axios.get('http://localhost:8080/dados_itens_vendedor', {
+      response = await api.get('/dados_itens_vendedor', {
         params: {
           vendedor: cpfVendedor,
           startDate: dates.startDate.toISOString(),

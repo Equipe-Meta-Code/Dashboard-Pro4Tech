@@ -5,6 +5,7 @@ import numeral from 'numeral';
 import PermissionComponent from '../../PermissionComponent';
 import { useAuth } from '../../../context/AuthContext';
 import { DateContext } from '../../../context/DateContext'; // Importe o contexto de data
+import api from '../../../services/api';
 
 const AreaBarChart = () => {
   const { login } = useAuth();
@@ -28,14 +29,14 @@ const AreaBarChart = () => {
 
       let response;
       if (await PermissionComponent.hasPermission("Admin_Role,Admin")) {
-        response = await axios.get('http://localhost:8080/dados_vendas_mes', {
+        response = await api.get('/dados_vendas_mes', {
           params: {
             startDate: startDate.toISOString(), // Use a data de início do contexto de data
             endDate: endDate.toISOString() // Use a data de término do contexto de data
           }
         });
       } else {
-        response = await axios.get('http://localhost:8080/dados_vendas_mes_user', {
+        response = await api.get('/dados_vendas_mes_vendedor', {
           params: { 
             vendedor: login,
             startDate: startDate.toISOString(), // Use a data de início do contexto de data

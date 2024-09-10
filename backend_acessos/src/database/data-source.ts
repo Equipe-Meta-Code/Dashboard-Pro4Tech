@@ -16,17 +16,23 @@ import { CreateComissao1725646611269 } from './migrations/1725646611269-CreateCo
 import { CreateProdutos1725647497765 } from './migrations/1725647497765-CreateProdutos';
 import { CreatePorcentagem1725647023777 } from './migrations/1725647023777-CreatePorcentagem';
 import { CreateVendedor1725647218438 } from './migrations/1725647218438-CreateVendedor';
+import Informacoes from "../models/Informacoes";
+import Produtos from "../models/Produtos";
+import Cliente from "../models/Cliente";
+import Porcentagem from "../models/Porcentagem";
+import Vendedor from "../models/Vendedor";
+import Comissao from "../models/Comissao";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
     host: "localhost",
     port: 3306,
     username: "root",
-    password: "",
+    password: "root",
     database: "upload",
     synchronize: true,
     logging: false,
-    entities: [User, Permission, Role, Product],
+    entities: [User, Permission, Role, Product, Informacoes, Produtos, Cliente, Porcentagem, Vendedor, Comissao],
     migrations: [CreatePermissions1713826201044, 
         CreateUsers1713488452253, 
         CreateRoles1713878406786,

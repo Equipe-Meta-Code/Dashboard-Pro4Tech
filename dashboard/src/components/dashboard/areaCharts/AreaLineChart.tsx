@@ -3,6 +3,7 @@ import axios from "axios";
 import { Line, LineChart, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import numeral from 'numeral';
 import { DateContext } from '../../../context/DateContext'; // Importe o contexto de data
+import api from '../../../services/api';
 
 const AreaLineChart = () => {
   const [chartData, setChartData] = useState([]);
@@ -21,7 +22,7 @@ const AreaLineChart = () => {
 
       const { startDate, endDate } = dateContext.dates; // Obtenha as datas do contexto de data
 
-      const response = await axios.get('http://localhost:8080/dados_vendas', {
+      const response = await api.get('/dados_vendas', {
         params: {
           startDate: startDate.toISOString(), // Use a data de início do contexto de data
           endDate: endDate.toISOString() // Use a data de término do contexto de data

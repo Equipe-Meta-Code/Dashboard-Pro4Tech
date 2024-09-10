@@ -41,6 +41,10 @@ class Informacoes {
 
     @UpdateDateColumn({ type: 'timestamp' })
     updatedAt: Date;
+
+    tipoVendaProduto?: string;
+    tipoVendaCliente?: string;
+    tipoVendaGeral?: string;
 }
 
 export default Informacoes;

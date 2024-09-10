@@ -28,6 +28,7 @@ import axios from "axios";
 
 import Modal from "../modal/modal";
 import user_icon from '../../../assets/person.png'
+import api from "../../../services/api";
 
 const Clientes = () => {
   const [chartData, setChartData] = useState([]);
@@ -43,7 +44,7 @@ const Clientes = () => {
 
   async function buscarCliente(id) {
     try {
-      const clientes = await axios.get('http://localhost:8080/clientes');
+      const clientes = await api.get('/clientes');
       const dataClientes = clientes.data;
   
       const cliente = dataClientes.find(cliente => cliente.id === id);
@@ -79,10 +80,10 @@ const Clientes = () => {
   const fetchData = async () => {
     try {
 
-      const responseClientes = await axios.get('http://localhost:8080/clientes');
+      const responseClientes = await api.get('/clientes');
       const dataClientes = responseClientes.data;
 
-      const responseGeral = await axios.get('http://localhost:8080/geral');
+      const responseGeral = await api.get('/geral');
       const dataGeral = responseGeral.data;
 
       
@@ -133,7 +134,7 @@ const Clientes = () => {
         console.log("Chamando função saveChangesToDatabase");
         const updatedData = [clienteEditando];
         console.log("Updated Data OBJ: ", updatedData);
-        await axios.put('http://localhost:8080/vendas_clientes_update', updatedData);
+        await api.put('/vendas_clientes_update', updatedData);
         console.log("Dados atualizados com sucesso!");
         setOpenModalEditar(!openModalEditar)
         fetchData()
@@ -179,7 +180,7 @@ const Clientes = () => {
         console.log("Adicionando vendedor", newData);
     
         // Envia uma requisição POST para o endpoint adequado no backend para adicionar os dados
-        await axios.post('http://localhost:8080/clientes_adicionar', newData);
+        await api.post('/clientes_adicionar', newData);
 
 
         window.location.reload();

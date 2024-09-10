@@ -4,6 +4,7 @@ import axios from 'axios';
 import numeral from 'numeral';
 import { useAuth } from '../../../context/AuthContext';
 import { DateContext } from '../../../context/DateContext'; // Importe o contexto de data
+import api from '../../../services/api';
 
 interface AreaBarChartProps {
   vendedorSelecionado?: number | string; // Permite que vendedorSelecionado seja um número ou string
@@ -22,7 +23,7 @@ const AreaBarChartPerfil: React.FC<AreaBarChartProps> = ({ vendedorSelecionado }
     // Fetch the vendedores data on component mount
     const fetchVendedores = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/vendedores");
+        const response = await api.get("/vendedores");
         setDataVendedores(response.data);
       } catch (error) {
         console.error('Erro ao buscar vendedores:', error);
@@ -60,7 +61,7 @@ const AreaBarChartPerfil: React.FC<AreaBarChartProps> = ({ vendedorSelecionado }
       }
 
 
-      response = await axios.get('http://localhost:8080/dados_vendas_mes_vendedores', {
+      response = await api.get('/dados_vendas_mes_vendedor', {
         params: {
           vendedor: cpfVendedor,
           startDate: dates.startDate.toISOString(), // Adiciona a data de início ao request

@@ -11,9 +11,9 @@
 
 •	O sistema deverá ser capaz de calcular a comissão de cada vendendor de acordo com suas respectivas vendas e seus diferentes tipos.
 
-•	O sistema deverá conter uma área de login e cadastro para funcionários e gerencia. 
+•	O sistema deverá conter uma área de login e cadastro para funcionários e gerência. 
 
-•	O sistema deverá conter uma interface exclusiva para a gerencia, onde seja possível atribuir maior porcentagem nas comissões de um funcionário.
+•	O sistema deverá conter uma interface exclusiva para a gerência, onde seja possível atribuir maior porcentagem nas comissões de um funcionário.
 
 
 
